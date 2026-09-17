@@ -118,7 +118,7 @@ def normalize_runtime_id(value: Any, *, field_name: str = "construction_id") -> 
 def normalize_slot_name(value: Any, *, field_name: str = "slot_name") -> str:
     """Normalize a canonical slot name."""
     text = _clean_required_text(value, field_name=field_name)
-    if not _ SLOT_NAME_RE.fullmatch(text):
+    if not _SLOT_NAME_RE.fullmatch(text):
         raise InvalidConstructionIdentifierError(
             f"{field_name} must be canonical snake_case; got {value!r}."
         )

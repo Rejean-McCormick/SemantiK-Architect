@@ -12,9 +12,7 @@ from fastapi.security import APIKeyHeader
 
 from app.adapters.llm_adapter import GeminiAdapter
 from app.core.ports.grammar_engine import IGrammarEngine
-from app.core.use_cases.build_language import BuildLanguage
 from app.core.use_cases.generate_text import GenerateText
-from app.core.use_cases.onboard_language_saga import OnboardLanguageSaga
 from app.shared.config import AppEnv, settings
 
 logger = logging.getLogger(__name__)
@@ -150,25 +148,3 @@ def get_generate_text_use_case(
         use_case.llm = llm_adapter
 
     return use_case
-
-
-def get_build_language_use_case() -> BuildLanguage:
-    """Resolve BuildLanguage from the DI container."""
-    return _get_container().build_language_use_case()
-
-
-def get_onboard_saga(
-    llm_adapter: GeminiAdapter = Depends(get_llm_adapter),
-) -> OnboardLanguageSaga:
-    """
-    Resolve the onboarding saga from the DI container.
-
-    Kept BYOK-compatible for future saga variants that may expose an `llm`
-    attribute, without requiring the current saga constructor to change.
-    """
-    saga = _get_container().onboard_language_saga()
-
-    if hasattr(saga, "llm"):
-        saga.llm = llm_adapter
-
-    return saga

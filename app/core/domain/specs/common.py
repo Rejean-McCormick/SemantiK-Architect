@@ -216,7 +216,7 @@ def normalize_runtime_id(value: Any, *, field_name: str = "runtime_id") -> str:
 def normalize_slot_name(value: Any, *, field_name: str = "slot_name") -> str:
     """Normalize and validate a canonical snake_case slot name."""
     out = normalize_non_empty_string(value, field_name)
-    if not _ SLOT_NAME_RE.fullmatch(out):
+    if not _SLOT_NAME_RE.fullmatch(out):
         raise InvalidIdentifierError(
             f"{field_name} must be canonical snake_case; got {value!r}."
         )

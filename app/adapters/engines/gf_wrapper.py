@@ -189,7 +189,7 @@ class GFGrammarEngine:
             or os.getenv("PGF_PATH")
             or getattr(settings, "PGF_PATH", None)
             or os.getenv("AW_PGF_PATH")
-            or getattr(settings, "AW_PGF_PATH", "gf/semantik_architect.pgf")
+            or getattr(settings, "AW_PGF_PATH", "runtime/semantik_architect.pgf")
         )
         self.pgf_path: str = str(self._resolve_path(configured))
 

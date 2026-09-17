@@ -1,26 +1,14 @@
-# app/adapters/api/main.py
 import os
-import uvicorn
+from contextlib import asynccontextmanager
+
 import structlog
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
 
 from app.shared.container import container
 from app.shared.config import settings
-
-# Import Routers
-# Note: We import the modules directly to ensure 'container.wire' works correctly
-from app.adapters.api.routers import (
-    generation,
-    management,
-    health,
-    tools,
-    languages,
-    entities,
-    frames,
-    ai,
-)
+from app.adapters.api.routers import generation, health, languages, entities, frames, ai
 
 logger = structlog.get_logger()
 
@@ -43,21 +31,12 @@ def _parse_csv_env(name: str, default: list[str]) -> list[str]:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    Manages the application lifecycle.
-    1. Startup: Wires DI container, connects to infrastructure.
-    2. Shutdown: Closes connections.
-    """
-    env_name = getattr(settings, "APP_ENV", "development")
-    logger.info("app_startup", env=env_name)
-
-    # 1. Wire the Container
+    """Runtime lifecycle: wire the application; no compiler queue or broker."""
+    logger.info("app_startup", env=getattr(settings, "APP_ENV", "development"))
     container.wire(
         modules=[
             "app.adapters.api.routers.generation",
-            "app.adapters.api.routers.management",
             "app.adapters.api.routers.health",
-            "app.adapters.api.routers.tools",
             "app.adapters.api.routers.languages",
             "app.adapters.api.routers.entities",
             "app.adapters.api.routers.frames",
@@ -65,65 +44,29 @@ async def lifespan(app: FastAPI):
             "app.adapters.api.dependencies",
         ]
     )
-
-    # 2. Infrastructure Initialization (fail-fast-ish)
-    broker = container.message_broker()
-    try:
-        await broker.connect()
-        logger.info("broker_connected")
-    except Exception as e:
-        logger.error("broker_connection_failed", error=str(e))
-
-    task_queue = container.task_queue()
-    try:
-        await task_queue.connect()
-        logger.info("task_queue_connected")
-    except Exception as e:
-        logger.error("task_queue_connection_failed", error=str(e))
-
     yield
-
-    # 3. Shutdown / Cleanup
     logger.info("app_shutdown")
-    await broker.disconnect()
-    await task_queue.disconnect()
+    container.unwire()
 
 
 def create_app() -> FastAPI:
-    """Factory function to create the FastAPI application."""
     is_dev = getattr(settings, "APP_ENV", "development") == "development"
     app_name = getattr(settings, "APP_NAME", "Semantik Architect")
-
-    # NOTE:
-    # - The backend is canonically served at /api/v1/...
-    # - If you run behind a reverse proxy that *mounts* the app under a prefix
-    #   (e.g. /semantik_architect) AND rewrites/strips that prefix before
-    #   forwarding to the backend, set ARCHITECT_API_ROOT_PATH to that prefix
-    #   so Swagger/OpenAPI generate correct URLs.
     root_path = _normalize_root_path(os.getenv("ARCHITECT_API_ROOT_PATH"))
 
     app = FastAPI(
         title=app_name,
-        version="2.1.0",
-        description="Semantik Architect Core Engine (Hexagonal Architecture)",
+        version="3.0.0-runtime",
+        description="Semantik Architect runtime: semantic planning and text realization using precompiled GF/PGF assets.",
         lifespan=lifespan,
         root_path=root_path,
         docs_url="/docs" if is_dev else None,
         redoc_url=None,
     )
 
-    # Global Middleware (CORS)
-    #
-    # IMPORTANT (browser CORS rule):
-    # - allow_origins=["*"] cannot be used with allow_credentials=True.
-    # - Tools Command Center runs in the browser; invalid CORS config will surface as "Failed to fetch".
-    #
-    # Local dev frontend runs at :3000 and calls backend at :8000.
-    # Default to allowing localhost origins; override with ARCHITECT_CORS_ORIGINS (comma-separated).
     default_origins = ["http://localhost:3000", "http://127.0.0.1:3000"]
     allow_origins = _parse_csv_env("ARCHITECT_CORS_ORIGINS", default_origins) if is_dev else _parse_csv_env("ARCHITECT_CORS_ORIGINS", [])
     allow_all = len(allow_origins) == 0
-
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"] if allow_all else allow_origins,
@@ -134,49 +77,26 @@ def create_app() -> FastAPI:
         max_age=600,
     )
 
-    # --- Router Registration ---
-
-    # Health should be reachable both at /health/* (k8s probes, tests)
-    # AND under /api/v1/health/* (canonical API prefix)
-    app.include_router(health.router)  # -> /health/live, /health/ready
-    app.include_router(health.router, prefix="/api/v1")  # -> /api/v1/health/*
-
-    # Public Read Endpoints
+    app.include_router(health.router)
+    app.include_router(health.router, prefix="/api/v1")
     app.include_router(languages.router, prefix="/api/v1/languages", tags=["Languages"])
     app.include_router(entities.router, prefix="/api/v1/entities", tags=["Entities"])
     app.include_router(frames.router, prefix="/api/v1/entities", tags=["Entities"])
     app.include_router(frames.router, prefix="/api/v1/frames", tags=["Frames"])
-
-    # AI (public helper endpoints)
     app.include_router(ai.router, prefix="/api/v1", tags=["AI"])
-
-    # Core Logic
     app.include_router(generation.router, prefix="/api/v1")
-
-    # Admin / Management (Protected)
-    app.include_router(management.router, prefix="/api/v1")
-
-    # Developer Tools
-    app.include_router(tools.router, prefix="/api/v1/tools", tags=["System Tools"])
-
     return app
 
 
 def start():
-    """
-    Entry point for the 'architect-api' CLI script defined in pyproject.toml.
-    """
-    is_dev = getattr(settings, "APP_ENV", "development") == "development"
-
     uvicorn.run(
         "app.adapters.api.main:create_app",
         host="0.0.0.0",
         port=8000,
-        reload=is_dev,
+        reload=getattr(settings, "APP_ENV", "development") == "development",
         factory=True,
     )
 
 
-# Entry point for local debugging (e.g. `python app/adapters/api/main.py`)
 if __name__ == "__main__":
     start()

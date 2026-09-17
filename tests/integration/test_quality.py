@@ -89,7 +89,7 @@ def engine():
 
     # Skip early if PGF binary isn't present where the engine resolved it.
     if not Path(eng.pgf_path).exists():
-        pytest.skip(f"PGF binary not found at {eng.pgf_path}. Please build the grammar first.")
+        pytest.skip(f"PGF binary not found at {eng.pgf_path}. Supply the precompiled runtime PGF artifact.")
 
     return eng
 

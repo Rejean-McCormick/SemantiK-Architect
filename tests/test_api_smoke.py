@@ -193,22 +193,6 @@ def test_generate_endpoint_structure_exists():
         assert data.get("detail") and data.get("detail") != "Not Found"
 
 
-def test_tools_run_exists_and_is_not_default_404():
-    resp = client.post(f"{API_PREFIX}/tools/run", json={"tool_id": "fake_tool", "args": {}})
-    assert not _is_route_missing(resp), "The /tools/run endpoint is missing!"
-    assert resp.status_code != 500, "Tools endpoint is mounted but crashing."
-    assert resp.status_code in (200, 400, 401, 403, 404, 422), f"Unexpected status: {resp.status_code}"
-
-    if resp.status_code == 404:
-        data = resp.json()
-        assert isinstance(data, dict)
-        assert data.get("detail") and data.get("detail") != "Not Found"
-
-
-# ------------------------------------------------------------
-# NEW: Guardrail for the GUI "Dynamic Test Bench" request catalog
-# ------------------------------------------------------------
-
 
 def _repo_root() -> Path:
     # tests/ is typically at repo_root/tests

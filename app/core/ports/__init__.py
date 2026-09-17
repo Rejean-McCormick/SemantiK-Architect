@@ -1,11 +1,10 @@
 # app/core/ports/__init__.py
 from __future__ import annotations
 
-from collections.abc import Awaitable, Callable, Mapping
+from collections.abc import Mapping
 from typing import Any, Protocol, TYPE_CHECKING, runtime_checkable
 
 if TYPE_CHECKING:
-    from app.core.domain.events import SystemEvent
     from app.core.domain.models import Frame, Sentence
 
 
@@ -15,7 +14,6 @@ if TYPE_CHECKING:
 # pull in app.core.domain.models during package initialization.
 
 JSONMapping = Mapping[str, Any]
-EventHandler = Callable[[Any], Awaitable[None]]
 
 
 # ==============================================================================
@@ -73,79 +71,6 @@ class LLMPort(Protocol):
 
 
 # ==============================================================================
-# INFRASTRUCTURE PORTS
-# ==============================================================================
-
-@runtime_checkable
-class IMessageBroker(Protocol):
-    """
-    Port for pub/sub messaging infrastructure.
-    """
-
-    async def publish(self, event: "SystemEvent | Any") -> None:
-        """
-        Publish an event to the broker.
-        """
-        ...
-
-    async def subscribe(self, channel: str, handler: EventHandler) -> None:
-        """
-        Subscribe an async handler to a channel/topic.
-        """
-        ...
-
-    async def connect(self) -> None:
-        """
-        Open broker connection(s).
-        """
-        ...
-
-    async def disconnect(self) -> None:
-        """
-        Close broker connection(s).
-        """
-        ...
-
-    async def health_check(self) -> bool:
-        """
-        Return True when the broker is reachable and healthy.
-        """
-        ...
-
-
-@runtime_checkable
-class TaskQueue(Protocol):
-    """
-    Port for async job queues such as Redis/ARQ.
-    """
-
-    async def connect(self) -> None:
-        """
-        Open queue connection(s).
-        """
-        ...
-
-    async def disconnect(self) -> None:
-        """
-        Close queue connection(s).
-        """
-        ...
-
-    async def enqueue(self, function_name: str, **kwargs: Any) -> str | None:
-        """
-        Enqueue a background job.
-
-        Args:
-            function_name: Worker function name to execute.
-            **kwargs: Keyword arguments passed to the worker.
-
-        Returns:
-            The job ID if available, otherwise None.
-        """
-        ...
-
-
-# ==============================================================================
 # REPOSITORY PORTS
 # ==============================================================================
 
@@ -174,41 +99,12 @@ class LexiconRepo(Protocol):
         ...
 
 
-@runtime_checkable
-class LanguageRepo(Protocol):
-    """
-    Port for language metadata and grammar registry storage.
-    """
-
-    async def save_grammar(self, code: str, metadata_json: str) -> None:
-        """
-        Persist language/grammar metadata for a language code.
-        """
-        ...
-
-    async def list_languages(self) -> list[dict[str, Any]]:
-        """
-        Return onboarded language records.
-        """
-        ...
-
-    async def health_check(self) -> bool:
-        """
-        Return True when the repository is reachable and healthy.
-        """
-        ...
-
-
 # ==============================================================================
 # EXPORTS
 # ==============================================================================
 
 __all__ = [
-    "EventHandler",
     "IGrammarEngine",
-    "IMessageBroker",
     "LLMPort",
-    "LanguageRepo",
     "LexiconRepo",
-    "TaskQueue",
 ]

@@ -1,82 +1,26 @@
 version: '3.8'
-
 services:
-  # 1. MESSAGE BROKER / JOB QUEUE BACKEND
-  # Redis is used by ARQ as the durable job queue backend.
-  redis:
-    image: redis:alpine
-    container_name: aw_redis
-    ports:
-      - "6379:6379"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
-  # 2. API BACKEND (Hexagonal Adapter)
-  # Serves HTTP requests; (after refactor) enqueues ARQ jobs in Redis.
   backend:
     build:
       context: .
       dockerfile: docker/Dockerfile.backend
-    container_name: aw_backend
+    container_name: semantik_architect_backend
     env_file: .env
     environment:
-      - REDIS_URL=redis://redis:6379/0
-
-      # Container absolute paths (override Windows/local .env)
       - FILESYSTEM_REPO_PATH=/app
-      - GF_LIB_PATH=/app/gf-rgl
-
-      # IMPORTANT: current Settings.PGF_PATH honors AW_PGF_PATH, not PGF_PATH
-      - AW_PGF_PATH=/app/gf/semantik_architect.pgf
-
-      # Keep queue name explicit for ARQ WorkerSettings
-      - REDIS_QUEUE_NAME=architect_tasks
+      - PGF_PATH=/app/runtime/semantik_architect.pgf
     ports:
       - "8000:8000"
     volumes:
       - .:/app
-    depends_on:
-      redis:
-        condition: service_healthy
-    command: uvicorn app.adapters.api.main:create_app --host 0.0.0.0 --port 8000 --reload --factory
+    command: uvicorn app.adapters.api.main:create_app --host 0.0.0.0 --port 8000 --factory
     restart: unless-stopped
 
-  # 3. ASYNC WORKER (Hexagonal Adapter)
-  # Runs ARQ and consumes jobs from the Redis job queue (NOT Pub/Sub channels).
-  worker:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.worker
-    container_name: aw_worker
-    env_file: .env
-    environment:
-      - REDIS_URL=redis://redis:6379/0
-
-      # Match Backend paths exactly
-      - FILESYSTEM_REPO_PATH=/app
-      - GF_LIB_PATH=/app/gf-rgl
-      - AW_PGF_PATH=/app/gf/semantik_architect.pgf
-
-      # Must match WorkerSettings.queue_name
-      - REDIS_QUEUE_NAME=architect_tasks
-    volumes:
-      - .:/app
-    depends_on:
-      redis:
-        condition: service_healthy
-    command: arq app.workers.worker.WorkerSettings --watch app
-    restart: unless-stopped
-
-  # 4. FRONTEND (UI Layer)
   frontend:
     build:
       context: .
       dockerfile: docker/Dockerfile.frontend
-    container_name: aw_frontend
+    container_name: semantik_architect_frontend
     env_file: .env
     environment:
       - NEXT_PUBLIC_ARCHITECT_API_BASE_URL=/semantik_architect/api/v1
@@ -86,11 +30,9 @@ services:
       - "3000:3000"
     restart: unless-stopped
 
-  # 5. REVERSE PROXY (Primary Entrypoint)
-  # ACCESS: http://localhost:4000/semantik_architect/
   nginx:
     image: nginx:alpine
-    container_name: aw_nginx
+    container_name: semantik_architect_nginx
     depends_on:
       - frontend
       - backend

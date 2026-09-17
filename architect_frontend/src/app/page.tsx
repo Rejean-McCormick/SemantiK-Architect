@@ -1,17 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 // Ensure these paths point to where we moved the files
 import { architectApi } from "@/lib/api";
 import EntityList from "@/components/EntityList";
 import CreateWorkspaceGrid from "@/components/CreateWorkspaceGrid";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { Language } from "@/types/language";
-import { Terminal, Wrench } from "lucide-react"; // Optional icons if you have lucide-react
 
-export default function Semantik ArchitectArchitectHomePage() {
+export default function SemantikArchitectHomePage() {
   // --- STATE ---
   // We manage the global language selection here.
   // Defaults to "eng" (English) or empty.
@@ -63,30 +60,7 @@ export default function Semantik ArchitectArchitectHomePage() {
             </p>
           </div>
 
-          {/* ACTIONS COLUMN */}
           <div className="flex flex-col gap-4 w-full md:w-64">
-            
-            {/* Developer Console (FastAPI Status) */}
-            <Link href="/dev" className="w-full">
-              <Button 
-                variant="outline" 
-                className="w-full justify-start gap-2 border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
-              >
-                🎛️ Open Dev Console
-              </Button>
-            </Link>
-
-            {/* NEW: System Tools Dashboard (Scripts) */}
-            <Link href="/tools" className="w-full">
-              <Button 
-                variant="outline" 
-                className="w-full justify-start gap-2 border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
-              >
-                <Terminal className="w-4 h-4" />
-                System Tools
-              </Button>
-            </Link>
-
             {/* LANGUAGE SELECTOR INTEGRATION */}
             <div>
               <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-slate-500">

@@ -22,10 +22,6 @@ class AppEnv(str, Enum):
     TESTING = "testing"
 
 
-class StorageBackend(str, Enum):
-    FILESYSTEM = "filesystem"
-    S3 = "s3"
-
 
 class Settings(BaseSettings):
     """
@@ -35,7 +31,7 @@ class Settings(BaseSettings):
     Important PGF-path behavior:
     - Prefer explicit PGF_PATH.
     - Accept deprecated AW_PGF_PATH as fallback.
-    - Default only to <repo>/gf/semantik_architect.pgf.
+    - Default only to <repo>/runtime/semantik_architect.pgf.
     - Never infer the compiled PGF from GF_LIB_PATH / gf-rgl.
     """
 
@@ -84,11 +80,6 @@ class Settings(BaseSettings):
     OTEL_SERVICE_NAME: str = "architect-backend"
     OTEL_EXPORTER_OTLP_ENDPOINT: Optional[str] = None
 
-    # --- Messaging & State (Redis) ---
-    REDIS_URL: str = "redis://localhost:6379/0"
-    REDIS_QUEUE_NAME: str = "architect_tasks"
-    SESSION_TTL_SEC: int = 600
-
     # --- External Services ---
     WIKIDATA_SPARQL_URL: str = "https://query.wikidata.org/sparql"
     WIKIDATA_TIMEOUT: int = 30
@@ -98,30 +89,11 @@ class Settings(BaseSettings):
     GOOGLE_API_KEY: Optional[str] = None  # Deprecated alias for Gemini
     AI_MODEL_NAME: str = "gemini-1.5-pro"
 
-    # GitHub Integration
-    GITHUB_TOKEN: Optional[str] = None
-    REPO_URL: str = "https://github.com/your-org/semantik-architect"
-
     # --- Persistence ---
-    STORAGE_BACKEND: StorageBackend = StorageBackend.FILESYSTEM
-
-    # FILESYSTEM CONFIG
     FILESYSTEM_REPO_PATH: str = str(_PROJECT_ROOT)
-
-    # S3 Config
-    AWS_ACCESS_KEY_ID: Optional[str] = None
-    AWS_SECRET_ACCESS_KEY: Optional[str] = None
-    AWS_REGION: str = "us-east-1"
-    AWS_BUCKET_NAME: str = "abstract-wiki-grammars"
-
-    # --- Worker Configuration ---
-    WORKER_CONCURRENCY: int = 2
 
     # --- Feature Flags ---
     USE_MOCK_GRAMMAR: bool = False
-
-    # Path to vendored GF/RGL sources/libs; this is NOT the compiled PGF artifact.
-    GF_LIB_PATH: str = "/usr/local/lib/gf"
 
     # --- Grammar Binary Path (PGF) ---
     PGF_PATH: Optional[str] = Field(
@@ -267,10 +239,6 @@ class Settings(BaseSettings):
         repo_root = self._coerce_repo_root(self.FILESYSTEM_REPO_PATH)
         self.FILESYSTEM_REPO_PATH = str(repo_root)
 
-        gf_lib = (self.GF_LIB_PATH or "").strip()
-        if gf_lib:
-            self.GF_LIB_PATH = self._abspath_from_repo(gf_lib)
-
         return self
 
     @model_validator(mode="after")
@@ -281,9 +249,9 @@ class Settings(BaseSettings):
         Precedence:
           1) PGF_PATH
           2) AW_PGF_PATH (deprecated)
-          3) <repo_root>/gf/semantik_architect.pgf
+          3) <repo_root>/runtime/semantik_architect.pgf
 
-        Deliberately does NOT use GF_LIB_PATH / gf-rgl as a PGF fallback.
+        Source trees and GF compiler paths are intentionally outside this runtime configuration.
         """
         explicit = (self.PGF_PATH or "").strip()
         legacy = (self.AW_PGF_PATH or "").strip()
@@ -296,7 +264,7 @@ class Settings(BaseSettings):
             self.PGF_PATH = self._abspath_from_repo(self._normalize_pgf_path(legacy))
             return self
 
-        self.PGF_PATH = str(Path(self.FILESYSTEM_REPO_PATH) / "gf" / _PGF_FILENAME)
+        self.PGF_PATH = str(Path(self.FILESYSTEM_REPO_PATH) / "runtime" / _PGF_FILENAME)
         return self
 
     model_config = SettingsConfigDict(

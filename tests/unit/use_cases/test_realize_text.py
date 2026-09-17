@@ -1,5 +1,3 @@
-Use this updated version:
-
 # tests/unit/use_cases/test_realize_text.py
 from __future__ import annotations
 
