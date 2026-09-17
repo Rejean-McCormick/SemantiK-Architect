@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def setup_telemetry(app_name: str = settings.OTEL_SERVICE_NAME):
     """
     Initializes the OpenTelemetry SDK with OTLP export.
-    Should be called once at process startup (api or worker).
+    Should be called once at API process startup.
     """
     if not settings.OTEL_EXPORTER_OTLP_ENDPOINT:
         logger.info("Telemetry disabled: No OTEL_EXPORTER_OTLP_ENDPOINT configured.")

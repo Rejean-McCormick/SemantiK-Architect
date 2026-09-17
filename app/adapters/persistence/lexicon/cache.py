@@ -23,8 +23,8 @@ Implementation notes
 - We cache by normalized language code (casefold + strip).
 - We use a lock to protect cache mutations (double-checked build).
 - We provide a `warmup_languages` alias for clarity in app startup code.
-- Compatibility: current loader returns a lexeme mapping; we construct
-  the index via LexiconIndex.from_lexemes().
+- Compatibility: load_lexicon() returns the rich Lexicon runtime object;
+  LexiconIndex accepts that object directly.
 """
 
 from __future__ import annotations
@@ -87,16 +87,8 @@ def get_or_build_index(lang: str) -> LexiconIndex:
         if existing is not None:
             return existing
 
-        lexemes = load_lexicon(nlang)
-
-        if not hasattr(LexiconIndex, "from_lexemes"):
-            raise TypeError(
-                "LexiconIndex does not expose from_lexemes(), but load_lexicon() "
-                "returns a lexeme mapping. Either add LexiconIndex.from_lexemes() "
-                "or migrate loader/index to a Lexicon-based construction path."
-            )
-
-        index = LexiconIndex.from_lexemes(lexemes)  # type: ignore[attr-defined]
+        lexicon = load_lexicon(nlang)
+        index = LexiconIndex(lexicon)
         _INDEX_CACHE[nlang] = index
         return index
 

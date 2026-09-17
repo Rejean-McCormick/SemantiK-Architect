@@ -14,7 +14,7 @@ from app.core.domain.constructions.slot_models import (
 )
 from app.core.ports.lexical_resolver_port import ResolutionResult
 
-from .index import get_index
+from .cache import get_or_build_index as get_index
 from .normalization import normalize_for_lookup
 
 if TYPE_CHECKING:

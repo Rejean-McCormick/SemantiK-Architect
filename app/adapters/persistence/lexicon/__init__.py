@@ -61,11 +61,8 @@ from .types import (
     TitleEntry,
 )
 
-# Batch 5 bridge / runtime exports
+# Batch 5 bridge / ingestion exports
 from .aw_lexeme_bridge import lexeme_from_z_object, lexemes_from_z_list
-from . import lexical_resolution
-from . import entity_resolution
-from . import predicate_resolution
 
 
 # ---------------------------------------------------------------------------
@@ -163,6 +160,18 @@ def lookup_form(
             return idx.lookup_form(lemma, feats)  # type: ignore[attr-defined]
 
     return None
+
+
+# ---------------------------------------------------------------------------
+# Batch 5 runtime namespaces
+# ---------------------------------------------------------------------------
+
+# Import these only after get_index()/lookup_* exist. entity_resolution imports
+# lookup_lemma/lookup_qid from this package boundary, so importing it earlier
+# creates a partially-initialized-package cycle.
+from . import lexical_resolution
+from . import entity_resolution
+from . import predicate_resolution
 
 
 # ---------------------------------------------------------------------------

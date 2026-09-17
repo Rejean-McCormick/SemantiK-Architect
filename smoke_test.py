@@ -1,33 +1,68 @@
-import pgf
+from __future__ import annotations
+
+from pathlib import Path
 import sys
 
-# Load the compiled binary
-pgf_path = "gf/semantik_architect.pgf"
-try:
-    grammar = pgf.readPGF(pgf_path)
-except FileNotFoundError:
-    print(f"❌ Error: Could not find {pgf_path}. Did the build finish?")
-    sys.exit(1)
 
-# Grab the languages
-try:
-    eng = grammar.languages["WikiEng"]
-    que = grammar.languages["WikiQue"]
-except KeyError as e:
-    print(f"❌ Error: Language {e} not found in PGF. The build failed to link it.")
-    sys.exit(1)
+ROOT = Path(__file__).resolve().parent
+PGF_PATH = ROOT / "runtime" / "semantik_architect.pgf"
 
-# Construct the Semantic Tree: "Shaka walks"
-# Abstract: mkFact (mkLiteral "Shaka") lex_walk_V
-expr_str = 'mkFact (mkLiteral "Shaka") lex_walk_V'
+REQUIRED_LANGUAGES = ("WikiEng", "WikiFre")
 
-try:
-    expr = pgf.readExpr(expr_str)
-    print(f"\n✨ ABSTRACT TREE: {expr_str}")
-    print("-" * 30)
-    print(f"🇬🇧 Eng (Tier 1): {eng.linearize(expr)}")
-    print(f"🇧🇴 Que (Tier 3): {que.linearize(expr)}")
-    print("-" * 30)
-    print("✅ SMOKE TEST PASSED: The system is ready.")
-except Exception as e:
-    print(f"❌ Error parsing expression: {e}")
+SMOKE_TREES = (
+    'mkBioProf (mkEntityStr "Alan Turing") (strProf "computer scientist")',
+    'mkBioNat (mkEntityStr "Alan Turing") (strNat "British")',
+    'mkBioFull (mkEntityStr "Alan Turing") (strProf "computer scientist") (strNat "British")',
+    'mkEvent (mkEntityStr "Alan Turing") (strEvent "WWII")',
+)
+
+
+def main() -> int:
+    try:
+        import pgf
+    except Exception as exc:
+        print(f"ERROR: Python PGF binding is unavailable: {exc}")
+        return 2
+
+    if not PGF_PATH.is_file():
+        print(f"ERROR: Runtime PGF not found: {PGF_PATH}")
+        return 3
+
+    try:
+        grammar = pgf.readPGF(str(PGF_PATH))
+    except Exception as exc:
+        print(f"ERROR: Could not load runtime PGF: {exc}")
+        return 4
+
+    available = sorted(grammar.languages.keys())
+    missing = [name for name in REQUIRED_LANGUAGES if name not in grammar.languages]
+
+    print(f"PGF: {PGF_PATH}")
+    print(f"LANGUAGES: {available}")
+
+    if missing:
+        print(f"ERROR: Missing required concrete languages: {missing}")
+        return 5
+
+    try:
+        for source in SMOKE_TREES:
+            expr = pgf.readExpr(source)
+            print()
+            print(f"TREE: {source}")
+            for language in REQUIRED_LANGUAGES:
+                text = grammar.languages[language].linearize(expr)
+                if not text:
+                    print(f"ERROR: Empty linearization for {language}")
+                    return 6
+                print(f"{language}: {text}")
+    except Exception as exc:
+        print(f"ERROR: Runtime PGF smoke test failed: {exc}")
+        return 7
+
+    print()
+    print("SEMANTIK_RUNTIME_PGF_OK")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

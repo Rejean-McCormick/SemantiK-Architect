@@ -218,7 +218,7 @@ async def test_realize_rejects_unloaded_runtime() -> None:
     engine = FakeGFEngine(
         status_payload={
             "loaded": False,
-            "pgf_path": "gf/semantik_architect.pgf",
+            "pgf_path": "runtime/semantik_architect.pgf",
             "error": "missing binary",
         }
     )

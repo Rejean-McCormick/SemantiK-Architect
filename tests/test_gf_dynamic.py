@@ -113,15 +113,17 @@ async def test_gf_status_reports_loaded_runtime_and_languages(
     assert sorted(supported) == sorted(gf_engine.grammar.languages.keys())
 
 
-def test_linearize_simple_phrase_across_loaded_languages(
+def test_linearize_current_semantik_ast_across_loaded_languages(
     gf_engine: GFGrammarEngine,
 ) -> None:
     """
-    Smoke test the actual PGF binary directly across every loaded concrete
-    syntax. This file is explicitly about dynamic loading + linearization, so an
-    abstract-expression test is appropriate here.
+    Smoke test the actual runtime PGF using the current SemantikArchitect
+    abstract contract, not the retired Wiki/WordNet SimpNP/apple_N contract.
     """
-    expr = pgf.readExpr("SimpNP apple_N")
+    expr = pgf.readExpr(
+        'mkBioProf (mkEntityStr "Alan Turing") '
+        '(strProf "computer scientist")'
+    )
 
     failures: list[str] = []
     successes: list[tuple[str, str]] = []
@@ -137,7 +139,7 @@ def test_linearize_simple_phrase_across_loaded_languages(
 
     assert successes, "No loaded GF language produced a non-empty linearization."
     assert not failures, (
-        "Some loaded GF languages failed to linearize a simple shared AST.\n"
+        "Some loaded GF languages failed to linearize the current SemantiK AST.\n"
         + "\n".join(failures)
     )
 

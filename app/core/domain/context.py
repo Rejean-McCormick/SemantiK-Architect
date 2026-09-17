@@ -21,7 +21,7 @@ class DiscourseEntity(BaseModel):
 
 class SessionContext(BaseModel):
     """
-    The state of a conversation session, serializable to Redis.
+    Ephemeral discourse state for a conversation session.
     """
     session_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     history_depth: int = 0

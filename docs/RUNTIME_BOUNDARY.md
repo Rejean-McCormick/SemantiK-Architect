@@ -32,3 +32,10 @@ A missing PGF is a deployment/configuration error, not a signal for SemantiK Arc
 to synthesize or compile a grammar.
 
 Language availability is read from the loaded PGF, not from an Everything Matrix. Optional display names may be supplied in `runtime/languages.json`.
+
+## Runtime session state
+
+Optional `X-Session-ID` discourse state is held in an in-process bounded/TTL
+store. No Redis broker or compilation queue is part of the application runtime.
+The state is intentionally ephemeral and is not shared across API processes.
+

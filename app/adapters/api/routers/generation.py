@@ -12,7 +12,7 @@ from app.adapters.api.contracts.generation_response_mapper import (
     map_generation_response,
 )
 from app.adapters.api.dependencies import get_generate_text_use_case, verify_api_key
-from app.adapters.redis_bus import redis_bus
+from app.adapters.persistence.session_store import session_store
 from app.core.domain.context import DiscourseEntity
 from app.core.domain.exceptions import (
     DomainError,
@@ -192,6 +192,23 @@ def _extract_subject_qid(frame: BioFrame) -> Optional[str]:
     return None
 
 
+def _normalize_discourse_gender(value: Any) -> str:
+    """Normalize runtime gender labels to the SessionContext contract."""
+    normalized = str(value or "").strip().lower()
+    return {
+        "m": "m",
+        "male": "m",
+        "masculine": "m",
+        "f": "f",
+        "female": "f",
+        "feminine": "f",
+        "n": "n",
+        "neuter": "n",
+        "c": "c",
+        "common": "c",
+    }.get(normalized, "n")
+
+
 async def _apply_discourse_context(session_id: str, frame: BioFrame) -> None:
     """
     Applies pronominalization logic based on the session history.
@@ -199,9 +216,7 @@ async def _apply_discourse_context(session_id: str, frame: BioFrame) -> None:
     This mutates the BioFrame in place before planner-first generation runs.
     It is a request-context concern, not a public-response concern.
     """
-    context = await redis_bus.get_session(session_id)
-    if context is None:
-        return
+    context = await session_store.get_session(session_id)
 
     subject_qid = _extract_subject_qid(frame)
     if not subject_qid:
@@ -240,11 +255,13 @@ async def _apply_discourse_context(session_id: str, frame: BioFrame) -> None:
             or pronoun_label
         )
         focus_qid = getattr(context.current_focus, "qid", None) or subject_qid
-        focus_gender_out = focus_gender or (getattr(frame, "gender", None) or "n")
+        focus_gender_out = _normalize_discourse_gender(
+            focus_gender or getattr(frame, "gender", None)
+        )
     else:
         focus_label = original_label or getattr(frame, "name", None) or "It"
         focus_qid = subject_qid
-        focus_gender_out = getattr(frame, "gender", None) or "n"
+        focus_gender_out = _normalize_discourse_gender(getattr(frame, "gender", None))
 
     new_entity = DiscourseEntity(
         label=focus_label,
@@ -253,5 +270,5 @@ async def _apply_discourse_context(session_id: str, frame: BioFrame) -> None:
         recency=0,
     )
     context.update_focus(new_entity)
-    await redis_bus.save_session(context)
+    await session_store.save_session(context)
 

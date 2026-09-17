@@ -75,7 +75,13 @@ def _is_event_like_frame_type(frame_type: str) -> bool:
 
 def _is_relation_like_frame_type(frame_type: str) -> bool:
     return (
-        frame_type in {"relational", "relation", "attribute", "comparison"}
+        frame_type in {
+            "relational",
+            "relation",
+            "attribute",
+            "comparison",
+            "membership_affiliation",
+        }
         or frame_type.startswith("rel.")
         or frame_type.startswith("relation.")
         or frame_type.startswith("relational.")
@@ -140,7 +146,7 @@ class SurfaceResult(BaseModel):
     construction_id: str = "unknown"
     renderer_backend: str = "compat"
     fallback_used: bool = False
-    tokens: list[str] = Field(default_factory=list)
+    tokens: list[str]
     debug_info: dict[str, Any] = Field(default_factory=dict)
     generation_time_ms: float = 0.0
 
@@ -174,7 +180,10 @@ class SurfaceResult(BaseModel):
     @field_validator("tokens", mode="before")
     @classmethod
     def _normalize_tokens(cls, value: Any) -> list[str]:
-        return _coerce_str_list(value)
+        tokens = _coerce_str_list(value)
+        if not tokens:
+            raise ValueError("tokens must contain at least one non-empty string")
+        return tokens
 
     @field_validator("debug_info", mode="before")
     @classmethod
@@ -191,21 +200,23 @@ class SurfaceResult(BaseModel):
 
     @model_validator(mode="after")
     def _finalize_runtime_contract(self) -> "SurfaceResult":
-        if not self.tokens:
-            self.tokens = self.text.split()
-
+        # validate_assignment=True means normal attribute assignment from an
+        # after-validator recursively invokes this validator. Use object-level
+        # assignment for the one normalized field we materialize here.
         debug = dict(self.debug_info)
 
         debug["lang_code"] = self.lang_code
         debug["construction_id"] = self.construction_id
         debug["renderer_backend"] = self.renderer_backend
         debug["fallback_used"] = self.fallback_used
+        debug["tokens"] = list(self.tokens)
+        debug["generation_time_ms"] = self.generation_time_ms
         debug.setdefault("runtime_path", "compat")
         debug.setdefault("slot_keys", [])
         debug.setdefault("selected_backend", self.renderer_backend)
         debug.setdefault("attempted_backends", [self.renderer_backend])
 
-        self.debug_info = debug
+        object.__setattr__(self, "debug_info", debug)
         return self
 
 
@@ -288,7 +299,7 @@ class Frame(BaseFrame):
     """
 
     frame_type: str = Field(default="generic")
-    subject: Optional[dict[str, Any]] = Field(default=None)
+    subject: dict[str, Any] = Field(default_factory=dict)
     main_entity: Optional[dict[str, Any]] = Field(default=None)
     primary_profession_lemmas: list[str] = Field(default_factory=list)
     nationality_lemmas: list[str] = Field(default_factory=list)
@@ -303,7 +314,7 @@ class Frame(BaseFrame):
         raw = dict(data)
         raw["frame_type"] = _normalize_frame_type(raw.get("frame_type"))
 
-        raw["subject"] = _coerce_mapping(raw.get("subject")) or None
+        raw["subject"] = _coerce_mapping(raw.get("subject"))
         raw["main_entity"] = _coerce_mapping(raw.get("main_entity")) or None
         raw["event"] = _coerce_mapping(raw.get("event")) or None
         raw["primary_profession_lemmas"] = _coerce_str_list(raw.get("primary_profession_lemmas"))
@@ -350,7 +361,12 @@ class Frame(BaseFrame):
     def _normalize_frame_type_field(cls, value: Any) -> str:
         return _normalize_frame_type(value)
 
-    @field_validator("subject", "main_entity", "event", mode="before")
+    @field_validator("subject", mode="before")
+    @classmethod
+    def _normalize_subject_mapping(cls, value: Any) -> dict[str, Any]:
+        return _coerce_mapping(value)
+
+    @field_validator("main_entity", "event", mode="before")
     @classmethod
     def _normalize_optional_mapping_fields(cls, value: Any) -> Optional[dict[str, Any]]:
         mapped = _coerce_mapping(value)
@@ -408,6 +424,78 @@ class Frame(BaseFrame):
     @property
     def subject_qid(self) -> Optional[str]:
         return self.qid
+
+    def _canonical_meta(self) -> dict[str, Any]:
+        meta = dict(self.meta)
+        meta["properties"] = dict(self.properties)
+        return meta
+
+    def to_bio_frame(self) -> "BioFrame":
+        if not self.subject:
+            raise ValueError("Bio frames require a subject")
+        return BioFrame(
+            frame_type="bio",
+            subject=dict(self.subject),
+            context_id=self.context_id,
+            style=self.style,
+            properties=dict(self.properties),
+            meta=self._canonical_meta(),
+        )
+
+    def to_event_frame(self) -> "EventFrame":
+        if not self.subject:
+            raise ValueError("Event frames require a subject")
+        return EventFrame(
+            frame_type="event",
+            subject=dict(self.subject),
+            event_object=getattr(self, "event_object", None),
+            event_type=getattr(self, "event_type", "participation"),
+            date=getattr(self, "date", None),
+            location=getattr(self, "location", None),
+            context_id=self.context_id,
+            style=self.style,
+            properties=dict(self.properties),
+            meta=self._canonical_meta(),
+        )
+
+    def to_relational_frame(self) -> "RelationalFrame":
+        relation = _clean_optional_str(getattr(self, "relation", None))
+        if not relation:
+            raise ValueError("Relational frames require `relation`")
+        target = _coerce_mapping(getattr(self, "object", None))
+        if not self.subject:
+            raise ValueError("Relational frames require a subject")
+        if not target:
+            raise ValueError("Relational frames require `object`")
+        return RelationalFrame(
+            frame_type="relational",
+            subject=dict(self.subject),
+            relation=relation,
+            object=target,
+            context_id=self.context_id,
+            style=self.style,
+            properties=dict(self.properties),
+            meta=self._canonical_meta(),
+        )
+
+    def to_canonical_frame(self) -> "BaseFrame":
+        if self.is_bio_like:
+            return self.to_bio_frame()
+        if self.is_event_like:
+            return self.to_event_frame()
+        if self.is_relation_like:
+            return self.to_relational_frame()
+
+        meta = dict(self.meta)
+        meta["frame_type"] = self.frame_type
+        meta["subject"] = dict(self.subject)
+        meta["properties"] = dict(self.properties)
+        return BaseFrame(
+            context_id=self.context_id,
+            style=self.style,
+            properties=dict(self.properties),
+            meta=meta,
+        )
 
 
 class BioFrame(Frame):
@@ -559,11 +647,12 @@ class LexiconEntry(BaseModel):
     key: Optional[str] = None
     lemma: str
     pos: str
-    language: str
+    language: str = "und"
     forms: dict[str, str] = Field(default_factory=dict)
+    features: dict[str, Any] = Field(default_factory=dict)
     sense: Optional[str] = None
     wikidata_qid: Optional[str] = None
-    source: Optional[str] = None
+    source: str = "manual"
     confidence: float = 1.0
     meta: dict[str, Any] = Field(default_factory=dict)
 
@@ -586,12 +675,20 @@ class LexiconEntry(BaseModel):
     def _normalize_entry_language(cls, value: Any) -> str:
         return _normalize_lang_code(value)
 
-    @field_validator("forms", "meta", mode="before")
+    @field_validator("forms", "features", "meta", mode="before")
     @classmethod
     def _normalize_dict_fields(cls, value: Any) -> dict[str, Any]:
         return _coerce_mapping(value)
 
-    @field_validator("sense", "wikidata_qid", "source", "key", mode="before")
+    @field_validator("source", mode="before")
+    @classmethod
+    def _normalize_source(cls, value: Any) -> str:
+        cleaned = _clean_optional_str(value)
+        if not cleaned:
+            raise ValueError("source must be a non-empty string")
+        return cleaned
+
+    @field_validator("sense", "wikidata_qid", "key", mode="before")
     @classmethod
     def _normalize_optional_fields(cls, value: Any) -> Optional[str]:
         return _clean_optional_str(value)

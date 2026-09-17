@@ -46,3 +46,11 @@ semantic frame -> planning -> lexical resolution -> GF/PGF realization -> surfac
 ```
 
 See `docs/RUNTIME_BOUNDARY.md` for the migration boundary.
+
+## Request sessions
+
+`X-Session-ID` discourse context is process-local and ephemeral. It no longer
+requires Redis. For horizontally scaled deployments, treat session affinity or
+an external session service as a deployment concern rather than a grammar-build
+dependency of SemantiK Architect.
+

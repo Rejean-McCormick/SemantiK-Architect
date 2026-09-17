@@ -139,6 +139,7 @@ class LexemeRef:
     """
 
     lemma: str
+    lang_code: Optional[str] = None
     lexeme_id: Optional[str] = None
     qid: Optional[str] = None
     pos: Optional[str] = None
@@ -150,6 +151,7 @@ class LexemeRef:
     def __post_init__(self) -> None:
         lemma = _clean_required_text(self.lemma, field_name="lemma")
         object.__setattr__(self, "lemma", lemma)
+        object.__setattr__(self, "lang_code", _clean_optional_text(self.lang_code))
         object.__setattr__(self, "lexeme_id", _clean_optional_text(self.lexeme_id))
         object.__setattr__(self, "qid", _clean_optional_text(self.qid))
         object.__setattr__(self, "pos", _clean_optional_text(self.pos))
@@ -172,6 +174,7 @@ class LexemeRef:
     def to_dict(self) -> dict[str, Any]:
         return {
             "lemma": self.lemma,
+            "lang_code": self.lang_code,
             "lexeme_id": self.lexeme_id,
             "qid": self.qid,
             "pos": self.pos,
@@ -198,6 +201,7 @@ class LexemeRef:
 
         return cls(
             lemma=lemma,
+            lang_code=_first_text(value, "lang_code", "language"),
             lexeme_id=_first_text(value, "lexeme_id", "id"),
             qid=_first_text(value, "qid"),
             pos=_first_text(value, "pos"),

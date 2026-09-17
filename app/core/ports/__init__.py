@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 # Keep this module import-light.
 # Do not import domain models or adapter code at runtime from here.
-# This package should define ports only, so worker/API startup does not
+# This package should define ports only, so API/runtime startup does not
 # pull in app.core.domain.models during package initialization.
 
 JSONMapping = Mapping[str, Any]

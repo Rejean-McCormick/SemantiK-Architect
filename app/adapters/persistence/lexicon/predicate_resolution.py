@@ -8,7 +8,7 @@ from typing import Any, Mapping
 from app.core.domain.constructions.slot_models import LexemeRef
 from app.core.ports.lexical_resolver_port import ResolutionResult
 
-from .index import get_index
+from .cache import get_or_build_index as get_index
 
 _QID_OR_LEXEME_ID_RE = re.compile(r"^[QL]\d+(?:[-_][A-Za-z0-9]+)?$", re.IGNORECASE)
 

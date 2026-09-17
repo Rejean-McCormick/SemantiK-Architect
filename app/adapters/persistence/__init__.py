@@ -1,16 +1,6 @@
-# app\adapters\persistence\__init__.py
+"""Runtime persistence adapters.
+
+This package contains local lexical/runtime persistence and ephemeral discourse
+session storage. It does not own GF source files or grammar-build artifacts.
+Import concrete adapters from their modules to keep package initialization light.
 """
-Persistence Adapters.
-
-This package implements the Repository ports defined in the Core Domain.
-It handles the translation between Domain Entities and the underlying storage mechanism
-(currently the local file system).
-
-Components:
-- FileSystemLexiconRepository: Concrete implementation of ILexiconRepository using JSON/GF files.
-"""
-
-from .filesystem_repo import FileSystemLexiconRepository
-__all__ = [
-    "FileSystemLexiconRepository",
-]
