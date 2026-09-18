@@ -386,7 +386,7 @@ async def test_resolve_plan_returns_updated_construction_plan_with_top_level_lex
     assert isinstance(resolved_plan.slot_map["profession"], LexemeRef)
     assert resolved_plan.slot_map["year"] == 1903
 
-    assert resolved_plan.lexical_bindings == resolved_plan.slot_map["lexical_bindings"]
+    assert "lexical_bindings" not in resolved_plan.slot_map
     assert resolved_plan.lexical_bindings["profession"]["lemma"] == "physicist"
     assert resolved_plan.lexical_bindings["profession"]["lexeme_id"] == "L123"
     assert resolved_plan.lexical_bindings["profession"]["fallback_used"] is False

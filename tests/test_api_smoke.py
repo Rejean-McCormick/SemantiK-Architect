@@ -282,41 +282,35 @@ def _get_req_path(req: Dict[str, Any]) -> str:
 
 
 def _collect_route_matchers() -> List[Tuple[re.Pattern, set]]:
-    """
-    Build regex matchers for backend routes so we can validate that the
-    GUI request catalog points to real endpoints.
+    """Build regex matchers from the public OpenAPI surface.
+
+    Newer FastAPI/Starlette versions may retain included routers behind nested
+    route objects, so direct ``app.routes`` introspection is not a stable public
+    contract. OpenAPI paths are exactly the surface the frontend consumes.
     """
     matchers: List[Tuple[re.Pattern, set]] = []
+    schema = app.openapi()
 
-    def add_route(path: str, methods: Optional[Iterable[str]]) -> None:
+    for path, path_item in schema.get("paths", {}).items():
+        if not isinstance(path_item, dict):
+            continue
+
+        methods = {
+            method.upper()
+            for method, operation in path_item.items()
+            if method.lower() in {"get", "post", "put", "patch", "delete", "options", "head"}
+            and isinstance(operation, dict)
+        }
+
         parts = []
-        for seg in path.strip("/").split("/"):
+        for seg in str(path).strip("/").split("/"):
             if seg.startswith("{") and seg.endswith("}"):
                 parts.append(r"[^/]+")
             else:
                 parts.append(re.escape(seg))
         pat = r"^/" + "/".join(parts) + r"/?$"
-        matchers.append((re.compile(pat), set(methods or [])))
+        matchers.append((re.compile(pat), methods))
 
-    def walk(router_obj: Any, prefix: str = "") -> None:
-        routes = getattr(router_obj, "routes", None)
-        if not routes:
-            return
-        for r in routes:
-            if isinstance(r, APIRoute):
-                add_route(prefix + r.path, r.methods)
-            elif isinstance(r, Mount):
-                # Join mount prefix with subroutes
-                mp = prefix + (r.path or "")
-                for sub in getattr(r, "routes", []) or []:
-                    if isinstance(sub, APIRoute):
-                        add_route(mp + sub.path, sub.methods)
-                    elif isinstance(sub, Router):
-                        walk(sub, mp)
-            elif isinstance(r, Router):
-                walk(r, prefix)
-
-    walk(app, "")
     return matchers
 
 

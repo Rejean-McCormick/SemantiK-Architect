@@ -220,8 +220,25 @@ class SurfaceResult(BaseModel):
         return self
 
 
-# Backward-compatible alias used throughout the repo/tests.
-Sentence = SurfaceResult
+class Sentence(SurfaceResult):
+    """Backward-compatible sentence result.
+
+    Legacy engine callers historically supplied only ``text`` and ``lang_code``.
+    Keep the canonical ``SurfaceResult`` strict while deriving tokens for this
+    compatibility subtype when callers omit them.
+    """
+
+    tokens: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _derive_legacy_tokens(cls, data: Any) -> Any:
+        if isinstance(data, dict) and not data.get("tokens"):
+            text = data.get("text")
+            if isinstance(text, str) and text.strip():
+                data = dict(data)
+                data["tokens"] = [part for part in text.split() if part]
+        return data
 
 
 # ---------------------------------------------------------------------------

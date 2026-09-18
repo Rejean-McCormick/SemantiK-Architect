@@ -1,0 +1,13 @@
+{
+  "app/adapters/api/routers/languages.py": "6cf6ac0d5e8e82ba6460c2b9943546505a60ea031e4336411579abf641a31a73",
+  "app/adapters/engines/family_construction_adapter.py": "6e0d4cb1331eea4c056b383466de7a1bbbf0c99eda272eb4d246b4de9b8a8bba",
+  "app/adapters/engines/gf_construction_adapter.py": "7059ad7023a630331ae74c1d2161be2bc7297dab2490d2786a98a963e4db24e6",
+  "app/core/bridges/frame_to_slots.py": "f527df8cab0a7ab7529ef28aada27eb383dc1378d52acd307df491729ab5313c",
+  "app/core/domain/models.py": "d20c7eee255f958ae0f71829ecf52916a450b44e8f5e55249d9508771dfa7a67",
+  "app/core/use_cases/plan_text.py": "52b9771c5ec6b32393e494d2496fada2b248945ff6d7075d980e6c4c2dba6d78",
+  "app/core/use_cases/realize_text.py": "97478f8c4398af91d406f253f4aa9858ce34a022ac39b2fc1a1d5bf08da2a523",
+  "tests/http_api/test_entities.py": "58aa0f08953a50e6454fd47a1fe2ebb6141a591388dc294fafdca3964baf4869",
+  "tests/http_api/test_generate.py": "20a5e8935dae2b9cf1144cbe9aa658d5e8a45a817128f712d5248267e31d1603",
+  "tests/test_api_smoke.py": "1d1e62d160f0fdd5a6531d7f9f5ac3aca349131b0e9cb7dbb07074ca0c5373e6",
+  "tests/test_lexicon_smoke.py": "388c7fa22e9b78fe410c2187fafb3b01a7c94da0f17d9ecb0fef66824c71aa34"
+}

@@ -315,8 +315,20 @@ class PlanText:
         if isinstance(value, PlannedSentence):
             return True
 
+        # A mapping is one planner item, even when malformed. Treating it as
+        # an iterable would iterate its keys and hide the useful "without a frame"
+        # contract error behind a string-item error.
         if isinstance(value, Mapping):
-            return "construction_id" in value and "frame" in value
+            return True
+
+        model_dump = getattr(value, "model_dump", None)
+        if callable(model_dump):
+            try:
+                dumped = model_dump()
+            except Exception:
+                dumped = None
+            if isinstance(dumped, Mapping):
+                return True
 
         return hasattr(value, "construction_id") and hasattr(value, "frame")
 

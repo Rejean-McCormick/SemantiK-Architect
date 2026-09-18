@@ -301,9 +301,17 @@ class LexicalResolver:
         )
 
         lexical_bindings = resolved_slot_map.get("lexical_bindings", {})
+        # resolve_slot_map() returns an intermediate envelope that includes
+        # lexical_bindings for standalone callers. ConstructionPlan keeps that
+        # metadata at the plan level and explicitly rejects it as a slot name.
+        plan_slot_map = {
+            key: value
+            for key, value in resolved_slot_map.items()
+            if key != "lexical_bindings"
+        }
         return _clone_with_updates(
             construction_plan,
-            slot_map=resolved_slot_map,
+            slot_map=plan_slot_map,
             lexical_bindings=lexical_bindings,
         )
 

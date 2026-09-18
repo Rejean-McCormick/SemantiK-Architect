@@ -401,6 +401,10 @@ class RealizeText:
         for index, plan in enumerate(construction_plans):
             try:
                 results.append(await self.execute(plan))
+            except RealizationError as exc:
+                raise RealizationError(
+                    f"Failed to realize sentence at index {index}: {exc}"
+                ) from exc
             except DomainError:
                 raise
             except Exception as exc:
@@ -533,11 +537,16 @@ class RealizeText:
 
         slot_keys = _normalize_slot_keys(_extract_slot_map(construction_plan))
 
-        generation_time_ms_raw = _get_value(
-            raw_result,
-            "generation_time_ms",
-            existing_debug.get("generation_time_ms", elapsed_ms),
-        )
+        if isinstance(raw_result, str):
+            # A raw string carries no backend timing contract. Preserve the
+            # compatibility value rather than attributing wrapper overhead to it.
+            generation_time_ms_raw = 0.0
+        else:
+            generation_time_ms_raw = _get_value(
+                raw_result,
+                "generation_time_ms",
+                existing_debug.get("generation_time_ms", elapsed_ms),
+            )
         try:
             generation_time_ms = _coerce_float(
                 generation_time_ms_raw,

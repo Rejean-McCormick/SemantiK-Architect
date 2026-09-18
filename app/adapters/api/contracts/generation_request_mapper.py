@@ -57,6 +57,10 @@ def map_generation_request(
     - If `path_lang_code` is provided, it is authoritative.
     - If both URL and payload languages are provided, they must match after normalization.
     - If no URL language is provided, the payload must contain one.
+    - Standard semantic-frame payloads must explicitly declare `frame_type`
+      (the legacy key `type` is accepted only as an HTTP-boundary alias).
+    - The request mapper never infers a semantic frame family from payload shape.
+    - Ninai protocol payloads (`function` present) keep their own protocol contract.
     - HTTP compatibility handling ends here; downstream runtime code receives
       only canonicalized domain objects plus cleaned payload data.
     """
@@ -175,19 +179,23 @@ def parse_generation_payload(
     frame_type_raw = payload_dict.get("frame_type") or payload_dict.get("type")
     frame_type = str(frame_type_raw or "").strip()
 
+    # Contract decision: a standard semantic-frame request must state its frame
+    # family explicitly. Shape-based inference (for example, seeing a `subject`
+    # or person-like fields and silently choosing `bio`) is intentionally not
+    # part of the public API contract.
+    if not frame_type:
+        raise InvalidFrameError("Missing required field: frame_type")
+
     try:
-        if is_bioish_frame_type(frame_type) or looks_like_bioish_payload(payload_dict):
+        if is_bioish_frame_type(frame_type):
             normalized = coerce_bio_payload(payload_dict)
             logger.info(
                 "bio_payload_normalized",
                 lang=lang_code,
-                original_frame_type=frame_type or "(implicit_bio)",
+                original_frame_type=frame_type,
                 subject_keys=sorted(normalized["subject"].keys()),
             )
             return BioFrame(**normalized)
-
-        if not frame_type:
-            raise InvalidFrameError("Missing required field: frame_type")
 
         canonical_payload = dict(payload_dict)
         canonical_payload.pop("type", None)
@@ -233,7 +241,12 @@ def is_bioish_frame_type(frame_type: Any) -> bool:
 
 def looks_like_bioish_payload(payload: Mapping[str, Any]) -> bool:
     """
-    Heuristic for GUI/test-bench person payloads that omit an explicit bio frame_type.
+    Legacy compatibility helper for identifying person-like payloads.
+
+    The canonical HTTP generation path deliberately does *not* call this helper:
+    standard semantic-frame requests must declare `frame_type` explicitly.  It
+    remains available for callers that still need to inspect legacy payloads
+    during migration without changing the public API contract.
     """
     if not isinstance(payload, Mapping):
         return False

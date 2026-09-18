@@ -27,6 +27,7 @@ import os
 import sys
 import logging
 from dataclasses import asdict
+from pathlib import Path
 from typing import List, Tuple, Dict
 
 # Ensure project root is on path
@@ -36,12 +37,13 @@ if PROJECT_ROOT not in sys.path:
 
 # [FIX] Use full application paths instead of top-level 'lexicon'
 from app.adapters.persistence.lexicon.loader import available_languages, load_lexicon
+from app.adapters.persistence.lexicon.config import get_config
 from app.adapters.persistence.lexicon.schema import SchemaIssue, validate_lexicon_structure
 
 # [FIX] Use standard logging if utils.logging_setup is missing
 log = logging.getLogger(__name__)
 
-LEXICON_DIR = os.path.join(PROJECT_ROOT, "data", "lexicon")
+LEXICON_DIR = str(get_config().resolved_lexicon_dir(project_root=Path(PROJECT_ROOT)))
 
 
 # ---------------------------------------------------------------------------

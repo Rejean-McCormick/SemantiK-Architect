@@ -8,7 +8,7 @@ from typing import Any
 import pytest
 from fastapi.testclient import TestClient
 
-from app.adapters.api.dependencies import get_generate_text_use_case
+from app.adapters.api.dependencies import get_generate_text_use_case, verify_api_key
 from app.adapters.api.main import create_app
 from app.core.domain.exceptions import LanguageNotFoundError
 from app.core.domain.models import SurfaceResult
@@ -42,6 +42,7 @@ def client_factory():
     def _make(use_case: Any):
         app = create_app()
         app.dependency_overrides[get_generate_text_use_case] = lambda: use_case
+        app.dependency_overrides[verify_api_key] = lambda: "test-api-key"
         try:
             with TestClient(app) as client:
                 yield client

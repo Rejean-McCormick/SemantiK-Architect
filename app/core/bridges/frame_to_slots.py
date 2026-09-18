@@ -54,7 +54,10 @@ _RESERVED_PLAN_FIELDS = {
     "lexical_bindings",
     "provenance",
     "renderer_backend",
+    "fallback_used",
+    "tokens",
     "debug_info",
+    "generation_time_ms",
     "metadata",
     "slot_map_version",
     "frame_ref",
@@ -513,6 +516,12 @@ class FrameToSlotsBridge:
             value = extractor(frame)
             if value is not None:
                 out[slot_name] = value
+
+        # Generic extraction may discover the same entity as both topic and
+        # subject because topic has a compatibility fallback to subject. A generic
+        # slot map should not duplicate that semantic role.
+        if out.get("topic") == out.get("subject"):
+            out.pop("topic", None)
 
         out = _maybe_add_common_modifiers(frame, out)
 
@@ -1176,6 +1185,21 @@ def _normalize_location_ref(raw: Any) -> Optional[dict[str, JSONValue]]:
             _strip_str(data.get("location_type")),
             _strip_str(data.get("kind")),
         )
+        # Location-specific fields belong at the location-ref top level, not
+        # duplicated inside the generic entity ``extra`` bucket.
+        extra = entity.get("extra")
+        if isinstance(extra, dict):
+            for key in (
+                "country_code",
+                "countryCode",
+                "iso_country_code",
+                "iso_3166_1_alpha2",
+                "location_type",
+            ):
+                extra.pop(key, None)
+            if not extra:
+                entity.pop("extra", None)
+
         if country_code is not None:
             entity["country_code"] = country_code.upper()
         if location_type is not None:

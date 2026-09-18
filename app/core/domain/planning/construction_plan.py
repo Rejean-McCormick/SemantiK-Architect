@@ -42,6 +42,8 @@ from types import MappingProxyType
 from typing import Any, Iterable, Iterator, Mapping
 from collections.abc import Mapping as ABCMapping
 
+from ..constructions.slot_models import EntityRef, LexemeRef
+
 __all__ = ["ConstructionPlan"]
 
 
@@ -116,7 +118,7 @@ def _materialize_mapping(value: Any, *, field_name: str) -> dict[str, Any]:
             )
         key = raw_key.strip()
         if not key:
-            raise ValueError(f"{field_name} contains an empty key.")
+            raise ValueError("slot_map contains an empty slot name." if field_name == "slot_map" else f"{field_name} contains an empty key.")
         out[key] = raw_val
     return out
 
@@ -131,6 +133,12 @@ def _freeze_jsonish(value: Any) -> Any:
     - dataclass -> frozen dict-like mapping
     - scalars / unknown objects -> unchanged
     """
+    # Canonical slot references are immutable domain values, not JSON blobs.
+    # Preserve their runtime type inside a ConstructionPlan so downstream
+    # renderers/resolvers can distinguish EntityRef/LexemeRef from mappings.
+    if isinstance(value, EntityRef | LexemeRef):
+        return value
+
     if is_dataclass(value):
         value = asdict(value)
 

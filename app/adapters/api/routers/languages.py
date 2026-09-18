@@ -5,13 +5,12 @@ from functools import lru_cache
 from pathlib import Path
 from typing import List, Optional
 
-from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
+from app.adapters.api.dependencies import get_grammar_engine
 from app.core.ports import IGrammarEngine
 from app.shared.config import settings
-from app.shared.container import Container
 
 router = APIRouter()
 
@@ -49,9 +48,8 @@ def _runtime_language_metadata() -> dict[str, dict[str, str]]:
 
 
 @router.get("/", response_model=List[LanguageOut])
-@inject
 async def list_languages(
-    engine: IGrammarEngine = Depends(Provide[Container.grammar_engine]),
+    engine: IGrammarEngine = Depends(get_grammar_engine),
 ) -> List[LanguageOut]:
     """List languages actually available in the loaded runtime grammar."""
     try:

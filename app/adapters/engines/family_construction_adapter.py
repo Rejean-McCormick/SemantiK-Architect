@@ -354,8 +354,9 @@ def _extract_lexical_item(
 
 
 def _resolved_language_hint(lang_code: str) -> str:
-    normalized = (_clean_str(lang_code) or "").lower()
-    return _RESOLVED_LANGUAGE_HINTS.get(normalized, normalized)
+    # Family renderers are selected by the public/runtime language code. GF
+    # concrete syntax names (WikiEng/WikiFre) belong to the GF backend only.
+    return (_clean_str(lang_code) or "").lower()
 
 
 # ---------------------------------------------------------------------------

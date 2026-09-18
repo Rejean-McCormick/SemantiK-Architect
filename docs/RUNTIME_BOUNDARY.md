@@ -1,41 +1,96 @@
-# SemantiK Architect — Runtime Boundary
+# Runtime Boundary
+
+Status: **normative**
 
 ## Decision
 
-SemantiK Architect is a consumer of Grammatical Framework runtime artifacts. It is
-not a grammar-development, RGL-maintenance, compilation, repair, or audit environment.
+SemantiK Architect is a **semantic/NLG runtime** and a **consumer of precompiled GF runtime artifacts**. It is not a GF grammar-development environment.
 
-## Kept here
+## Responsibilities kept in this repository
 
-- semantic frame/domain model;
+SemantiK Architect owns:
+
+- semantic frame/domain models;
+- request normalization into canonical semantic input;
 - planning and construction selection;
-- lexical lookup needed at runtime;
+- `PlannedSentence` and `ConstructionPlan` runtime contracts;
+- runtime lexical lookup and lexical resolution;
+- renderer dispatch and realization;
 - GF/PGF runtime adapters;
-- text-generation API and generation UI;
-- runtime health, configuration, deployment, and tests.
+- non-GF runtime renderers where supported;
+- the public generation API and runtime UI;
+- runtime capability reporting;
+- optional in-process discourse/session state;
+- health, observability, deployment configuration, tests, and diagnostics.
 
-## Removed from here
+## Responsibilities outside this repository
 
-- `builder/` and generated GF bridge sources;
-- grammar factories, grammar repair scripts, AI grammar authoring agents;
-- GF/RGL backups and quarantines;
-- build/onboarding queue, worker, Redis compilation pipeline;
-- developer tools API/dashboard, Everything Matrix UI, grammar refiner UI;
-- source `.gf` ownership inside the runtime repository.
+SemantiK Architect does not own:
 
-## Runtime contract
+- GF source grammar authoring;
+- `.gf` source files for the runtime grammar;
+- RGL maintenance or vendoring;
+- grammar repair or grammar-generation agents;
+- GF source alignment or compilation workflows;
+- language-onboarding build pipelines;
+- grammar build workers or queues;
+- Redis/ARQ compilation infrastructure;
+- grammar-development dashboards or tools APIs;
+- maturity matrices for grammar-development readiness;
+- GF/RGL backups, quarantines, or source archives.
 
-The application receives a precompiled `semantik_architect.pgf`. The default location
-is `runtime/semantik_architect.pgf`, overridable with `PGF_PATH`.
+Those concerns belong to the external GF development/validation ecosystem. The boundary between systems is the deployed PGF artifact and any explicitly versioned runtime data that SemantiK requires.
 
-A missing PGF is a deployment/configuration error, not a signal for SemantiK Architect
-to synthesize or compile a grammar.
+## PGF deployment contract
 
-Language availability is read from the loaded PGF, not from an Everything Matrix. Optional display names may be supplied in `runtime/languages.json`.
+The default runtime artifact is:
 
-## Runtime session state
+```text
+runtime/semantik_architect.pgf
+```
 
-Optional `X-Session-ID` discourse state is held in an in-process bounded/TTL
-store. No Redis broker or compilation queue is part of the application runtime.
-The state is intentionally ephemeral and is not shared across API processes.
+It may be overridden with:
 
+```text
+PGF_PATH
+```
+
+A missing or unreadable PGF is a deployment/configuration failure. The application must not respond by synthesizing or compiling a grammar.
+
+## Capability contract
+
+Language capability is determined from the **loaded PGF concrete languages**, then mapped to application language codes. Lexicon directory presence, old language inventories, or development matrices do not define runtime capability.
+
+Optional display metadata may live in `runtime/languages.json`, but it cannot create a capability that is absent from the loaded PGF.
+
+## Generation ingress contract
+
+Standard JSON generation requests carry explicit semantic intent:
+
+- `frame_type` is mandatory;
+- the frame family is not inferred from payload shape;
+- each public frame family has one canonical JSON shape;
+- retired aliases are rejected rather than normalized;
+- unsupported frame types are request/domain validation errors.
+
+Ninai/function-style input, when enabled, is a separate input protocol. It must normalize to the same canonical domain model before planning and does not create a second runtime pipeline.
+
+## No hidden second runtime
+
+There is one canonical generation path. A facade may compose the stages, but it must not introduce an alternate direct frame-to-engine execution path.
+
+The renderer contract is:
+
+```text
+ConstructionPlan -> SurfaceResult
+```
+
+not:
+
+```text
+Frame -> renderer
+```
+
+## Runtime state
+
+Optional discourse/session state is ephemeral, bounded, and in-process. It is not a grammar-build queue, a persistence layer, or a cross-process coordination mechanism. See `SESSION_STATE.md`.

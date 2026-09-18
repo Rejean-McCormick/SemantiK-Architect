@@ -256,6 +256,7 @@ class GFConstructionAdapter:
             raise RealizationError(stripped_text[1:-1])
 
         debug_info: dict[str, Any] = {
+            "runtime_path": "planner_first",
             "construction_id": construction_plan.construction_id,
             "renderer_backend": self.renderer_backend,
             "lang_code": construction_plan.lang_code,

@@ -45,7 +45,17 @@ The central generation path remains:
 semantic frame -> planning -> lexical resolution -> GF/PGF realization -> surface text
 ```
 
-See `docs/RUNTIME_BOUNDARY.md` for the migration boundary.
+### Generation request contract
+
+Canonical JSON generation requests must declare `frame_type` explicitly. SemantiK
+Architect does not infer a frame family from the presence of `subject`, `name`,
+`profession`, or other payload fields. Missing `frame_type` is a request-validation
+error (HTTP 422). Explicit legacy frame-type aliases such as `entity.person` may be
+normalized at the HTTP boundary; the legacy key `type` is also accepted there as a
+compatibility alias. Ninai `function` payloads remain governed by the Ninai protocol.
+
+See `docs/API_GENERATION_CONTRACT.md` for the generation ingress contract and
+`docs/RUNTIME_BOUNDARY.md` for the migration boundary.
 
 ## Request sessions
 
