@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import re
+from time import perf_counter
 from typing import Any
 
 import structlog
@@ -25,66 +26,8 @@ class _RenderedSurface:
 
 
 _LANG_WORDS: dict[str, dict[str, str]] = {
-    "en": {
-        "be": "is",
-        "have": "has",
-        "there_is": "there is",
-        "and": "and",
-        "by": "by",
-        "in": "in",
-        "who": "who",
-        "that": "that",
-    },
-    "fr": {
-        "be": "est",
-        "have": "a",
-        "there_is": "il y a",
-        "and": "et",
-        "by": "par",
-        "in": "à",
-        "who": "qui",
-        "that": "que",
-    },
-    "es": {
-        "be": "es",
-        "have": "tiene",
-        "there_is": "hay",
-        "and": "y",
-        "by": "por",
-        "in": "en",
-        "who": "que",
-        "that": "que",
-    },
-    "de": {
-        "be": "ist",
-        "have": "hat",
-        "there_is": "es gibt",
-        "and": "und",
-        "by": "von",
-        "in": "in",
-        "who": "der",
-        "that": "dass",
-    },
-    "it": {
-        "be": "è",
-        "have": "ha",
-        "there_is": "c'è",
-        "and": "e",
-        "by": "da",
-        "in": "a",
-        "who": "che",
-        "that": "che",
-    },
-    "pt": {
-        "be": "é",
-        "have": "tem",
-        "there_is": "há",
-        "and": "e",
-        "by": "por",
-        "in": "em",
-        "who": "que",
-        "that": "que",
-    },
+    "en": {"be": "is", "have": "has", "there_is": "there is", "and": "and", "by": "by", "in": "in", "who": "who", "that": "that"},
+    "fr": {"be": "est", "have": "a", "there_is": "il y a", "and": "et", "by": "par", "in": "à", "who": "qui", "that": "que"},
 }
 
 _COPULAR_CONSTRUCTIONS = frozenset(
@@ -290,9 +233,12 @@ class SafeModeConstructionAdapter:
 
     async def realize(
         self,
-        construction_plan: ConstructionPlan | Mapping[str, Any],
+        construction_plan: ConstructionPlan,
     ) -> SurfaceResult:
-        plan = self._coerce_plan(construction_plan)
+        if not isinstance(construction_plan, ConstructionPlan):
+            raise TypeError("SafeModeConstructionAdapter.realize expects a ConstructionPlan")
+        plan = construction_plan.validate()
+        started = perf_counter()
         rendered = self._render(plan)
 
         warnings: list[str] = []
@@ -349,16 +295,9 @@ class SafeModeConstructionAdapter:
             fallback_used=True,
             tokens=text.split(),
             debug_info=debug_info,
+            generation_time_ms=max((perf_counter() - started) * 1000.0, 0.0),
         )
 
-    def _coerce_plan(self, value: ConstructionPlan | Mapping[str, Any]) -> ConstructionPlan:
-        if isinstance(value, ConstructionPlan):
-            return value.validate()
-        if isinstance(value, Mapping):
-            return ConstructionPlan.from_dict(value).validate()
-        raise TypeError(
-            "SafeModeConstructionAdapter.realize expects a ConstructionPlan or mapping."
-        )
 
     def _render(self, plan: ConstructionPlan) -> _RenderedSurface:
         cid = _clean_str(plan.construction_id)

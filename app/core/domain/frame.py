@@ -8,24 +8,9 @@ Style = Literal["simple", "formal"]
 EntityLike = Union["Entity", Dict[str, Any]]
 EventObjectLike = Union["Entity", Dict[str, Any], str]
 
-_BIOISH_FRAME_TYPES = {
-    "bio",
-    "biography",
-    "entity.person",
-    "entity_person",
-    "person",
-    "entity.person.v1",
-    "entity.person.v2",
-}
+_BIOISH_FRAME_TYPES = {"bio"}
 
-_STYLE_ALIASES: dict[str, Style] = {
-    "simple": "simple",
-    "plain": "simple",
-    "default": "simple",
-    "neutral": "simple",
-    "basic": "simple",
-    "formal": "formal",
-}
+_STYLE_ALIASES: dict[str, Style] = {"simple": "simple", "formal": "formal"}
 
 
 # ---------------------------------------------------------------------------
@@ -103,10 +88,8 @@ class Entity(BaseModel):
     """
     Lightweight discourse entity used by wire/domain frames.
 
-    This model is intentionally permissive:
-    - required `name` for direct instantiation
-    - optional metadata fields used by discourse/planning and routers
-    - extra fields are preserved for forward compatibility
+    Required `name` plus optional runtime metadata used by planning and discourse.
+    Extra semantic metadata is preserved for forward evolution of canonical frames.
     """
 
     name: str = Field(..., min_length=1)
@@ -185,8 +168,7 @@ class BaseFrame(BaseModel):
 
         raw = dict(data)
 
-        # Accept common synonyms sent by older callers.
-        style_in = raw.get("style", raw.get("register"))
+        style_in = raw.get("style")
         if isinstance(style_in, str):
             normalized_style = _STYLE_ALIASES.get(style_in.strip().lower())
             if normalized_style is not None:
@@ -226,6 +208,45 @@ class BaseFrame(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# Generic frame
+# ---------------------------------------------------------------------------
+
+
+class Frame(BaseFrame):
+    """Canonical generic semantic frame for explicitly named frame families."""
+
+    frame_type: str
+    subject: Dict[str, Any] = Field(default_factory=dict)
+
+    model_config = ConfigDict(
+        extra="allow",
+        validate_assignment=True,
+        str_strip_whitespace=True,
+    )
+
+    @field_validator("frame_type", mode="before")
+    @classmethod
+    def _validate_frame_type(cls, value: Any) -> str:
+        cleaned = _clean_optional_str(value)
+        if not cleaned:
+            raise ValueError("frame_type must be a non-empty string.")
+        return cleaned.lower()
+
+    @field_validator("subject", mode="before")
+    @classmethod
+    def _normalize_subject(cls, value: Any) -> Dict[str, Any]:
+        return _coerce_mapping(value)
+
+    @property
+    def name(self) -> str:
+        return _best_name(self.subject)
+
+    @property
+    def qid(self) -> Optional[str]:
+        return _entity_attr(self.subject, "qid")
+
+
+# ---------------------------------------------------------------------------
 # Bio frame
 # ---------------------------------------------------------------------------
 
@@ -242,15 +263,6 @@ class BioFrame(BaseFrame):
           "meta": {...}
         }
 
-    Still accepts legacy flat inputs such as:
-        {
-          "frame_type": "entity.person",
-          "name": "Alan Turing",
-          "profession": "mathematician",
-          "nationality": "British",
-          "gender": "m",
-          "qid": "Q7251"
-        }
     """
 
     frame_type: Literal["bio"] = "bio"
@@ -263,43 +275,27 @@ class BioFrame(BaseFrame):
             return data
 
         raw = dict(data)
-        incoming_type = str(raw.get("frame_type") or "").strip().lower()
+        incoming_type = str(raw.get("frame_type") or "bio").strip().lower()
+        if incoming_type != "bio":
+            raise ValueError("BioFrame.frame_type must be 'bio'.")
 
-        # Start from any existing nested subject/properties.
-        subject_in = raw.get("subject")
-        properties_in = raw.get("properties")
+        retired_flat = {
+            "name", "label", "qid", "gender", "sex",
+            "profession", "occupation", "nationality", "citizenship",
+            "main_entity", "primary_profession_lemmas", "nationality_lemmas",
+        }
+        present = sorted(key for key in retired_flat if key in raw)
+        if present:
+            raise ValueError(
+                "BioFrame uses a nested subject object; retired flat fields are not accepted: "
+                + ", ".join(present)
+            )
 
-        subject = _copy_if_mapping(subject_in)
-        properties = _copy_if_mapping(properties_in)
+        subject = raw.get("subject")
+        if not isinstance(subject, (dict, Entity)):
+            raise ValueError("BioFrame requires a nested `subject` object.")
 
-        # If subject is not a mapping, allow Pydantic to parse Entity instances later.
-        # We only normalize legacy flat payloads into nested dicts here.
-        if not subject and isinstance(subject_in, Entity):
-            pass
-
-        # Merge legacy flat fields into the canonical nested structure.
-        _fill_if_missing(subject, "name", raw.get("name"))
-        _fill_if_missing(subject, "name", raw.get("label"))
-        _fill_if_missing(subject, "qid", raw.get("qid"))
-        _fill_if_missing(subject, "gender", raw.get("gender"))
-        _fill_if_missing(subject, "gender", raw.get("sex"))
-
-        _fill_if_missing(properties, "profession", raw.get("profession"))
-        _fill_if_missing(properties, "profession", raw.get("occupation"))
-        _fill_if_missing(properties, "nationality", raw.get("nationality"))
-        _fill_if_missing(properties, "nationality", raw.get("citizenship"))
-
-        # If the upstream subject already contains profession/nationality, keep them;
-        # they remain readable through compatibility properties.
-        if subject:
-            raw["subject"] = subject
-        if properties:
-            raw["properties"] = properties
-
-        # Canonicalize known bio/person aliases.
-        if incoming_type in _BIOISH_FRAME_TYPES or not incoming_type:
-            raw["frame_type"] = "bio"
-
+        raw["frame_type"] = "bio"
         return raw
 
     @model_validator(mode="after")
@@ -312,7 +308,7 @@ class BioFrame(BaseFrame):
 
     @property
     def name(self) -> str:
-        """Compatibility bridge used by discourse and older render paths."""
+        """Return the canonical subject label."""
         return _best_name(self.subject)
 
     @name.setter
@@ -398,20 +394,6 @@ class EventFrame(BaseFrame):
 
         raw = dict(data)
 
-        # Accept a few legacy aliases.
-        if "event_object" not in raw:
-            for alias in ("object", "target", "patient", "theme"):
-                if alias in raw:
-                    raw["event_object"] = raw[alias]
-                    break
-
-        if "event_type" not in raw:
-            for alias in ("type", "kind"):
-                value = raw.get(alias)
-                if isinstance(value, str) and value.strip():
-                    raw["event_type"] = value
-                    break
-
         if "date" in raw:
             raw["date"] = _clean_optional_str(raw.get("date"))
         if "location" in raw:
@@ -454,7 +436,7 @@ class RelationalFrame(BaseFrame):
     """
     Direct relationship between two entities.
 
-    Uses `object` intentionally to preserve compatibility with existing callers.
+    Uses `object` as the canonical relation target field.
     """
 
     frame_type: Literal["relational"] = "relational"
@@ -470,11 +452,6 @@ class RelationalFrame(BaseFrame):
 
         raw = dict(data)
 
-        if "object" not in raw:
-            for alias in ("target", "right", "other"):
-                if alias in raw:
-                    raw["object"] = raw[alias]
-                    break
 
         if "relation" in raw:
             raw["relation"] = _clean_optional_str(raw.get("relation"))
@@ -506,7 +483,7 @@ class RelationalFrame(BaseFrame):
 # Public aliases
 # ---------------------------------------------------------------------------
 
-SemanticFrame = Union[BioFrame, EventFrame, RelationalFrame, BaseFrame]
+SemanticFrame = Union[BioFrame, EventFrame, RelationalFrame, Frame]
 
 __all__ = [
     "Style",
@@ -514,6 +491,7 @@ __all__ = [
     "EventObjectLike",
     "Entity",
     "BaseFrame",
+    "Frame",
     "BioFrame",
     "EventFrame",
     "RelationalFrame",

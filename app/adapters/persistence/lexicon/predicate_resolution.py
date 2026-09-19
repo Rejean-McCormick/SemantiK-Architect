@@ -70,13 +70,11 @@ class PredicateResolutionOptions:
     """
 
     allow_raw_fallback: bool = True
-    allow_shared_lexicon_fallback: bool = True
     try_qid_lookup: bool = True
     try_posless_lookup: bool = True
     raw_fallback_confidence: float = 0.25
     index_hit_confidence: float = 0.98
     qid_hit_confidence: float = 1.0
-    shared_runtime_confidence: float = 0.72
     preferred_pos_by_slot: dict[str, str] = field(
         default_factory=lambda: dict(DEFAULT_POS_BY_SLOT)
     )
@@ -104,8 +102,7 @@ def resolve_predicate(
     2. Resolve by explicit QID / lexeme ID
     3. Resolve by lemma with preferred POS
     4. Resolve by lemma without POS (optional)
-    5. Shared legacy lexicon fallback (optional)
-    6. Raw-string fallback as a low-confidence LexemeRef (optional)
+    5. Raw-string fallback as a low-confidence LexemeRef (optional)
     """
 
     opts = options or PredicateResolutionOptions()
@@ -365,34 +362,6 @@ def _resolve_from_text(
                 requested_pos=requested_pos,
             )
 
-    if options.allow_shared_lexicon_fallback:
-        fallback = _lookup_in_shared_lexicon(
-            text=cleaned,
-            lang_code=lang_code,
-            requested_pos=requested_pos,
-            confidence=options.shared_runtime_confidence,
-        )
-        if fallback is not None:
-            return ResolutionResult(
-                slot_name=slot_name,
-                input_value=original_value,
-                resolved_value=fallback,
-                kind="lexeme_ref",
-                source=fallback.source,
-                confidence=fallback.confidence,
-                fallback_used=False,
-                unresolved=False,
-                surface_hint=fallback.surface_hint,
-                notes=("resolved_via_shared_lexicon",),
-                metadata={
-                    "lang_code": lang_code,
-                    "construction_id": construction_id,
-                    "requested_pos": requested_pos,
-                    "resolved_pos": fallback.pos,
-                    "matched_qid": fallback.qid,
-                    "matched_lexeme_id": fallback.lexeme_id,
-                },
-            )
 
     if allow_raw:
         raw = _build_raw_fallback(
@@ -458,46 +427,6 @@ def _lookup_by_qid(*, lang_code: str, qid: str) -> Any | None:
         return None
 
 
-def _lookup_in_shared_lexicon(
-    *,
-    text: str,
-    lang_code: str,
-    requested_pos: str | None,
-    confidence: float,
-) -> LexemeRef | None:
-    try:
-        from app.shared.lexicon import LexiconRuntime
-    except Exception:
-        return None
-
-    try:
-        runtime = LexiconRuntime.get_instance()
-        entry = runtime.lookup(text, lang_code)
-    except Exception:
-        return None
-
-    if entry is None:
-        return None
-
-    entry_pos = _clean_text(getattr(entry, "pos", None))
-    if requested_pos and entry_pos and entry_pos != requested_pos:
-        return None
-
-    features = _copy_mapping(getattr(entry, "features", None))
-    gf_fun = _clean_text(getattr(entry, "gf_fun", None))
-    if gf_fun:
-        features.setdefault("gf_fun", gf_fun)
-
-    return LexemeRef(
-        lemma=_clean_text(getattr(entry, "lemma", None)) or text,
-        lexeme_id=None,
-        qid=_clean_text(getattr(entry, "qid", None)),
-        pos=entry_pos or requested_pos,
-        surface_hint=None,
-        source=_clean_text(getattr(entry, "source", None)) or "shared_lexicon",
-        confidence=confidence,
-        features=features,
-    )
 
 
 # ---------------------------------------------------------------------------

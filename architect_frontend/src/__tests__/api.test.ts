@@ -109,7 +109,7 @@ describe("frontend API helpers", () => {
     const slug = "entity-person";
 
     const requestBody = {
-      frame_type: "entity.person",
+      frame_type: "bio",
       inputs: {
         name: "Marie Curie",
         language: "en",
@@ -118,7 +118,7 @@ describe("frontend API helpers", () => {
 
     const responseBody = {
       generation_id: "gen_123",
-      frame_type: "entity.person",
+      frame_type: "bio",
       content: "Marie Curie was a Polish-French physicist...",
       warnings: [],
     };
@@ -157,7 +157,7 @@ describe("frontend API helpers", () => {
   describe("getSuggestions", () => {
     const suggestionRequest = {
       query: "Marie Curie",
-      frame_type: "entity.person",
+      frame_type: "bio",
       max_suggestions: 3,
     };
 

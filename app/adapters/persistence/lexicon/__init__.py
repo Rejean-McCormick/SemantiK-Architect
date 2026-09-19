@@ -1,32 +1,8 @@
 # app/adapters/persistence/lexicon/__init__.py
-"""
-Public entrypoint for the lexicon subsystem.
+"""Canonical runtime lexicon package.
 
-This package now exposes two layers of API:
-
-1. Legacy / storage-oriented APIs
-   - load_lexicon(...)
-   - get_index(...)
-   - lookup_lemma(...)
-   - lookup_qid(...)
-   - lookup_form(...)
-
-2. Batch 5 lexical-resolution APIs
-   - lexical_resolution module namespace
-   - entity_resolution module namespace
-   - predicate_resolution module namespace
-
-The legacy lookup surface remains stable for existing callers, while the new
-planner-first runtime can import the lexical-resolution layer from the same
-package boundary.
-
-Notes
------
-- Keep this file import-light and side-effect free.
-- Prefer re-exporting stable public names here rather than forcing callers
-  to know submodule layout.
-- New lexical-resolution submodules are exported as namespaces to avoid
-  overcommitting to exact helper names while the Batch 5 API settles.
+The public package exposes loading/index access, normalization, schema validation
+and lexical-resolution namespaces used by the planner-first runtime.
 """
 
 from __future__ import annotations
@@ -80,7 +56,7 @@ def get_index(lang: str):
 
 
 # ---------------------------------------------------------------------------
-# Convenience wrappers (legacy-safe, best-effort)
+# Convenience lookup wrappers
 # ---------------------------------------------------------------------------
 
 
@@ -175,12 +151,6 @@ from . import predicate_resolution
 
 
 # ---------------------------------------------------------------------------
-# Backwards-compatible aliases
-# ---------------------------------------------------------------------------
-
-warmup_languages = preload_languages
-
-
 __all__ = [
     # Core access
     "get_index",
@@ -194,7 +164,6 @@ __all__ = [
     "available_languages",
     # Cache controls
     "preload_languages",
-    "warmup_languages",
     "clear_cache",
     "cached_languages",
     # Normalization

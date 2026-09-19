@@ -145,7 +145,7 @@ def test_list_languages_exists():
         resp = client.get(f"{API_PREFIX}/languages/")
 
     assert not _is_route_missing(resp), "The /languages endpoint is missing!"
-    assert resp.status_code in (200, 401, 403), f"Unexpected status: {resp.status_code}"
+    assert resp.status_code in (200, 503), f"Unexpected status: {resp.status_code}"
 
     if resp.status_code == 200:
         data = resp.json()
@@ -160,11 +160,11 @@ def test_generate_endpoint_structure_exists():
 
     Acceptable:
       - 200 (success)
-      - 400 (bad request / unsupported language / app-level validation)
-      - 401/403 (auth)
-      - 404 (app-level "unknown language") BUT not FastAPI default 404
-      - 422 (request validation)
-    Checks both new and legacy variants.
+      - 404 (runtime capability unavailable) BUT not FastAPI default 404
+      - 422 (semantic request validation)
+      - 503 (deployed PGF unavailable in the current test environment)
+
+    Only the canonical /generate/{lang_code} route is valid.
     """
     payload = _default_generate_payload()
 
@@ -176,16 +176,11 @@ def test_generate_endpoint_structure_exists():
 
     lang_code = _pick_language_code(candidate_langs)
 
-    # New style: /generate/{lang_code}
     resp = client.post(f"{API_PREFIX}/generate/{lang_code}", json=payload)
 
-    # If the new style isn't mounted, try legacy style: /generate
-    if _is_route_missing(resp):
-        resp = client.post(f"{API_PREFIX}/generate", json=payload)
-
-    assert not _is_route_missing(resp), "No generate endpoint is mounted!"
+    assert not _is_route_missing(resp), "Canonical generate endpoint is not mounted!"
     assert resp.status_code != 500, "Generate endpoint is mounted but crashing."
-    assert resp.status_code in (200, 400, 401, 403, 404, 422), f"Unexpected status: {resp.status_code}"
+    assert resp.status_code in (200, 404, 422, 503), f"Unexpected status: {resp.status_code}"
 
     if resp.status_code == 404:
         data = resp.json()

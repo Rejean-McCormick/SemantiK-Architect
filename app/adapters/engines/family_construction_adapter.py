@@ -3,18 +3,15 @@ from __future__ import annotations
 import importlib
 import json
 from collections.abc import Mapping
-from dataclasses import dataclass, field
 from pathlib import Path
 from time import perf_counter
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import structlog
 
 from app.core.domain.exceptions import DomainError, LanguageNotFoundError
-
-if TYPE_CHECKING:
-    from app.core.domain.models import SurfaceResult
-    from app.core.domain.planning.construction_plan import ConstructionPlan
+from app.core.domain.models import SurfaceResult
+from app.core.domain.planning.construction_plan import ConstructionPlan
 
 
 logger = structlog.get_logger()
@@ -22,18 +19,9 @@ logger = structlog.get_logger()
 _BACKEND_NAME = "family"
 _RUNTIME_PATH = "planner_first"
 
-# Migration-era supported coverage:
-# - legacy biography-like plans
-# - nominal-predicate / simple equative constructions that can be rendered
-#   through the existing family-engine biography templates
+# Construction coverage currently realized by the family renderer.
 _SUPPORTED_CONSTRUCTIONS: frozenset[str] = frozenset(
     {
-        "bio",
-        "biography",
-        "biography_lead",
-        "entity.person",
-        "entity_person",
-        "person",
         "copula_equative_simple",
         "copula_equative_classification",
         "copula_attributive_np",
@@ -54,71 +42,6 @@ _RESOLVED_LANGUAGE_HINTS: dict[str, str] = {
 }
 
 
-# ---------------------------------------------------------------------------
-# Runtime-safe SurfaceResult import
-# ---------------------------------------------------------------------------
-
-try:
-    from app.core.domain.models import SurfaceResult as _ImportedSurfaceResult
-except Exception:  # pragma: no cover - import safety during staged migration
-    _ImportedSurfaceResult = None
-
-
-@dataclass(frozen=True, slots=True)
-class _FallbackSurfaceResult:
-    text: str
-    lang_code: str
-    construction_id: str
-    renderer_backend: str
-    fallback_used: bool = False
-    tokens: list[str] = field(default_factory=list)
-    debug_info: dict[str, Any] = field(default_factory=dict)
-    generation_time_ms: float = 0.0
-
-
-def _build_surface_result(
-    *,
-    text: str,
-    lang_code: str,
-    construction_id: str,
-    renderer_backend: str,
-    fallback_used: bool,
-    tokens: list[str],
-    debug_info: dict[str, Any],
-    generation_time_ms: float,
-) -> Any:
-    if _ImportedSurfaceResult is not None:
-        try:
-            return _ImportedSurfaceResult(
-                text=text,
-                lang_code=lang_code,
-                construction_id=construction_id,
-                renderer_backend=renderer_backend,
-                fallback_used=fallback_used,
-                tokens=tokens,
-                debug_info=debug_info,
-                generation_time_ms=generation_time_ms,
-            )
-        except TypeError:
-            pass
-
-    return _FallbackSurfaceResult(
-        text=text,
-        lang_code=lang_code,
-        construction_id=construction_id,
-        renderer_backend=renderer_backend,
-        fallback_used=fallback_used,
-        tokens=tokens,
-        debug_info=debug_info,
-        generation_time_ms=generation_time_ms,
-    )
-
-
-# ---------------------------------------------------------------------------
-# Local migration-safe exceptions
-# ---------------------------------------------------------------------------
-
-
 class UnsupportedConstructionError(DomainError):
     def __init__(self, construction_id: str):
         super().__init__(
@@ -128,9 +51,7 @@ class UnsupportedConstructionError(DomainError):
 
 class MissingRequiredRoleError(DomainError):
     def __init__(self, role_name: str):
-        super().__init__(
-            f"Missing required role/slot for family realization: '{role_name}'."
-        )
+        super().__init__(f"Missing required role/slot for family realization: '{role_name}'.")
 
 
 class FamilyRendererError(DomainError):
@@ -138,13 +59,7 @@ class FamilyRendererError(DomainError):
         super().__init__(f"Family renderer failed: {reason}")
 
 
-# ---------------------------------------------------------------------------
-# Small helpers
-# ---------------------------------------------------------------------------
-
-
 def _repo_root() -> Path:
-    # .../app/adapters/engines/family_construction_adapter.py -> repo root
     return Path(__file__).resolve().parents[3]
 
 
@@ -207,8 +122,7 @@ def _normalize_gender(value: Any) -> str:
         return "male"
     if raw in {"f", "female", "fem", "feminine"}:
         return "female"
-    # Migration-safe default: current family engines generally assume
-    # masculine/default morphology when gender is unavailable.
+    # Current family engines use masculine/default morphology when gender is absent.
     return "male"
 
 
@@ -366,13 +280,13 @@ def _resolved_language_hint(lang_code: str) -> str:
 
 class FamilyConstructionAdapter:
     """
-    Migration-era family realizer adapter.
+    Family/construction realizer adapter.
 
     Contract:
         ConstructionPlan -> SurfaceResult
 
     Current scope:
-    - bridges the planner/runtime contract to the existing family engine modules
+    - realizes canonical construction plans through the existing family engine modules
       under `app.adapters.engines.engines.*`
     - prioritizes explicitness and stable debug metadata over maximal coverage
     - currently targets biography / nominal-predicate realizations that can be
@@ -436,9 +350,9 @@ class FamilyConstructionAdapter:
         slot_map = _as_dict(_get_member(construction_plan, "slot_map"))
 
         metadata = _as_dict(_get_member(construction_plan, "metadata"))
-        legacy_generation_options = _as_dict(_get_member(construction_plan, "generation_options"))
+        plan_generation_options = _as_dict(_get_member(construction_plan, "generation_options"))
         metadata_generation_options = _as_dict(metadata.get("generation_options"))
-        generation_options = _deep_merge(legacy_generation_options, metadata_generation_options)
+        generation_options = _deep_merge(plan_generation_options, metadata_generation_options)
 
         lexical_bindings = _as_dict(_get_member(construction_plan, "lexical_bindings"))
 
@@ -587,12 +501,6 @@ class FamilyConstructionAdapter:
 
         generation_time_ms = round((perf_counter() - started_at) * 1000.0, 3)
 
-        requested_backend = (
-            _clean_str(generation_options.get("renderer_backend"))
-            or _clean_str(generation_options.get("backend"))
-            or self.backend_name
-        )
-
         debug_info: dict[str, Any] = {
             "runtime_path": _RUNTIME_PATH,
             "construction_id": requested_construction_id,
@@ -600,7 +508,6 @@ class FamilyConstructionAdapter:
             "lang_code": lang_code,
             "fallback_used": lexical_fallback_used,
             "slot_keys": list(slot_map.keys()),
-            "requested_backend": requested_backend,
             "selected_backend": self.backend_name,
             "attempted_backends": [self.backend_name],
             "family": family_name,
@@ -638,7 +545,7 @@ class FamilyConstructionAdapter:
             fallback_used=lexical_fallback_used,
         )
 
-        return _build_surface_result(
+        return SurfaceResult(
             text=text,
             lang_code=lang_code,
             construction_id=requested_construction_id,

@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import os
-import sys
 from enum import Enum
 from pathlib import Path
 from typing import ClassVar, Optional
@@ -30,8 +29,7 @@ class Settings(BaseSettings):
 
     Important PGF-path behavior:
     - Prefer explicit PGF_PATH.
-    - Accept deprecated AW_PGF_PATH as fallback.
-    - Default only to <repo>/runtime/semantik_architect.pgf.
+        - Default only to <repo>/runtime/semantik_architect.pgf.
     - Never infer the compiled PGF from GF_LIB_PATH / gf-rgl.
     """
 
@@ -41,7 +39,7 @@ class Settings(BaseSettings):
     # --- Application Meta ---
     APP_NAME: str = "Semantik Architect"
 
-    # Accept both APP_ENV and legacy ENV from env files.
+    # Accept APP_ENV and ENV as deployment environment spellings.
     APP_ENV: AppEnv = Field(
         default=AppEnv.DEVELOPMENT,
         validation_alias=AliasChoices("APP_ENV", "ENV"),
@@ -49,7 +47,7 @@ class Settings(BaseSettings):
 
     @property
     def ENV(self) -> str:
-        """Alias for APP_ENV to support legacy calls (settings.ENV)."""
+        """Read-only environment string convenience property."""
         return self.APP_ENV.value
 
     DEBUG: bool = True
@@ -70,9 +68,6 @@ class Settings(BaseSettings):
         description="Canonical API prefix (versioned).",
     )
 
-    # --- Security ---
-    API_SECRET: Optional[str] = None
-    API_KEY: Optional[str] = None  # Back-compat alias
 
     # --- Logging & Observability ---
     LOG_LEVEL: str = "INFO"
@@ -84,27 +79,14 @@ class Settings(BaseSettings):
     WIKIDATA_SPARQL_URL: str = "https://query.wikidata.org/sparql"
     WIKIDATA_TIMEOUT: int = 30
 
-    # --- AI & DevOps ---
-    GEMINI_API_KEY: str = ""
-    GOOGLE_API_KEY: Optional[str] = None  # Deprecated alias for Gemini
-    AI_MODEL_NAME: str = "gemini-1.5-pro"
-
     # --- Persistence ---
     FILESYSTEM_REPO_PATH: str = str(_PROJECT_ROOT)
-
-    # --- Feature Flags ---
-    USE_MOCK_GRAMMAR: bool = False
 
     # --- Grammar Binary Path (PGF) ---
     PGF_PATH: Optional[str] = Field(
         default=None,
         validation_alias=AliasChoices("PGF_PATH"),
-        description="Path to semantik_architect.pgf. Prefer PGF_PATH; AW_PGF_PATH is deprecated.",
-    )
-    AW_PGF_PATH: Optional[str] = Field(
-        default=None,
-        validation_alias=AliasChoices("AW_PGF_PATH"),
-        description="Deprecated alias for PGF_PATH. Prefer PGF_PATH.",
+        description="Path to the deployed semantik_architect.pgf artifact.",
     )
 
     # --- Dynamic Path Resolution ---
@@ -200,23 +182,6 @@ class Settings(BaseSettings):
         """
         return self._join_url_paths(self.ARCHITECT_API_ROOT_PATH, self.API_V1_PREFIX)
 
-    @model_validator(mode="after")
-    def _configure_security_and_test_defaults(self) -> "Settings":
-        # Sync alias fields
-        if self.API_SECRET and not self.API_KEY:
-            self.API_KEY = self.API_SECRET
-        elif self.API_KEY and not self.API_SECRET:
-            self.API_SECRET = self.API_KEY
-
-        # Under pytest, enforce deterministic auth unless explicitly provided.
-        is_pytest = bool(os.getenv("PYTEST_CURRENT_TEST")) or ("pytest" in sys.modules)
-        if is_pytest:
-            self.APP_ENV = AppEnv.TESTING
-            if not self.API_SECRET and not self.API_KEY:
-                self.API_KEY = "test-api-key"
-                self.API_SECRET = self.API_KEY
-
-        return self
 
     @model_validator(mode="after")
     def _normalize_http_paths(self) -> "Settings":
@@ -248,21 +213,15 @@ class Settings(BaseSettings):
 
         Precedence:
           1) PGF_PATH
-          2) AW_PGF_PATH (deprecated)
-          3) <repo_root>/runtime/semantik_architect.pgf
+          2) <repo_root>/runtime/semantik_architect.pgf
 
         Source trees and GF compiler paths are intentionally outside this runtime configuration.
         """
         explicit = (self.PGF_PATH or "").strip()
-        legacy = (self.AW_PGF_PATH or "").strip()
-
         if explicit:
             self.PGF_PATH = self._abspath_from_repo(self._normalize_pgf_path(explicit))
             return self
 
-        if legacy:
-            self.PGF_PATH = self._abspath_from_repo(self._normalize_pgf_path(legacy))
-            return self
 
         self.PGF_PATH = str(Path(self.FILESYSTEM_REPO_PATH) / "runtime" / _PGF_FILENAME)
         return self

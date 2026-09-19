@@ -33,20 +33,8 @@ def _parse_csv_env(name: str, default: list[str]) -> list[str]:
 async def lifespan(app: FastAPI):
     """Runtime lifecycle: wire the application; no compiler queue or broker."""
     logger.info("app_startup", env=getattr(settings, "APP_ENV", "development"))
-    container.wire(
-        modules=[
-            "app.adapters.api.routers.generation",
-            "app.adapters.api.routers.health",
-            "app.adapters.api.routers.languages",
-            "app.adapters.api.routers.entities",
-            "app.adapters.api.routers.frames",
-            "app.adapters.api.routers.ai",
-            "app.adapters.api.dependencies",
-        ]
-    )
     yield
     logger.info("app_shutdown")
-    container.unwire()
 
 
 def create_app() -> FastAPI:

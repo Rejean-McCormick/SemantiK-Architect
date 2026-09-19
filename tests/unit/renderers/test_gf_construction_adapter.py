@@ -35,7 +35,7 @@ class FakeGFEngine:
         self.linearize_calls.append((str(expr), language))
         return self.linearize_value
 
-    def _resolve_concrete_name(self, lang_code: str) -> str | None:
+    def resolve_concrete_name(self, lang_code: str) -> str | None:
         return self.resolved_languages.get(lang_code)
 
 

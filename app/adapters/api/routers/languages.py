@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 import json
-from functools import lru_cache
 from pathlib import Path
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from app.adapters.api.dependencies import get_grammar_engine
-from app.core.ports import IGrammarEngine
+from app.adapters.api.dependencies import get_language_capabilities
+from app.adapters.engines.language_capabilities import RuntimeLanguageCapabilities
 from app.shared.config import settings
 
 router = APIRouter()
@@ -21,50 +20,41 @@ class LanguageOut(BaseModel):
     z_id: Optional[str] = None
 
 
-@lru_cache(maxsize=1)
-def _runtime_language_metadata() -> dict[str, dict[str, str]]:
-    """Optional presentation metadata; runtime capability comes from the PGF."""
+def _metadata() -> dict[str, dict[str, str]]:
     path = Path(settings.FILESYSTEM_REPO_PATH) / "runtime" / "languages.json"
-    if not path.exists():
+    if not path.is_file():
         return {}
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
     except Exception:
         return {}
-
-    out: dict[str, dict[str, str]] = {}
     items = raw if isinstance(raw, list) else raw.get("languages", []) if isinstance(raw, dict) else []
+    out: dict[str, dict[str, str]] = {}
     for item in items:
         if not isinstance(item, dict):
             continue
-        code = str(item.get("code", "")).strip().lower()
-        if not code:
-            continue
-        out[code] = {
-            "name": str(item.get("name", code)).strip() or code,
-            "z_id": str(item.get("z_id", "")).strip(),
-        }
+        code = str(item.get("code") or "").strip().lower()
+        if code:
+            out[code] = {
+                "name": str(item.get("name") or code),
+                "z_id": str(item.get("z_id") or ""),
+            }
     return out
 
 
 @router.get("/", response_model=List[LanguageOut])
 async def list_languages(
-    engine: IGrammarEngine = Depends(get_grammar_engine),
+    capabilities: RuntimeLanguageCapabilities = Depends(get_language_capabilities),
 ) -> List[LanguageOut]:
-    """List languages actually available in the loaded runtime grammar."""
     try:
-        codes = await engine.get_supported_languages()
-        meta = _runtime_language_metadata()
-        result: list[LanguageOut] = []
-        for raw in sorted({str(code).strip().lower() for code in codes if str(code).strip()}):
-            details = meta.get(raw, {})
-            result.append(
-                LanguageOut(
-                    code=raw,
-                    name=details.get("name", raw),
-                    z_id=details.get("z_id") or None,
-                )
+        meta = _metadata()
+        return [
+            LanguageOut(
+                code=code,
+                name=meta.get(code, {}).get("name", code),
+                z_id=meta.get(code, {}).get("z_id") or None,
             )
-        return result
+            for code in await capabilities.list_codes()
+        ]
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc)) from exc
+        raise HTTPException(status_code=503, detail=str(exc)) from exc

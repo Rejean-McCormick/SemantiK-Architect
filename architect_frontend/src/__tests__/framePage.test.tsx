@@ -55,7 +55,7 @@ describe("EditorPage", () => {
     await waitFor(() => expect(mockGenerate).toHaveBeenCalledTimes(1));
     expect(mockGenerate).toHaveBeenCalledWith(
       expect.objectContaining({
-        lang: "en",
+        lang_code: "en",
         frame_type: "bio",
         frame_payload: expect.objectContaining({
           name: "Marie Curie",

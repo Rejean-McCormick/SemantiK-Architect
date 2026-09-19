@@ -51,7 +51,7 @@ const MOCK_ENTITIES: Entity[] = [
   {
     id: 42,
     name: "Douglas Adams",
-    frame_type: "entity.person",
+    frame_type: "bio",
     lang: "en",
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),

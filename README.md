@@ -1,33 +1,54 @@
 # SemantiK Architect
 
-SemantiK Architect is the **semantic/NLG application runtime**. It accepts semantic
-frames, plans constructions, resolves lexical material, and realizes text through a
-precompiled Grammatical Framework PGF artifact.
+SemantiK Architect is the **semantic/NLG application runtime**. It accepts canonical
+semantic frames, plans constructions, resolves lexical material, and realizes text
+through runtime renderers, including a precompiled Grammatical Framework PGF artifact.
 
 ## Product boundary
 
 SemantiK Architect **uses GF; it does not develop GF**. This repository does not own:
 
-- generation or repair of `.gf` source modules;
-- RGL source trees or RGL backups;
-- grammar scaffolding, compilation orchestration, or compiler workers;
-- language-development dashboards, maturity matrices, or grammar-refinement tools.
+- `.gf` source authoring, repair, generation, or compilation;
+- RGL source trees, backups, or alignment workflows;
+- grammar-build workers, queues, Redis/ARQ build infrastructure;
+- grammar-development dashboards, maturity matrices, or refinement tools.
 
 Those responsibilities belong to the external GF development/validation ecosystem.
-SemantiK Architect consumes only the resulting runtime contract, primarily
-`runtime/semantik_architect.pgf` plus runtime data required by its semantic and lexical layers.
+SemantiK consumes the deployed runtime contract, primarily
+`runtime/semantik_architect.pgf` plus semantic and lexical runtime data.
 
-## Runtime
+## Canonical architecture
 
-Place the compiled grammar at:
+```text
+HTTP / external semantic protocol
+    -> canonical Frame
+    -> planning
+    -> PlannedSentence
+    -> ConstructionPlan
+    -> lexical resolution
+    -> renderer dispatch
+    -> SurfaceResult
+    -> public response
+```
+
+There is no direct `Frame -> engine` runtime path and no parallel `Sentence` result
+contract. `ConstructionPlan` is the renderer input contract; `SurfaceResult` is the
+single generation result contract.
+
+## PGF runtime
+
+Place the precompiled grammar at:
 
 ```text
 runtime/semantik_architect.pgf
 ```
 
-or set `PGF_PATH` to another `.pgf` file.
+or set `PGF_PATH` to another deployed `.pgf` file.
 
-Check the runtime:
+A missing PGF is a deployment/readiness error. SemantiK never responds by compiling,
+synthesizing, or repairing GF source.
+
+Check readiness:
 
 ```bash
 python manage.py doctor
@@ -39,28 +60,57 @@ Start the API:
 python manage.py serve --reload
 ```
 
-The central generation path remains:
+## Generation API
 
-```text
-semantic frame -> planning -> lexical resolution -> GF/PGF realization -> surface text
+The canonical endpoint is:
+
+```http
+POST /api/v1/generate/{lang_code}
 ```
 
-### Generation request contract
+Standard JSON requests require an explicit, canonical `frame_type`. SemantiK does not
+infer a frame family from payload shape and does not normalize retired aliases.
 
-Canonical JSON generation requests must declare `frame_type` explicitly. SemantiK
-Architect does not infer a frame family from the presence of `subject`, `name`,
-`profession`, or other payload fields. Missing `frame_type` is a request-validation
-error (HTTP 422). Explicit legacy frame-type aliases such as `entity.person` may be
-normalized at the HTTP boundary; the legacy key `type` is also accepted there as a
-compatibility alias. Ninai `function` payloads remain governed by the Ninai protocol.
+Canonical biography example:
 
-See `docs/API_GENERATION_CONTRACT.md` for the generation ingress contract and
-`docs/RUNTIME_BOUNDARY.md` for the migration boundary.
+```json
+{
+  "frame_type": "bio",
+  "subject": {
+    "name": "Marie Curie",
+    "qid": "Q7186",
+    "profession": "physicist",
+    "nationality": "Polish"
+  }
+}
+```
 
-## Request sessions
+`entity.person`, the top-level key `type`, flat person payloads, renderer ASTs, and
+backend-selection fields are not part of the standard semantic ingress contract.
+Ninai/function-style input is a separate protocol adapter that must normalize to the
+same canonical domain before planning.
 
-`X-Session-ID` discourse context is process-local and ephemeral. It no longer
-requires Redis. For horizontally scaled deployments, treat session affinity or
-an external session service as a deployment concern rather than a grammar-build
-dependency of SemantiK Architect.
+## Runtime languages
 
+Runtime language capability comes from the **loaded PGF concrete languages**, mapped
+to application language codes. Lexicon inventories and historical language lists do
+not create runtime capability. The currently deployed PGF exposes English and French.
+
+## Session state
+
+Optional `X-Session-ID` discourse context is process-local, bounded, and ephemeral.
+It is not a persistence layer or cross-process coordination mechanism.
+
+## Documentation
+
+The normative documentation starts at `docs/README.md`. In particular:
+
+- `docs/ARCHITECTURE.md`
+- `docs/RUNTIME_BOUNDARY.md`
+- `docs/API_GENERATION_CONTRACT.md`
+- `docs/GF_RUNTIME.md`
+- `docs/LANGUAGE_CAPABILITIES.md`
+- `docs/TESTING_AND_VALIDATION.md`
+
+Git history is the archive for superseded architecture; the active documentation tree
+contains only the current runtime contract.

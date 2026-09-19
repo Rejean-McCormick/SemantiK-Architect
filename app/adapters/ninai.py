@@ -19,9 +19,8 @@ TYPE_EVENT = "ninai.types.Event"
 
 class NinaiAdapter:
     """
-    The Bridge between the external Ninai Protocol (Recursive JSON Objects)
-    and the internal Semantik Architect Domain (Flat Pydantic Frames).
-    v2.0 Upgrade: Integrates LexiconStore for Entity Grounding.
+    Adapter from the external Ninai protocol to canonical SemantiK frames.
+    Lexical enrichment uses the same runtime lexicon indexes as planning.
     """
 
     def parse(
@@ -60,8 +59,7 @@ class NinaiAdapter:
         Parses a Biographical Statement.
         Enriches Entity data using the Lexicon (Zone B).
         """
-        # [FIX] Local import to avoid circular dependency with app.shared.lexicon
-        from app.shared.lexicon import lexicon
+        from app.adapters.persistence.lexicon.runtime_lookup import get_entry
 
         try:
             # --- Subject (Arg 1) ---
@@ -69,7 +67,7 @@ class NinaiAdapter:
             subject_qid = self._extract_qid(subject_node)
 
             # Lookup in Lexicon (Enrichment)
-            subj_entry = lexicon.get_entry(lang, subject_qid) if subject_qid else None
+            subj_entry = get_entry(lang, subject_qid) if subject_qid else None
 
             subject_name = self._extract_label(subject_node)
             subject_gender = None  # Default to None if not found
@@ -94,7 +92,7 @@ class NinaiAdapter:
             if len(args) > 2:
                 prof_node = args[2]
                 prof_qid = self._extract_qid(prof_node)
-                prof_entry = lexicon.get_entry(lang, prof_qid) if prof_qid else None
+                prof_entry = get_entry(lang, prof_qid) if prof_qid else None
 
                 # Priority: GF Function -> Lemma -> Raw Value
                 if prof_entry:
@@ -116,7 +114,7 @@ class NinaiAdapter:
                 job_qids = self._get_lexicon_facts(lang, subject_qid, "P106")
 
                 if job_qids:
-                    job_entry = lexicon.get_entry(lang, job_qids[0])
+                    job_entry = get_entry(lang, job_qids[0])
                     if job_entry:
                         if isinstance(job_entry, dict):
                             profession_key = job_entry.get("gf_fun") or job_entry.get(
@@ -132,7 +130,7 @@ class NinaiAdapter:
             if len(args) > 3:
                 nat_node = args[3]
                 nat_qid = self._extract_qid(nat_node)
-                nat_entry = lexicon.get_entry(lang, nat_qid) if nat_qid else None
+                nat_entry = get_entry(lang, nat_qid) if nat_qid else None
 
                 # Priority: GF Function -> Lemma -> Raw Value
                 if nat_entry:
@@ -154,7 +152,7 @@ class NinaiAdapter:
                 nat_qids = self._get_lexicon_facts(lang, subject_qid, "P27")
 
                 if nat_qids:
-                    nat_entry = lexicon.get_entry(lang, nat_qids[0])
+                    nat_entry = get_entry(lang, nat_qids[0])
                     if nat_entry:
                         if isinstance(nat_entry, dict):
                             nationality_key = nat_entry.get("gf_fun")
@@ -193,8 +191,7 @@ class NinaiAdapter:
         """
         Parses an Event Statement.
         """
-        # [FIX] Local import to avoid circular dependency
-        from app.shared.lexicon import lexicon
+        from app.adapters.persistence.lexicon.runtime_lookup import get_entry
 
         try:
             # Subject
@@ -203,7 +200,7 @@ class NinaiAdapter:
             subject_name = self._extract_label(subject_node)
 
             # Lexicon Lookup
-            subj_entry = lexicon.get_entry(lang, subject_qid) if subject_qid else None
+            subj_entry = get_entry(lang, subject_qid) if subject_qid else None
 
             if subject_name == "Unknown" and subj_entry:
                 subject_name = (
@@ -277,38 +274,16 @@ class NinaiAdapter:
 
         return str(node)
 
-    # --- Helper: Safe Fact Retrieval (Fix for Missing Method) ---
+    # --- Helper: runtime lexicon facts ---
     def _get_lexicon_facts(self, lang: str, qid: Optional[str], prop: str) -> List[str]:
-        """
-        Safely retrieves facts/claims from a lexicon entry.
-        Handles the case where lexicon.get_facts() doesn't exist yet.
-        """
-        # [FIX] Local import to avoid circular dependency
-        from app.shared.lexicon import lexicon
+        from app.adapters.persistence.lexicon.runtime_lookup import get_entry, get_facts
 
         if not qid:
             return []
-
         try:
-            entry = lexicon.get_entry(lang, qid)
-            if not entry:
-                return []
-
-            if isinstance(entry, dict):
-                # Facts may live under facts or features depending on runtime merge.
-                return entry.get("facts", {}).get(prop, []) or entry.get("features", {}).get(
-                    prop, []
-                )
-
-            if hasattr(entry, "facts") and isinstance(entry.facts, dict):
-                return entry.facts.get(prop, [])
-
-            if hasattr(entry, "features") and isinstance(entry.features, dict):
-                return entry.features.get(prop, [])
-
-            return []
-        except Exception as e:
-            logger.warning(f"Failed to retrieve facts for {qid}: {e}")
+            return get_facts(get_entry(lang, qid), prop)
+        except Exception as exc:
+            logger.warning("ninai_lexicon_fact_lookup_failed: %s", exc)
             return []
 
 

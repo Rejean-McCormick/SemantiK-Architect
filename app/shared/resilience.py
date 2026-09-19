@@ -1,150 +1,160 @@
-# app/shared/resilience.py
-import time
+from __future__ import annotations
+
 import asyncio
-import structlog
+import time
 from enum import Enum
 from functools import wraps
-from typing import Callable, Any, Dict, Coroutine
-from tenacity import (
-    retry,
-    stop_after_attempt,
-    wait_exponential,
-    retry_if_exception_type,
-    before_sleep_log
-)
+from typing import Any, Awaitable, Callable, Dict, TypeVar
+
+import structlog
+
 from app.shared.config import settings
 
 logger = structlog.get_logger()
+T = TypeVar("T")
 
-# --- 1. Custom Exceptions ---
 
 class ResilienceError(Exception):
-    """Base class for resilience-related errors."""
-    pass
+    """Base class for resilience-related failures."""
+
 
 class CircuitBreakerOpenError(ResilienceError):
-    """Raised when a call is blocked because the Circuit Breaker is OPEN."""
+    """Raised when a call is blocked because the circuit is open."""
+
     def __init__(self, service_name: str, reset_timeout: float):
         self.service_name = service_name
         self.reset_timeout = reset_timeout
-        super().__init__(f"Circuit Breaker for {service_name} is OPEN. Retrying in {reset_timeout}s.")
+        super().__init__(
+            f"Circuit breaker for {service_name} is open. "
+            f"Retry after approximately {reset_timeout}s."
+        )
 
-# --- 2. Circuit Breaker Implementation ---
 
 class CircuitState(str, Enum):
-    CLOSED = "closed"     # Normal operation
-    OPEN = "open"         # Failing, blocking requests
-    HALF_OPEN = "half_open" # Testing recovery
+    CLOSED = "closed"
+    OPEN = "open"
+    HALF_OPEN = "half_open"
+
 
 class CircuitBreaker:
-    """
-    Implements the Circuit Breaker pattern.
-    
-    Prevents the system from repeatedly trying to execute an operation 
-    that is likely to fail, allowing the external service time to recover.
-    """
-    def __init__(self, name: str, failure_threshold: int = 5, recovery_timeout: int = 30):
+    """Small in-process circuit breaker for runtime external calls."""
+
+    def __init__(
+        self,
+        name: str,
+        *,
+        failure_threshold: int = 5,
+        recovery_timeout: float = 30.0,
+    ) -> None:
         self.name = name
-        self.failure_threshold = failure_threshold
-        self.recovery_timeout = recovery_timeout
-        
+        self.failure_threshold = max(int(failure_threshold), 1)
+        self.recovery_timeout = max(float(recovery_timeout), 0.0)
         self.state = CircuitState.CLOSED
         self.failure_count = 0
         self.last_failure_time = 0.0
 
-    def call(self, func: Callable, *args, **kwargs) -> Any:
-        """Executes the function (Synchronously) if the circuit is CLOSED or HALF-OPEN."""
+    def call(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> T:
         self._check_state()
-
         try:
             result = func(*args, **kwargs)
-            self._handle_success()
-            return result
-        except Exception as e:
+        except Exception:
             self._handle_failure()
-            raise e
+            raise
+        self._handle_success()
+        return result
 
-    async def a_call(self, func: Callable[..., Coroutine[Any, Any, Any]], *args, **kwargs) -> Any:
-        """
-        Executes an async function (Coroutine) if the circuit is CLOSED or HALF-OPEN.
-        This is the non-blocking equivalent of call().
-        """
+    async def a_call(
+        self,
+        func: Callable[..., Awaitable[T]],
+        *args: Any,
+        **kwargs: Any,
+    ) -> T:
         self._check_state()
-
         try:
-            # Await the coroutine
             result = await func(*args, **kwargs)
-            self._handle_success()
-            return result
-        except Exception as e:
+        except Exception:
             self._handle_failure()
-            raise e
+            raise
+        self._handle_success()
+        return result
 
-    def _check_state(self):
-        """Internal logic to check if the circuit allows execution."""
+    def _check_state(self) -> None:
         if self.state == CircuitState.OPEN:
-            # Check if enough time has passed to try again (Half-Open)
-            if time.time() - self.last_failure_time > self.recovery_timeout:
+            elapsed = time.monotonic() - self.last_failure_time
+            if elapsed >= self.recovery_timeout:
                 self._transition_to(CircuitState.HALF_OPEN)
             else:
-                # Fail fast
-                raise CircuitBreakerOpenError(self.name, self.recovery_timeout)
+                raise CircuitBreakerOpenError(self.name, self.recovery_timeout - elapsed)
 
-    def _handle_success(self):
-        """Called when a request succeeds. Closes the circuit if it was recovering."""
-        if self.state == CircuitState.HALF_OPEN:
-            self._reset()
+    def _handle_success(self) -> None:
+        if self.state == CircuitState.HALF_OPEN or self.failure_count:
+            self.failure_count = 0
+            self.state = CircuitState.CLOSED
 
-    def _handle_failure(self):
-        """Called when a request fails. Increments counter or trips the breaker."""
+    def _handle_failure(self) -> None:
         self.failure_count += 1
-        self.last_failure_time = time.time()
-        
-        if self.state == CircuitState.HALF_OPEN:
-            # If we fail immediately after trying to recover, go back to OPEN
-            self._transition_to(CircuitState.OPEN)
-        elif self.failure_count >= self.failure_threshold:
+        self.last_failure_time = time.monotonic()
+        if self.state == CircuitState.HALF_OPEN or self.failure_count >= self.failure_threshold:
             self._transition_to(CircuitState.OPEN)
 
-    def _transition_to(self, new_state: CircuitState):
+    def _transition_to(self, new_state: CircuitState) -> None:
         self.state = new_state
-        logger.warning("circuit_breaker_state_change", 
-                       service=self.name, 
-                       state=new_state, 
-                       failures=self.failure_count)
+        logger.warning(
+            "circuit_breaker_state_change",
+            service=self.name,
+            state=new_state.value,
+            failures=self.failure_count,
+        )
 
-    def _reset(self):
-        self.failure_count = 0
-        self.state = CircuitState.CLOSED
-        logger.info("circuit_breaker_recovered", service=self.name)
 
-# Registry to hold singleton instances of breakers
 _breakers: Dict[str, CircuitBreaker] = {}
 
+
 def get_circuit_breaker(service_name: str) -> CircuitBreaker:
-    if service_name not in _breakers:
-        _breakers[service_name] = CircuitBreaker(
-            name=service_name,
+    breaker = _breakers.get(service_name)
+    if breaker is None:
+        breaker = CircuitBreaker(
+            service_name,
             failure_threshold=5,
-            recovery_timeout=settings.WIKIDATA_TIMEOUT
+            recovery_timeout=float(settings.WIKIDATA_TIMEOUT),
         )
-    return _breakers[service_name]
+        _breakers[service_name] = breaker
+    return breaker
 
-# --- 3. Retry Policies (Tenacity) ---
 
-def retry_external_api(func):
-    """
-    Decorator for robust retries on external API calls (e.g., Wikidata).
-    Strategy:
-    - Wait: Exponential Backoff (1s, 2s, 4s...) up to 10s.
-    - Stop: After 5 attempts.
-    - Log: Logs retries using structlog.
-    """
-    return retry(
-        stop=stop_after_attempt(5),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
-        # Only retry on standard IO errors (network), not Logic errors (ValueError)
-        retry=retry_if_exception_type((IOError, TimeoutError, ConnectionError)),
-        before_sleep=before_sleep_log(logger, "warning"),
-        reraise=True
-    )(func)
+def retry_external_api(func: Callable[..., Awaitable[T]]) -> Callable[..., Awaitable[T]]:
+    """Retry transient external-I/O failures with bounded exponential backoff."""
+
+    @wraps(func)
+    async def wrapped(*args: Any, **kwargs: Any) -> T:
+        delay = 0.05
+        last_exc: BaseException | None = None
+        for attempt in range(1, 6):
+            try:
+                return await func(*args, **kwargs)
+            except (IOError, TimeoutError, ConnectionError) as exc:
+                last_exc = exc
+                if attempt == 5:
+                    raise
+                logger.warning(
+                    "external_api_retry",
+                    function=getattr(func, "__name__", "external_call"),
+                    attempt=attempt,
+                    error=str(exc),
+                )
+                await asyncio.sleep(delay)
+                delay = min(delay * 2.0, 0.5)
+        assert last_exc is not None
+        raise last_exc
+
+    return wrapped
+
+
+__all__ = [
+    "CircuitBreaker",
+    "CircuitBreakerOpenError",
+    "CircuitState",
+    "ResilienceError",
+    "get_circuit_breaker",
+    "retry_external_api",
+]

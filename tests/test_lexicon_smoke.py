@@ -122,26 +122,23 @@ def test_at_least_one_language_detected() -> None:
 
 
 def test_language_directories_integrity() -> None:
-    """
-    For every language discovered by available_languages(), ensure
-    a corresponding directory or legacy file exists.
-    """
+    import pgf
+
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    pgf_path = os.path.join(repo_root, "runtime", "semantik_architect.pgf")
+    assert os.path.isfile(pgf_path), f"Canonical runtime PGF missing: {pgf_path}"
+    grammar = pgf.readPGF(pgf_path)
+    concrete_to_iso = {"WikiEng": "en", "WikiFre": "fr"}
+    unknown = sorted(set(grammar.languages).difference(concrete_to_iso))
+    assert not unknown, f"Unmapped runtime concrete languages: {unknown}"
     missing = []
-    langs = available_languages()
-    
-    for lang in langs:
-        # It must be either a directory (new standard) or a file (legacy fallback)
+    for concrete in grammar.languages:
+        lang = concrete_to_iso[concrete]
         dir_path = os.path.join(LEXICON_DIR, lang)
         file_path = os.path.join(LEXICON_DIR, f"{lang}_lexicon.json")
-        
         if not os.path.isdir(dir_path) and not os.path.isfile(file_path):
             missing.append(lang)
-
-    assert not missing, (
-        f"Missing lexicon source for languages: {missing}\n"
-        f"  Root: {LEXICON_DIR}\n"
-        f"  Hint: Run 'utils/seed_lexicon_ai.py --langs {','.join(missing)}' to bootstrap."
-    )
+    assert not missing, f"Missing lexicon source for runtime languages: {missing}"
 
 
 def test_lexicon_schema_has_no_errors() -> None:

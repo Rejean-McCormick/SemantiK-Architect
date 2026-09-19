@@ -250,12 +250,7 @@ def normalize_bio_frame(payload: Mapping[str, Any], frame_type: str) -> BioFrame
 
 
 def normalize_entity_frame(payload: Mapping[str, Any], frame_type: str) -> Frame:
-    """
-    Construct a generic Entity frame (or fallback to BioFrame if it looks like a person).
-    """
-    if frame_type == "entity.person":
-        return normalize_bio_frame(payload, "bio")
-
+    """Construct a generic entity-domain frame for internal semantic tooling."""
     name = _normalize_string(payload.get("name") or payload.get("label"))
     ent = Entity(
         name=name,

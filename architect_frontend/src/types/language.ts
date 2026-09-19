@@ -4,7 +4,7 @@ export interface Language {
   /**
    * The ISO 639-1 code (e.g., "en", "fr", "zu").
    * This is the strictly enforced public identifier for the API.
-   * Legacy ISO-3 codes (e.g. "eng") are no longer supported here.
+   * Public UI language codes are ISO-2 application codes such as "en" and "fr".
    */
   code: string;
 

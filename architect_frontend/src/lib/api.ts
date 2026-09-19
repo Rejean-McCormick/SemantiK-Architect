@@ -6,7 +6,7 @@
  * Goals:
  * - Default base URL targets /api/v1
  * - Prefer the canonical public HTTP contract
- * - Remain robust against a small set of migration-era endpoint/path variants
+ * - Use only the canonical public endpoint and response contract
  * - Keep frontend/client convenience separate from the canonical transport shape
  *
  * Canonical generation response:
@@ -29,7 +29,6 @@ const API_BASE_URL = (
   process.env.NEXT_PUBLIC_ARCHITECT_API_BASE_URL ?? DEFAULT_API_BASE_URL
 ).replace(/\/$/, "");
 
-const DEV_API_KEY = process.env.NEXT_PUBLIC_ARCHITECT_API_KEY;
 
 export class ApiError extends Error {
   readonly status: number;
@@ -66,8 +65,6 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers ?? {});
   if (!headers.has("Accept")) headers.set("Accept", "application/json");
 
-  // Dev-only header injection (do not rely on this for production security).
-  if (DEV_API_KEY && !headers.has("x-api-key")) headers.set("x-api-key", DEV_API_KEY);
 
   if (
     init.body != null &&
@@ -106,24 +103,6 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   }
 
   return parsed as T;
-}
-
-async function requestWithFallback<T>(
-  paths: string[],
-  init?: RequestInit,
-): Promise<T> {
-  let lastErr: unknown = null;
-
-  for (const p of paths) {
-    try {
-      return await request<T>(p, init);
-    } catch (e) {
-      lastErr = e;
-      if (e instanceof ApiError && e.status !== 404) break;
-    }
-  }
-
-  throw lastErr;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -179,101 +158,41 @@ function requireStringField(
   return value;
 }
 
-function normalizeGenerationResult(
-  raw: unknown,
-  options: {
-    requestedLangCode?: string;
-    compatibilityRuntimePath?: string;
-  } = {},
-): GenerationResult {
+function normalizeGenerationResult(raw: unknown): GenerationResult {
   const root = asObject(raw);
-  if (!root) {
-    throw new Error("Non-conformant generation response: expected object.");
+  if (!root) throw new Error("Non-conformant generation response: expected object.");
+  const debug = asObject(root.debug_info);
+  const text = typeof root.text === "string" ? root.text : null;
+  const langCode = typeof root.lang_code === "string" ? root.lang_code : null;
+  const constructionId = typeof root.construction_id === "string" ? root.construction_id : null;
+  const rendererBackend = typeof root.renderer_backend === "string" ? root.renderer_backend : null;
+  const tokens = asStringArray(root.tokens);
+  if (!text || !langCode || !constructionId || !rendererBackend || !tokens || !debug) {
+    throw new Error("Non-conformant generation response: missing canonical fields.");
   }
-
-  const rawDebugInfo = asObject(root.debug_info) ?? asObject(root.debug) ?? {};
-
-  const text = requireStringField(
-    firstNonEmptyString(root.text, root.surface_text),
-    "text",
-  );
-
-  const langCode = requireStringField(
-    firstNonEmptyString(
-      root.lang_code,
-      root.lang,
-      root.language,
-      rawDebugInfo.lang_code,
-      options.requestedLangCode,
-    ),
-    "lang_code",
-  );
-
-  const constructionId = requireStringField(
-    firstNonEmptyString(root.construction_id, rawDebugInfo.construction_id),
-    "construction_id",
-  );
-
-  const rendererBackend = requireStringField(
-    firstNonEmptyString(root.renderer_backend, rawDebugInfo.renderer_backend),
-    "renderer_backend",
-  );
-
-  const fallbackUsed =
-    asBoolean(root.fallback_used) ??
-    asBoolean(rawDebugInfo.fallback_used) ??
-    (options.compatibilityRuntimePath ? true : undefined);
-
-  if (typeof fallbackUsed !== "boolean") {
-    throw new Error(
-      "Non-conformant generation response: missing fallback_used",
-    );
+  if (typeof root.fallback_used !== "boolean") {
+    throw new Error("Non-conformant generation response: missing fallback_used.");
   }
-
-  const runtimePath =
-    firstNonEmptyString(rawDebugInfo.runtime_path) ??
-    options.compatibilityRuntimePath;
-
-  if (!runtimePath) {
-    throw new Error(
-      "Non-conformant generation response: missing debug_info.runtime_path",
-    );
+  if (typeof root.generation_time_ms !== "number" || root.generation_time_ms < 0) {
+    throw new Error("Non-conformant generation response: invalid generation_time_ms.");
   }
-
-  const slotKeys = asStringArray(rawDebugInfo.slot_keys) ?? [];
-  const tokens = asStringArray(root.tokens) ?? tokenizeTransportText(text);
-
-  const generationTimeMs =
-    typeof root.generation_time_ms === "number" ? root.generation_time_ms : 0.0;
-
-  const debugInfo: GenerationDebugInfo = {
-    ...rawDebugInfo,
-    runtime_path: runtimePath,
-    construction_id: constructionId,
-    renderer_backend: rendererBackend,
-    lang_code: langCode,
-    fallback_used: fallbackUsed,
-    slot_keys: slotKeys,
-  };
-
   return {
     text,
     lang_code: langCode,
     construction_id: constructionId,
     renderer_backend: rendererBackend,
-    fallback_used: fallbackUsed,
+    fallback_used: root.fallback_used,
     tokens,
-    debug_info: debugInfo,
-    generation_time_ms: generationTimeMs,
+    debug_info: debug as GenerationDebugInfo,
+    generation_time_ms: root.generation_time_ms,
   };
 }
 
 function resolveGenerateLangCode(req: GenerateRequest): string {
-  const langCode = req.lang_code ?? req.lang;
-  if (!langCode || !langCode.trim()) {
-    throw new Error("GenerateRequest requires lang_code or lang.");
+  if (!req.lang_code || !req.lang_code.trim()) {
+    throw new Error("GenerateRequest requires lang_code.");
   }
-  return langCode.trim();
+  return req.lang_code.trim();
 }
 
 /* -------------------------------------------------------------------------- */
@@ -414,19 +333,9 @@ export interface SuggestionResponse {
 /* -------------------------------------------------------------------------- */
 
 export interface GenerateRequest {
-  /**
-   * Preferred spelling for new frontend code.
-   */
-  lang_code?: string;
-
-  /**
-   * Backward-compatible convenience alias.
-   */
-  lang?: string;
-
+  lang_code: string;
   frame_type: string;
   frame_payload: Record<string, unknown>;
-  options?: Record<string, unknown>;
 }
 
 export interface GenerationDebugInfo {
@@ -552,11 +461,7 @@ function normalizeLanguages(raw: unknown): Language[] {
 export const architectApi: ArchitectApi = {
   async health(): Promise<boolean> {
     try {
-      // Prefer the newer liveness endpoint; fall back to older /health if present.
-      const data = await requestWithFallback<Record<string, unknown>>([
-        "/health/live",
-        "/health",
-      ]);
+      const data = await request<Record<string, unknown>>("/health/live");
       return (data?.status ?? "") === "ok";
     } catch {
       return false;
@@ -570,10 +475,7 @@ export const architectApi: ArchitectApi = {
 
   getFrameSchema(frameType: string): Promise<Record<string, unknown>> {
     const ft = encodeURIComponent(frameType);
-    return requestWithFallback<Record<string, unknown>>([
-      `/schemas/frames/${ft}`,
-      `/frames/schemas/${ft}`,
-    ]);
+    return request<Record<string, unknown>>(`/frames/schemas/${ft}`);
   },
 
   async listLanguages(): Promise<Language[]> {
@@ -630,48 +532,14 @@ export const architectApi: ArchitectApi = {
 
   async generate(req: GenerateRequest): Promise<GenerationResult> {
     const langCode = resolveGenerateLangCode(req);
-    const encodedLangCode = encodeURIComponent(langCode);
-
-    // Preferred path: POST /generate/{lang_code}
-    try {
-      const normalizedBody = {
+    const raw = await request<unknown>(`/generate/${encodeURIComponent(langCode)}`, {
+      method: "POST",
+      body: JSON.stringify({
         frame_type: req.frame_type,
         ...req.frame_payload,
-        ...(req.options ?? {}),
-      };
-
-      const raw = await request<unknown>(`/generate/${encodedLangCode}`, {
-        method: "POST",
-        body: JSON.stringify(normalizedBody),
-      });
-
-      return normalizeGenerationResult(raw, {
-        requestedLangCode: langCode,
-      });
-    } catch (e) {
-      // Backward-compatible path fallback:
-      // POST /generate with language in payload.
-      //
-      // We still normalize into the canonical public transport shape.
-      if (e instanceof ApiError && e.status === 404) {
-        const raw = await request<unknown>("/generate", {
-          method: "POST",
-          body: JSON.stringify({
-            frame_type: req.frame_type,
-            lang_code: langCode,
-            ...req.frame_payload,
-            ...(req.options ?? {}),
-          }),
-        });
-
-        return normalizeGenerationResult(raw, {
-          requestedLangCode: langCode,
-          compatibilityRuntimePath: "legacy_direct_frame",
-        });
-      }
-
-      throw e;
-    }
+      }),
+    });
+    return normalizeGenerationResult(raw);
   },
 };
 

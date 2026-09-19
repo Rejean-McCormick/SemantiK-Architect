@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-// [FIX] Use the central API client instead of raw axios to ensure v2.1 compatibility
+// Use the canonical API client instead of raw transport calls.
 import { architectApi, type Language } from '@/lib/api';
 
 export default function EditorPage() {
@@ -20,7 +20,7 @@ export default function EditorPage() {
   useEffect(() => {
     const fetchLangs = async () => {
       try {
-        // [FIX] Use architectApi to get the normalized list (filters out legacy codes)
+        // Use architectApi so language capability comes from the runtime endpoint.
         const data = await architectApi.listLanguages();
         setLanguages(data);
         

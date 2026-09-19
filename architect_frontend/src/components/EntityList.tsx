@@ -292,7 +292,7 @@ export default function EntityList() {
                     className="w-full rounded border border-slate-300 px-3 py-2 text-sm bg-white focus:border-sky-500 focus:outline-none"
                   >
                     <option value="bio">Bio</option>
-                    <option value="entity.person">Person</option>
+                    <option value="bio">Person</option>
                     <option value="entity.place">Place</option>
                     <option value="event">Event</option>
                     <option value="construction">Construction</option>

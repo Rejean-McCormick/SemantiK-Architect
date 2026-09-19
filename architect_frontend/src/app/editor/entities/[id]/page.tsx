@@ -56,8 +56,8 @@ export default function EntityEditorPage() {
         try {
             // Use the frame data stored in the entity object for generation
             const result = await architectApi.generate({
-                lang: currentEntity.lang || 'en',
-                frame_type: currentEntity.frame_type || 'entity.person',
+                lang_code: currentEntity.lang || 'en',
+                frame_type: currentEntity.frame_type || 'bio',
                 frame_payload: currentEntity.frame_payload || {},
                 // Note: The payload will be empty here, producing the default 'Shaka IS Warrior' output
             });

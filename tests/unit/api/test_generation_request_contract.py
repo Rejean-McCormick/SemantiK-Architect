@@ -2,75 +2,57 @@ from __future__ import annotations
 
 import pytest
 
-from app.adapters.api.contracts.generation_request_mapper import parse_generation_payload
+from app.adapters.api.contracts.generation_request_mapper import (
+    map_generation_request,
+    parse_generation_payload,
+)
 from app.core.domain.exceptions import InvalidFrameError
 from app.core.domain.frame import BioFrame
-from app.core.domain.models import Frame
 
 
-def test_standard_payload_without_frame_type_is_rejected_even_when_person_like() -> None:
-    payload = {
-        "subject": {
-            "name": "Marie Curie",
-            "qid": "Q7186",
-        }
-    }
+def test_canonical_bio_payload_is_accepted() -> None:
+    frame = parse_generation_payload(
+        {"frame_type": "bio", "subject": {"name": "Marie Curie", "qid": "Q7186"}},
+        "en",
+    )
+    assert isinstance(frame, BioFrame)
+    assert frame.frame_type == "bio"
+    assert frame.name == "Marie Curie"
 
+
+def test_missing_frame_type_is_rejected() -> None:
     with pytest.raises(InvalidFrameError, match="frame_type"):
-        parse_generation_payload(payload, "en")
+        parse_generation_payload({"subject": {"name": "Marie Curie"}}, "en")
 
 
-def test_explicit_bio_frame_type_is_accepted() -> None:
-    frame = parse_generation_payload(
-        {
-            "frame_type": "bio",
-            "subject": {"name": "Marie Curie", "qid": "Q7186"},
-        },
-        "en",
-    )
-
-    assert isinstance(frame, BioFrame)
-    assert frame.frame_type == "bio"
-    assert frame.subject.name == "Marie Curie"
+@pytest.mark.parametrize("retired", ["entity.person", "person", "biography"])
+def test_retired_bio_aliases_are_rejected(retired: str) -> None:
+    with pytest.raises(InvalidFrameError, match="Retired"):
+        parse_generation_payload(
+            {"frame_type": retired, "subject": {"name": "Marie Curie"}},
+            "en",
+        )
 
 
-def test_explicit_person_alias_is_normalized_to_bio() -> None:
-    frame = parse_generation_payload(
-        {
-            "frame_type": "entity.person",
-            "name": "Marie Curie",
-            "profession": "physicist",
-        },
-        "en",
-    )
-
-    assert isinstance(frame, BioFrame)
-    assert frame.frame_type == "bio"
-    assert frame.subject.name == "Marie Curie"
-    assert frame.subject.profession == "physicist"
+def test_top_level_type_alias_is_rejected() -> None:
+    with pytest.raises(InvalidFrameError, match="Unsupported field 'type'"):
+        map_generation_request(
+            {"type": "bio", "subject": {"name": "Marie Curie"}},
+            path_lang_code="en",
+        )
 
 
-def test_legacy_type_key_remains_an_explicit_http_boundary_alias() -> None:
-    frame = parse_generation_payload(
-        {
-            "type": "person",
-            "name": "Marie Curie",
-        },
-        "en",
-    )
-
-    assert isinstance(frame, BioFrame)
-    assert frame.frame_type == "bio"
+def test_flat_bio_fields_are_rejected() -> None:
+    with pytest.raises(InvalidFrameError, match="nested subject"):
+        parse_generation_payload(
+            {"frame_type": "bio", "name": "Marie Curie"},
+            "en",
+        )
 
 
-def test_nonempty_custom_frame_type_is_not_blocked_by_an_http_allowlist() -> None:
-    frame = parse_generation_payload(
-        {
-            "frame_type": "custom.experimental",
-            "subject": {"name": "Marie Curie"},
-        },
-        "en",
-    )
-
-    assert isinstance(frame, Frame)
-    assert frame.frame_type == "custom.experimental"
+def test_renderer_specific_fields_are_rejected() -> None:
+    with pytest.raises(InvalidFrameError, match="Renderer-specific"):
+        map_generation_request(
+            {"frame_type": "bio", "subject": {"name": "Marie Curie"}, "backend": "gf"},
+            path_lang_code="en",
+        )

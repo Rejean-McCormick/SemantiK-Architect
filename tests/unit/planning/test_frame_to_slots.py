@@ -13,7 +13,7 @@ from app.core.bridges.frame_to_slots import (
     UnsupportedConstructionError,
     frame_to_slots,
 )
-from app.core.domain.models import Frame
+from app.core.domain.frame import Frame
 
 
 @dataclass

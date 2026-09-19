@@ -1,53 +1,19 @@
 from __future__ import annotations
 
 """
-Bridge normalized semantic frames into planner-owned sentence plans.
+Bridge canonical semantic frames into planner-owned sentence plans.
 
-This module is intentionally planner-side and backend-agnostic.
-
-Responsibilities
-----------------
-- accept a normalized frame (mapping, dataclass, Pydantic model, or plain object),
-- canonicalize / inspect its frame family,
-- choose a construction (or accept an injected selector),
-- package planner metadata and discourse hints,
-- emit a `PlannedSentence`.
-
-Non-responsibilities
---------------------
-- slot-map construction,
-- lexical resolution,
-- realization / rendering,
-- backend-specific wording or morphology.
-
-Migration notes
----------------
-The repository currently contains legacy frame shapes and an older
-`discourse.planner.PlannedSentence` dataclass. This bridge is tolerant of both
-legacy frames and evolving `PlannedSentence` constructor signatures.
+This module is backend-agnostic. It selects a construction and emits the
+canonical :class:`PlannedSentence`; slot extraction, lexical resolution and
+realization happen in later stages.
 """
 
-from dataclasses import asdict, dataclass, field, is_dataclass
-import inspect
+from dataclasses import asdict, is_dataclass
 from typing import Any, Callable, Iterable, Mapping, Sequence
 from collections.abc import Mapping as ABCMapping
 
 
-try:
-    from app.core.domain.planning.planned_sentence import PlannedSentence
-except Exception:
-    @dataclass(frozen=True, slots=True)
-    class PlannedSentence:  # pragma: no cover - migration fallback
-        frame: Any
-        construction_id: str
-        lang_code: str
-        topic_entity_id: str | None = None
-        focus_role: str | None = None
-        discourse_mode: str | None = None
-        generation_options: dict[str, Any] = field(default_factory=dict)
-        metadata: dict[str, Any] = field(default_factory=dict)
-        source_frame_ids: list[str] | None = None
-        priority: int | None = None
+from app.core.domain.planning.planned_sentence import PlannedSentence
 
 
 __all__ = [
@@ -91,17 +57,7 @@ Selector = Callable[..., SelectionResult]
 # ---------------------------------------------------------------------------
 
 
-_BIOISH_FRAME_TYPES: frozenset[str] = frozenset(
-    {
-        "bio",
-        "biography",
-        "entity.person",
-        "entity_person",
-        "person",
-        "entity.person.v1",
-        "entity.person.v2",
-    }
-)
+_BIOISH_FRAME_TYPES: frozenset[str] = frozenset({"bio"})
 
 _RELATIONISH_ALIASES: frozenset[str] = frozenset({"relational", "relation"})
 _EVENTISH_ALIASES: frozenset[str] = frozenset({"event"})
@@ -240,9 +196,6 @@ def _canonicalize_frame_type(raw_frame_type: Any) -> str:
 
     if ft in _BIOISH_FRAME_TYPES:
         return "bio"
-
-    if ft in {"definition", "biographical-definition"}:
-        return "relation.definition"
 
     if ft in _RELATIONISH_ALIASES:
         return "relation.definition"
@@ -497,52 +450,11 @@ def _coerce_selection_result(selection: SelectionResult) -> dict[str, Any]:
 
 
 def _instantiate_planned_sentence(**kwargs: Any) -> PlannedSentence:
-    """
-    Instantiate `PlannedSentence` while tolerating migration-era constructor
-    differences between legacy and final dataclasses.
-    """
-    cls = PlannedSentence
-
+    """Instantiate the canonical planner result contract."""
     try:
-        sig = inspect.signature(cls)
-        params = sig.parameters.values()
-        accepts_var_kw = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in params)
-        if accepts_var_kw:
-            return cls(**kwargs)
-
-        allowed = {p.name for p in params if p.kind in (
-            inspect.Parameter.POSITIONAL_OR_KEYWORD,
-            inspect.Parameter.KEYWORD_ONLY,
-        )}
-        filtered = {k: v for k, v in kwargs.items() if k in allowed}
-        return cls(**filtered)
-    except Exception:
-        pass
-
-    # Last-resort migration fallback for very old constructor shapes.
-    minimal_order = (
-        "frame",
-        "construction_id",
-        "lang_code",
-        "topic_entity_id",
-        "focus_role",
-        "discourse_mode",
-        "generation_options",
-        "metadata",
-        "source_frame_ids",
-        "priority",
-    )
-    last_error: Exception | None = None
-    for cutoff in range(len(minimal_order), 1, -1):
-        subset = {k: kwargs[k] for k in minimal_order[:cutoff] if k in kwargs}
-        try:
-            return cls(**subset)
-        except Exception as exc:
-            last_error = exc
-
-    raise FrameToPlanError(
-        "Unable to instantiate PlannedSentence with the available constructor."
-    ) from last_error
+        return PlannedSentence(**kwargs)
+    except (TypeError, ValueError) as exc:
+        raise FrameToPlanError(f"Invalid PlannedSentence: {exc}") from exc
 
 
 # ---------------------------------------------------------------------------

@@ -9,31 +9,17 @@ Canonical planner-side runtime contract.
 it captures *what* sentence is to be said before renderer-facing packaging
 (`ConstructionPlan`) and lexical resolution are applied.
 
-This implementation intentionally supports both:
-
-1. The documented canonical contract:
-   - construction_id
-   - lang_code
-   - topic_entity_id
-   - focus_role
-   - discourse_mode
-   - generation_options
-   - metadata
-   - source_frame_ids
-   - priority
-
-2. The repository's current migration needs:
-   - an opaque `frame` field is retained for in-process bridging from
-     planner output to slot extraction / construction-plan assembly.
+The contract carries the selected construction, language, discourse metadata and
+the canonical source frame used by the next in-process slot-extraction stage.
 
 Design notes
 ------------
 - Immutable by default (`frozen=True`, `slots=True`).
 - Mapping fields are recursively frozen so downstream stages do not mutate
   shared planning state by accident.
-- Validation is strict for core contract fields, but intentionally does
-  not import the construction registry yet, to avoid circular dependencies
-  during the migration batches.
+- Validation is strict for core contract fields.
+- Construction-registry validation remains outside this value object to avoid
+  coupling the domain value to registry initialization.
 """
 
 import re
@@ -287,13 +273,11 @@ class PlannedSentence:
     priority:
         Optional planner priority for ordering / tie-breaking.
 
-    Migration compatibility field
-    -----------------------------
+    In-process source frame
+    -----------------------
     frame:
-        Opaque normalized semantic frame or planner input object used by
-        in-process bridge layers. This is intentionally retained during
-        migration even though it is not part of the canonical serialized
-        planner contract.
+        Canonical semantic frame used by slot extraction after planning. It is
+        intentionally excluded from the default serialized planner view.
     """
 
     construction_id: str
@@ -381,8 +365,8 @@ class PlannedSentence:
         Serialize to a plain-Python dict suitable for logging, tests, or
         response mapping.
 
-        The opaque `frame` field is excluded by default because it is an
-        in-process compatibility carrier and may not be safely serializable.
+        The source `frame` is excluded by default because it is an in-process
+        domain object and may not be safely serializable.
         """
         data: dict[str, Any] = {
             "construction_id": self.construction_id,

@@ -1,44 +1,40 @@
+from __future__ import annotations
+
 from typing import Dict
 
 import structlog
-from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Response, status
 
-from app.core.ports import IGrammarEngine, LexiconRepo
-from app.shared.container import Container
+from app.adapters.api.dependencies import get_lexicon_repository, get_pgf_runtime
+from app.adapters.engines.pgf_runtime import PgfRuntime
+from app.adapters.persistence.filesystem_repo import FileSystemLexiconRepository
 
 logger = structlog.get_logger()
 router = APIRouter(prefix="/health", tags=["System"])
 
 
 @router.get("/live", status_code=status.HTTP_200_OK)
-async def liveness_probe():
+async def liveness_probe() -> dict[str, str]:
     return {"status": "ok", "service": "semantik-architect"}
 
 
 @router.get("/ready", status_code=status.HTTP_200_OK)
-@inject
 async def readiness_probe(
     response: Response,
-    repo: LexiconRepo = Depends(Provide[Container.lexicon_repository]),
-    engine: IGrammarEngine = Depends(Provide[Container.grammar_engine]),
+    repo: FileSystemLexiconRepository = Depends(get_lexicon_repository),
+    pgf_runtime: PgfRuntime = Depends(get_pgf_runtime),
 ) -> Dict[str, str]:
-    """Readiness for the runtime-only application: storage + PGF engine."""
-    health_status = {"storage": "down", "engine": "down"}
-
+    health = {"lexicon": "down", "pgf": "down"}
     try:
-        if not hasattr(repo, "health_check") or await repo.health_check():
-            health_status["storage"] = "up"
+        if await repo.health_check():
+            health["lexicon"] = "up"
     except Exception as exc:
-        logger.error("health_check_failed", component="storage", error=str(exc))
-
+        logger.error("health_check_failed", component="lexicon", error=str(exc))
     try:
-        if await engine.health_check():
-            health_status["engine"] = "up"
+        if await pgf_runtime.health_check():
+            health["pgf"] = "up"
     except Exception as exc:
-        logger.error("health_check_failed", component="engine", error=str(exc))
-
-    if not all(value == "up" for value in health_status.values()):
+        logger.error("health_check_failed", component="pgf", error=str(exc))
+    if not all(value == "up" for value in health.values()):
         response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
-        logger.warning("readiness_probe_failed", status=health_status)
-    return health_status
+    return health

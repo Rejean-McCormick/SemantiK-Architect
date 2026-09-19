@@ -37,11 +37,4 @@ async def list_frame_types():
             "schema_ref": "/api/v1/schemas/frames/event_transitive",
             "icon": "activity"
         },
-        {
-            "id": "generic",
-            "label": "Safe Mode (Generic)",
-            "description": "Direct Abstract Syntax Tree construction (Advanced Users).",
-            "schema_ref": "/api/v1/schemas/frames/generic",
-            "icon": "code"
-        }
     ]

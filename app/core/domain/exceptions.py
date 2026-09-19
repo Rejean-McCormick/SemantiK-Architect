@@ -1,43 +1,49 @@
-# app\core\domain\exceptions.py
-# app/core/domain/exceptions.py
+from __future__ import annotations
+
+
 class DomainError(Exception):
-    """Base class for all domain-level exceptions."""
-    def __init__(self, message: str):
-        self.message = message
-        super().__init__(self.message)
+    """Base class for SemantiK runtime/domain failures."""
 
-# --- Entity Not Found Errors ---
-
-class LanguageNotFoundError(DomainError):
-    """Raised when an operation is requested for a language code that is not supported."""
-    def __init__(self, lang_code: str):
-        super().__init__(f"Language '{lang_code}' is not supported or not found in the registry.")
-
-class LexiconEntryNotFoundError(DomainError):
-    """Raised when a specific lemma or QID is missing from the lexicon."""
-    def __init__(self, identifier: str, lang_code: str):
-        super().__init__(f"Lexicon entry '{identifier}' not found for language '{lang_code}'.")
-
-# --- Validation Errors ---
 
 class InvalidFrameError(DomainError):
-    """Raised when a semantic frame fails validation logic (e.g., missing required fields)."""
+    """Raised when semantic input violates the canonical frame contract."""
+
     def __init__(self, reason: str):
         super().__init__(f"Invalid Semantic Frame: {reason}")
 
+
 class UnsupportedFrameTypeError(DomainError):
-    """Raised when the engine does not know how to process a specific frame type."""
+    """Raised when a frame family is explicit but unsupported."""
+
     def __init__(self, frame_type: str):
-        super().__init__(f"Frame type '{frame_type}' is not supported by the current engine.")
+        super().__init__(f"Frame type '{frame_type}' is not supported by the current runtime.")
 
-# --- Process/State Errors ---
 
-class LanguageBuildInProgressError(DomainError):
-    """Raised when attempting to build a language that is already building."""
+class LanguageNotFoundError(DomainError):
+    """Raised when the deployed runtime does not expose a requested language."""
+
     def __init__(self, lang_code: str):
-        super().__init__(f"Build for language '{lang_code}' is already in progress.")
+        super().__init__(f"Language '{lang_code}' is not supported by the deployed runtime.")
 
-class GrammarCompilationError(DomainError):
-    """Raised when the underlying grammar engine (GF) fails to compile."""
-    def __init__(self, lang_code: str, details: str):
-        super().__init__(f"Grammar compilation failed for '{lang_code}': {details}")
+
+class LexiconEntryNotFoundError(DomainError):
+    """Raised when a required lexical entry cannot be resolved."""
+
+    def __init__(self, identifier: str, lang_code: str):
+        super().__init__(f"Lexicon entry '{identifier}' not found for language '{lang_code}'.")
+
+
+class PlanningError(DomainError):
+    """Raised when canonical planning fails."""
+
+
+class LexicalResolutionError(DomainError):
+    """Raised when a ConstructionPlan cannot be lexicalized."""
+
+
+class RealizationError(DomainError):
+    """Raised when no configured renderer can realize a ConstructionPlan."""
+
+
+class DeploymentError(DomainError):
+    """Raised when required deployed runtime resources are unavailable."""

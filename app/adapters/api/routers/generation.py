@@ -1,17 +1,13 @@
-# app/adapters/api/routers/generation.py
-from typing import Any, Callable, Dict, NoReturn, Optional
+from __future__ import annotations
+
+from typing import Any, Dict, NoReturn, Optional
 
 import structlog
 from fastapi import APIRouter, Body, Depends, Header, HTTPException, status
 
-from app.adapters.api.contracts.generation_request_mapper import (
-    MappedGenerationRequest,
-    map_generation_request,
-)
-from app.adapters.api.contracts.generation_response_mapper import (
-    map_generation_response,
-)
-from app.adapters.api.dependencies import get_generate_text_use_case, verify_api_key
+from app.adapters.api.contracts.generation_request_mapper import map_generation_request
+from app.adapters.api.contracts.generation_response_mapper import map_generation_response
+from app.adapters.api.dependencies import get_generate_text_use_case
 from app.adapters.persistence.session_store import session_store
 from app.core.domain.context import DiscourseEntity
 from app.core.domain.exceptions import (
@@ -21,148 +17,53 @@ from app.core.domain.exceptions import (
     UnsupportedFrameTypeError,
 )
 from app.core.domain.frame import BioFrame
-from app.core.domain.models import Sentence
+from app.core.domain.models import SurfaceResult
 from app.core.use_cases.generate_text import GenerateText
 
 logger = structlog.get_logger()
-
-router = APIRouter(
-    prefix="/generate",
-    tags=["Generation"],
-    dependencies=[Depends(verify_api_key)],
-)
-
-
-@router.post(
-    "",
-    response_model=Sentence,
-    status_code=status.HTTP_200_OK,
-    summary="Generate Text (language in payload)",
-)
-async def generate_text_from_payload(
-    payload: Dict[str, Any] = Body(
-        ...,
-        description=(
-            "Abstract Semantic Frame or Ninai Protocol payload "
-            "(must include lang, language, or lang_code either at top level "
-            "or inside inputs)."
-        ),
-    ),
-    x_session_id: Optional[str] = Header(None, alias="X-Session-ID"),
-    use_case: GenerateText = Depends(get_generate_text_use_case),
-) -> Sentence:
-    """
-    Generation endpoint where the target language is provided inside the payload.
-
-    Accepted language spellings are normalized by the request mapper. The router
-    owns only HTTP ingress/orchestration. Planner-first runtime truth remains in
-    the use case and public transport shaping remains in the response mapper.
-    """
-    return await _execute_generation(
-        request_mapper=lambda: map_generation_request(payload),
-        x_session_id=x_session_id,
-        use_case=use_case,
-        log_lang=None,
-    )
+router = APIRouter(prefix="/generate", tags=["Generation"])
 
 
 @router.post(
     "/{lang_code}",
-    response_model=Sentence,
+    response_model=SurfaceResult,
     status_code=status.HTTP_200_OK,
-    summary="Generate Text from Abstract Frame",
+    summary="Generate text from a canonical semantic frame",
 )
 async def generate_text(
     lang_code: str,
-    payload: Dict[str, Any] = Body(
-        ...,
-        description="Abstract Semantic Frame or Ninai Protocol payload.",
-    ),
+    payload: Dict[str, Any] = Body(...),
     x_session_id: Optional[str] = Header(None, alias="X-Session-ID"),
     use_case: GenerateText = Depends(get_generate_text_use_case),
-) -> Sentence:
-    """
-    Converts a semantic frame into a concrete sentence in the target language.
-
-    Features:
-    - request normalization via the request mapper
-    - optional discourse planning via X-Session-ID
-    - planner-first runtime execution via GenerateText
-    - stable public response serialization via the response mapper
-    """
-    return await _execute_generation(
-        request_mapper=lambda: map_generation_request(
-            payload,
-            path_lang_code=lang_code,
-        ),
-        x_session_id=x_session_id,
-        use_case=use_case,
-        log_lang=lang_code,
-    )
-
-
-async def _execute_generation(
-    *,
-    request_mapper: Callable[[], MappedGenerationRequest],
-    x_session_id: Optional[str],
-    use_case: GenerateText,
-    log_lang: Optional[str],
-) -> Sentence:
-    """
-    Shared request flow:
-
-    HTTP payload
-      -> request normalization
-      -> optional discourse context application
-      -> planner-first runtime execution
-      -> public response mapping
-    """
-    lang: Optional[str] = log_lang
-
+) -> dict[str, Any]:
     try:
-        mapped_request = request_mapper()
-        lang = mapped_request.lang_code
-        frame = mapped_request.frame
-
+        mapped = map_generation_request(payload, path_lang_code=lang_code)
+        frame = mapped.frame
         if x_session_id and isinstance(frame, BioFrame):
             await _apply_discourse_context(x_session_id, frame)
-
-        runtime_result = await use_case.execute(lang, frame)
-        public_result = map_generation_response(runtime_result)
-        return public_result
-
+        result = await use_case.execute(mapped.lang_code, frame)
+        return map_generation_response(result, requested_lang_code=mapped.lang_code)
     except Exception as exc:
-        _raise_generation_http_exception(exc, lang=lang)
+        _raise_generation_http_exception(exc, lang=lang_code)
 
 
 def _raise_generation_http_exception(exc: Exception, *, lang: Optional[str]) -> NoReturn:
     if isinstance(exc, (InvalidFrameError, UnsupportedFrameTypeError, ValueError)):
         logger.warning("generation_bad_request", lang=lang, error=str(exc))
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail=str(exc),
         )
-
     if isinstance(exc, LanguageNotFoundError):
         logger.warning("generation_language_not_found", lang=lang, error=str(exc))
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(exc),
-        )
-
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc))
     if isinstance(exc, DomainError):
-        logger.error("generation_domain_error", lang=lang, error=str(exc))
+        logger.error("generation_runtime_error", lang=lang, error=str(exc))
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Generation failed: {str(exc)}",
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Generation failed: {exc}",
         )
-
-    logger.critical(
-        "unexpected_generation_crash",
-        lang=lang,
-        error=str(exc),
-        exc_info=True,
-    )
+    logger.critical("unexpected_generation_crash", lang=lang, error=str(exc), exc_info=True)
     raise HTTPException(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         detail="An unexpected error occurred during text generation.",
@@ -170,105 +71,42 @@ def _raise_generation_http_exception(exc: Exception, *, lang: Optional[str]) -> 
 
 
 def _extract_subject_qid(frame: BioFrame) -> Optional[str]:
-    """
-    Best-effort extraction of the entity identifier used for discourse focus.
-    """
-    subj = getattr(frame, "subject", None)
+    subj = frame.subject
     if isinstance(subj, dict):
-        qid = subj.get("qid")
-        if isinstance(qid, str) and qid.strip():
-            return qid.strip()
-        return None
-
-    if subj is not None:
-        qid = getattr(subj, "qid", None)
-        if isinstance(qid, str) and qid.strip():
-            return qid.strip()
-
-    qid = getattr(frame, "qid", None)
-    if isinstance(qid, str) and qid.strip():
-        return qid.strip()
-
-    return None
+        value = subj.get("qid")
+    else:
+        value = getattr(subj, "qid", None)
+    return value.strip() if isinstance(value, str) and value.strip() else None
 
 
 def _normalize_discourse_gender(value: Any) -> str:
-    """Normalize runtime gender labels to the SessionContext contract."""
     normalized = str(value or "").strip().lower()
     return {
-        "m": "m",
-        "male": "m",
-        "masculine": "m",
-        "f": "f",
-        "female": "f",
-        "feminine": "f",
-        "n": "n",
-        "neuter": "n",
-        "c": "c",
-        "common": "c",
+        "m": "m", "male": "m", "masculine": "m",
+        "f": "f", "female": "f", "feminine": "f",
+        "n": "n", "neuter": "n", "c": "c", "common": "c",
     }.get(normalized, "n")
 
 
 async def _apply_discourse_context(session_id: str, frame: BioFrame) -> None:
-    """
-    Applies pronominalization logic based on the session history.
-
-    This mutates the BioFrame in place before planner-first generation runs.
-    It is a request-context concern, not a public-response concern.
-    """
     context = await session_store.get_session(session_id)
-
     subject_qid = _extract_subject_qid(frame)
     if not subject_qid:
         return
 
-    original_label = getattr(frame, "name", None)
-
+    original_label = frame.name
     if context.current_focus and context.current_focus.qid == subject_qid:
-        logger.info("pronominalization_triggered", session=session_id)
-
-        if frame.meta is None:
-            frame.meta = {}
-
-        gender_map = {
-            "f": ("She", "she_Pron"),
-            "female": ("She", "she_Pron"),
-            "m": ("He", "he_Pron"),
-            "male": ("He", "he_Pron"),
-            "n": ("It", "it_Pron"),
-            "neuter": ("It", "it_Pron"),
-        }
-
-        focus_gender = getattr(context.current_focus, "gender", None)
-        pronoun_label, gf_arg = gender_map.get(
-            str(focus_gender or "").strip().lower(),
-            ("It", "it_Pron"),
-        )
-
-        frame.name = pronoun_label
-        frame.meta["gf_function"] = "UsePron"
-        frame.meta["gf_arg"] = gf_arg
-
-        focus_label = (
-            getattr(context.current_focus, "label", None)
-            or original_label
-            or pronoun_label
-        )
-        focus_qid = getattr(context.current_focus, "qid", None) or subject_qid
-        focus_gender_out = _normalize_discourse_gender(
-            focus_gender or getattr(frame, "gender", None)
-        )
-    else:
-        focus_label = original_label or getattr(frame, "name", None) or "It"
-        focus_qid = subject_qid
-        focus_gender_out = _normalize_discourse_gender(getattr(frame, "gender", None))
+        gender = str(getattr(context.current_focus, "gender", "") or "").lower()
+        frame.name = "She" if gender in {"f", "female"} else "He" if gender in {"m", "male"} else "It"
 
     new_entity = DiscourseEntity(
-        label=focus_label,
-        gender=focus_gender_out,
-        qid=focus_qid,
+        label=original_label or frame.name,
+        gender=_normalize_discourse_gender(frame.gender),
+        qid=subject_qid,
         recency=0,
     )
     context.update_focus(new_entity)
     await session_store.save_session(context)
 
+
+__all__ = ["router", "generate_text"]

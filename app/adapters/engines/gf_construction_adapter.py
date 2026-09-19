@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import Any
+from time import perf_counter
 
 import structlog
 
-from app.adapters.engines.gf_wrapper import GFGrammarEngine
+from app.adapters.engines.pgf_runtime import PgfRuntime
 from app.core.domain.exceptions import DomainError
 from app.core.domain.models import SurfaceResult
 from app.core.domain.planning.construction_plan import ConstructionPlan
@@ -167,11 +168,11 @@ class GFConstructionAdapter:
 
     def __init__(
         self,
-        engine: GFGrammarEngine | None = None,
+        engine: PgfRuntime | None = None,
         *,
         allow_wrapper_passthrough: bool = True,
     ) -> None:
-        self.engine = engine or GFGrammarEngine()
+        self.engine = engine or PgfRuntime()
         self.allow_wrapper_passthrough = bool(allow_wrapper_passthrough)
 
     def supports(self, construction_id: str, lang_code: str) -> bool:
@@ -195,6 +196,7 @@ class GFConstructionAdapter:
             raise TypeError("GFConstructionAdapter.realize expects a ConstructionPlan")
 
         construction_plan.validate()
+        started = perf_counter()
 
         construction_id = _normalize_construction_id(construction_plan.construction_id)
         effective_construction_id = construction_id
@@ -290,10 +292,11 @@ class GFConstructionAdapter:
             fallback_used=fallback_used,
             tokens=stripped_text.split(),
             debug_info=debug_info,
+            generation_time_ms=max((perf_counter() - started) * 1000.0, 0.0),
         )
 
     def _resolve_language(self, lang_code: str) -> str | None:
-        resolver = getattr(self.engine, "_resolve_concrete_name", None)
+        resolver = getattr(self.engine, "resolve_concrete_name", None)
         if callable(resolver):
             try:
                 return resolver(lang_code)
