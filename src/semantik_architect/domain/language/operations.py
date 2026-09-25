@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from ..errors import SemantikArchitectError
+
 
 @dataclass(frozen=True, slots=True)
 class OperationDefinition:
@@ -10,7 +12,9 @@ class OperationDefinition:
 
 
 V1_OPERATIONS: tuple[OperationDefinition, ...] = (
-    OperationDefinition("discourse.greeting", ("recipient",)),
+    # Non-factual discourse operations. They carry no domain claim and
+    # discharge no business obligation.
+    OperationDefinition("discourse.greeting", ()),
     OperationDefinition("discourse.closing", ()),
     OperationDefinition("clause.intransitive_event", ("agent", "predicate")),
     OperationDefinition("clause.transitive_event", ("agent", "predicate", "patient")),
@@ -37,5 +41,9 @@ V1_OPERATION_IDS = frozenset(item.operation_id for item in V1_OPERATIONS)
 
 def require_known_operation(operation_id: str) -> str:
     if operation_id not in V1_OPERATION_IDS:
-        raise ValueError(f"Unknown SA↔GF v1 operation: {operation_id}")
+        raise SemantikArchitectError(
+            "SA-LANG-003",
+            f"Unknown SA↔GF v1 operation: {operation_id}",
+            details={"operation_id": operation_id},
+        )
     return operation_id
