@@ -1,8 +1,0 @@
-{
-  "SVO": { "nsubj": -10, "root": 0, "obj": 10 },
-  "SOV": { "nsubj": -10, "obj": -5, "root": 0 },
-  "VSO": { "root": -10, "nsubj": 0, "obj": 10 },
-  "VOS": { "root": -10, "obj": 5, "nsubj": 10 },
-  "OVS": { "obj": -10, "root": 0, "nsubj": 10 },
-  "OSV": { "obj": -10, "nsubj": -5, "root": 0 }
-}

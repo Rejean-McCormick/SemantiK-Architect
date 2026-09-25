@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "language": "fr",
+  "locale": "fr-CA",
+  "blocks": [
+    {
+      "block_id": "b1",
+      "kind": "utterance",
+      "text": "Marcel, la machine 4356 doit être réparée avant 16 h.",
+      "obligation_ids": ["o_task"]
+    },
+    {
+      "block_id": "b2",
+      "kind": "utterance",
+      "text": "Gabriel est disponible pour t'aider au 418 123-4567.",
+      "obligation_ids": ["o_support"]
+    }
+  ],
+  "plain_text": "Marcel, la machine 4356 doit être réparée avant 16 h.\nGabriel est disponible pour t'aider au 418 123-4567.",
+  "coverage": [
+    {"obligation_id": "o_task", "block_ids": ["b1"], "realization_unit_ids": ["u1"]},
+    {"obligation_id": "o_support", "block_ids": ["b2"], "realization_unit_ids": ["u2"]}
+  ],
+  "source_refs": ["orgo:task/123", "orgo:user/gabriel"],
+  "runtime": {
+    "sa_version": "1.0.0",
+    "runtime_set_id": "sha256:example",
+    "sa_gf_contract_version": "1.0",
+    "capability_profile": "orgo-operational-1"
+  },
+  "deterministic_result_id": "sha256:example-result",
+  "operational": {}
+}

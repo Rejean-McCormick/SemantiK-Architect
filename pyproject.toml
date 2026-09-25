@@ -4,52 +4,35 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "semantik-architect"
-version = "3.0.0"
-description = "Semantic planning and multilingual NLG runtime using precompiled GF/PGF grammars."
+version = "1.0.0"
+description = "Deterministic semantic-to-human multilingual communication architecture."
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "Semantik Architect Community License (NO-WMF) Version 1.0" }
 authors = [{ name = "Semantik Architect Contributors" }]
-dependencies = [
-  "pydantic>=2.6.0",
-  "pydantic-settings>=2.1.0",
-  "structlog>=24.1.0",
-  "httpx>=0.26.0",
-  "aiofiles>=23.1.0",
-  "python-dotenv>=1.0.0",
-]
+dependencies = []
 
 [project.optional-dependencies]
-api = [
-  "fastapi>=0.110.0",
-  "uvicorn[standard]>=0.27.0",
-  "uvloop>=0.19.0; platform_system != 'Windows'",
-  "opentelemetry-api>=1.22.0",
-  "opentelemetry-sdk>=1.22.0",
-  "opentelemetry-instrumentation-fastapi>=0.43b0",
-  "opentelemetry-exporter-otlp-proto-http>=1.22.0",
-]
 gf = ["pgf==1.1"]
 dev = [
   "pytest>=8.0.0",
-  "pytest-asyncio>=0.23.0",
   "black>=24.1.0",
   "flake8>=7.0.0",
   "mypy>=1.8.0",
+  "jsonschema>=4.0.0",
 ]
 
-[project.scripts]
-architect-api = "app.adapters.api.main:start"
-lexicon-cli = "app.adapters.persistence.lexicon.cli:main"
-
 [tool.setuptools]
+package-dir = {"" = "src"}
 include-package-data = true
 
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["app*", "utils*"]
-exclude = ["data*", "schemas*", "architect_frontend*", "docs*", "tests*", "dist*", "build*", ".venv*", "venv*"]
+where = ["src"]
+include = ["semantik_architect*"]
 
 [tool.black]
 line-length = 88
 target-version = ["py312"]
+
+[project.scripts]
+semantik-architect = "semantik_architect.adapters.inbound.cli.main:main"

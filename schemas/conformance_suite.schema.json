@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:semantik-architect:schema:conformance-suite:1.0",
+  "title": "Conformance Suite v1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "suite_id", "language", "capability_profile", "runtime_set_id", "cases"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "suite_id": {"type": "string"},
+    "language": {"type": "string"},
+    "capability_profile": {"type": "string"},
+    "runtime_set_id": {"type": "string"},
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["case_id", "request"],
+        "properties": {
+          "case_id": {"type": "string"},
+          "request": {"type": "object"},
+          "expected": {"type": "object", "additionalProperties": true}
+        }
+      }
+    }
+  }
+}

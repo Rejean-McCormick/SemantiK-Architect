@@ -1,6 +1,0 @@
-User-agent: *
-Disallow: /grammars
-Disallow: /*.pgf
-Disallow: /*.gfo
-Disallow: /w/
-Disallow: /lib/dist

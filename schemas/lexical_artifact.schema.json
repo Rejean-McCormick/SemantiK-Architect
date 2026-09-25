@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:semantik-architect:schema:lexical-artifact:1.0",
+  "title": "Lexical Artifact v1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "lexicon_id", "entries"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "lexicon_id": {"type": "string", "minLength": 1},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["semantic_ref", "language", "lexical_ref"],
+        "properties": {
+          "semantic_ref": {"type": "string"},
+          "language": {"type": "string"},
+          "lexical_ref": {"type": "string"},
+          "binding_kind": {"enum": ["gf_expr", "literal"]},
+          "category": {"type": "string"},
+          "properties": {"type": "object", "additionalProperties": true}
+        }
+      }
+    }
+  }
+}

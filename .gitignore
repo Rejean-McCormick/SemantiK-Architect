@@ -1,130 +1,19 @@
-# ---------------------------------
-# Python build / runtime artefacts
-# ---------------------------------
 __pycache__/
 *.py[cod]
-*$py.class
-
-# Virtual environments
-.venv/
-venv/
-env/
-.env/
-linux_env/      # Specific to your WSL setup
-
-# ---------------------------------
-# Environment Variables
-# ---------------------------------
-.env
-.env.*
-!.env.example   # Always commit the example config!
-
-# ---------------------------------
-# Packaging & Distribution
-# ---------------------------------
+*.egg-info/
 build/
 dist/
-*.egg-info/
-.eggs/
-*.spec
-
-# ---------------------------------
-# Test / coverage artefacts
-# ---------------------------------
+.venv/
+venv/
+.env
+.env.*
 .pytest_cache/
-.coverage
-.coverage.*
-htmlcov/
-.tox/
 .mypy_cache/
-.cache/
-
-# ---------------------------------
-# IDE / editor junk
-# ---------------------------------
-.vscode/
-.idea/
-*.swp
-*.swo
-*.orig
-
-# ---------------------------------
-# Project-specific generated data
-# ---------------------------------
-# Generated datasets
-qa_tools/generated_datasets/
-qa/generated_datasets/
-!qa/generated_datasets/.gitignore
-
-# Logs
+.coverage
+htmlcov/
 *.log
-build_logs/
-
-# OS-specific
 .DS_Store
 Thumbs.db
-
-# ---------------------------------
-# Node / frontend artefacts
-# ---------------------------------
-# Global ignore for node_modules (covers frontend and tools)
-node_modules/
-
-# Tooling caches
-.npm/
-.yarn/
-.pnp.*
-.turbo/
-.eslintcache
-.stylelintcache
-
-# Next.js / React build output
-.next/
-out/
-.next/cache/
-*.tsbuildinfo
-
-# Large binaries
-*.node
-*.a
-*.so
-*.dylib
-*.dll
-*.deb
-
-# ---------------------------------
-# Database (SQLite)
-# ---------------------------------
-*.db
-*.sqlite
-*.sqlite3
-
-# ---------------------------------
-# Migrations (Alembic)
-# ---------------------------------
-# ⚠️ CAUTION: We keep alembic.ini and versions/ so schema changes are tracked.
-# Only ignore the python cache inside alembic.
-alembic/__pycache__/
-
-# ---------------------------------
-# Grammatical Framework (GF)
-# ---------------------------------
-# Generated binaries (Catch root files like semantik_architect.gfo)
 *.gfo
 *.pgf
 *.o
-
-# Temporary GF directories
-gf/tmp/
-gf/temp/
-gf/generated/
-gf/incubator/
-
-# Exceptions - Keep these!
-!gf/*.gf        # Keep source grammars
-!gf/*.py        # Keep build scripts
-!gf/contrib/    # Keep manual contributionsdata/tests/reports/
-GitSink.bat
-.levelupdiag/
-architect_frontend/.next/
-logs/*.log

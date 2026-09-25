@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "request_id": "example:orgo:repair-4356",
+  "semantic_graph": {
+    "graph_id": "graph:repair-4356",
+    "nodes": [
+      {"id": "n_marcel", "kind": "entity_ref", "external_ref": "orgo:user/marcel", "labels": {"fr": "Marcel"}},
+      {"id": "n_machine", "kind": "entity_ref", "external_ref": "orgo:machine/4356", "labels": {"fr": "machine 4356"}},
+      {"id": "n_repair", "kind": "concept_ref", "concept_ref": "local-concept:repair"},
+      {"id": "n_deadline", "kind": "temporal", "temporal_kind": "time", "value": "16:00:00"},
+      {"id": "n_gabriel", "kind": "entity_ref", "external_ref": "orgo:user/gabriel", "labels": {"fr": "Gabriel"}},
+      {"id": "n_phone", "kind": "literal", "value": "418 123-4567", "datatype": "phone"}
+    ],
+    "statements": [
+      {
+        "id": "s_repair",
+        "predicate_ref": "local-predicate:repair_event",
+        "arguments": [
+          {"role_ref": "semantic-role:agent", "value_id": "n_marcel"},
+          {"role_ref": "semantic-role:patient", "value_id": "n_machine"},
+          {"role_ref": "semantic-role:event_type", "value_id": "n_repair"}
+        ],
+        "polarity": "positive",
+        "source_refs": ["orgo:task/123"]
+      },
+      {
+        "id": "s_deadline",
+        "predicate_ref": "local-predicate:deadline",
+        "arguments": [
+          {"role_ref": "semantic-role:target", "value_id": "s_repair"},
+          {"role_ref": "semantic-role:time", "value_id": "n_deadline"}
+        ],
+        "polarity": "positive",
+        "source_refs": ["orgo:task/123"]
+      },
+      {
+        "id": "s_contact",
+        "predicate_ref": "local-predicate:technical_contact",
+        "arguments": [
+          {"role_ref": "semantic-role:target", "value_id": "s_repair"},
+          {"role_ref": "semantic-role:contact", "value_id": "n_gabriel"}
+        ],
+        "polarity": "positive",
+        "source_refs": ["orgo:task/123"]
+      },
+      {
+        "id": "s_phone",
+        "predicate_ref": "local-predicate:phone",
+        "arguments": [
+          {"role_ref": "semantic-role:holder", "value_id": "n_gabriel"},
+          {"role_ref": "semantic-role:value", "value_id": "n_phone"}
+        ],
+        "polarity": "positive",
+        "source_refs": ["orgo:user/gabriel"]
+      }
+    ]
+  },
+  "obligations": [
+    {"obligation_id": "o_task", "semantic_refs": ["s_repair", "s_deadline"], "force": "DIRECT", "ordering": "FIXED", "source_refs": ["orgo:task/123"]},
+    {"obligation_id": "o_support", "semantic_refs": ["s_contact", "s_phone"], "force": "PRESENT", "ordering": "FREE", "source_refs": ["orgo:task/123"]}
+  ],
+  "supporting_context": [],
+  "context": {
+    "target_language": "fr",
+    "target_locale": "fr-CA",
+    "speaker_ref": "orgo:system",
+    "recipient_ref": "orgo:user/marcel",
+    "relationship": "familiar",
+    "formality": "informal",
+    "politeness": "neutral",
+    "register": "operational",
+    "tone_profile": "clear",
+    "channel": "app"
+  },
+  "constraints": {
+    "allowed_block_kinds": ["utterance", "notice", "list"],
+    "opening_policy": "allowed",
+    "closing_policy": "allowed",
+    "list_policy": "allowed",
+    "output_format": "structured"
+  },
+  "capability_profile": "orgo-operational-1"
+}

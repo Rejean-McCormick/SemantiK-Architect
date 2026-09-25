@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:semantik-architect:schema:error-envelope:1.0",
+  "title": "Error Envelope v1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "category",
+    "stage",
+    "message_safe",
+    "retryable"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "code": {
+      "type": "string",
+      "pattern": "^SA-[A-Z]{2,4}-[0-9]{3}$"
+    },
+    "category": {
+      "type": "string"
+    },
+    "stage": {
+      "type": "string"
+    },
+    "message_safe": {
+      "type": "string"
+    },
+    "retryable": {
+      "type": "boolean"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "runtime_set_id": {
+      "type": "string"
+    },
+    "details": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

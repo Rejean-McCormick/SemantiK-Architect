@@ -1,10 +1,24 @@
-# Runtime GF artifact
+# Runtime artifacts
 
-SemantiK Architect is a **consumer** of GF, not a GF development environment.
-Place the precompiled artifact here:
+SemantiK Architect executes only immutable, released RuntimeSets. Source control does not ship a language runtime by default.
 
-`runtime/semantik_architect.pgf`
+A typical runtime directory is:
 
-The artifact is produced and validated outside this repository (for example by the
-GF development/validation toolchain) and injected into the SemantiK Architect runtime.
-No `.gf` source generation or compilation is performed by this application.
+```text
+runtime/
+  activation.json                 # optional when only one released set matches
+  fr-core-2026-09/
+    runtime.manifest.json
+    capabilities.json
+    bridge.json
+    lexicon.json
+    grammar.pgf
+    profile-sa-core-1.json
+    conformance-sa-core-1.json
+```
+
+`runtime.manifest.json` pins SHA-256 identities for grammar, lexical, bridge and profile artifacts, plus the capability-manifest hash and every conformance-evidence hash.
+
+`activation.json` maps `language|profile` to one released RuntimeSet when multiple released sets coexist. Requests may instead pin `runtime_selector.runtime_set_id`.
+
+The bridge and lexical artifact formats are documented in `docs/reference/GF_BRIDGE_SPEC.md` and the JSON Schemas under `schemas/`.

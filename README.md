@@ -1,116 +1,102 @@
 # SemantiK Architect
 
-SemantiK Architect is the **semantic/NLG application runtime**. It accepts canonical
-semantic frames, plans constructions, resolves lexical material, and realizes text
-through runtime renderers, including a precompiled Grammatical Framework PGF artifact.
+**SemantiK Architect v1.0 — deterministic semantic-to-human communication engine**
 
-## Product boundary
+SemantiK Architect (SA) is the **semantic-to-human communication layer** of the kOA ecosystem. It receives complete structured meaning selected by an upstream authority and turns that meaning into faithful, context-appropriate, multilingual communication. It does **not** decide what is true, what should be selected, or which supplied facts may be discarded.
 
-SemantiK Architect **uses GF; it does not develop GF**. This repository does not own:
+SA is designed for deterministic, offline-capable operation and delegates grammar, morphology, agreement, and language-specific realization to validated **Grammatical Framework (GF/RGL)** runtimes through a versioned SA↔GF contract.
 
-- `.gf` source authoring, repair, generation, or compilation;
-- RGL source trees, backups, or alignment workflows;
-- grammar-build workers, queues, Redis/ARQ build infrastructure;
-- grammar-development dashboards, maturity matrices, or refinement tools.
+## Mission
 
-Those responsibilities belong to the external GF development/validation ecosystem.
-SemantiK consumes the deployed runtime contract, primarily
-`runtime/semantik_architect.pgf` plus semantic and lexical runtime data.
+> Given structured semantic content, explicit communication obligations, and a communication context, produce a faithful human presentation in the requested language without inventing, filtering, silently omitting, or covertly changing the supplied meaning.
 
-## Canonical architecture
+## Canonical pipeline
 
 ```text
-HTTP / external semantic protocol
-    -> canonical Frame
-    -> planning
-    -> PlannedSentence
-    -> ConstructionPlan
-    -> lexical resolution
-    -> renderer dispatch
-    -> SurfaceResult
-    -> public response
+Upstream domain / Kristal / semantic source
+                  |
+             boundary ACL
+                  v
+       Canonical CommunicationRequest
+          |                  |
+          |                  +-- CommunicationContext
+          |
+          +-- SemanticGraph
+          +-- CommunicationObligations
+                  |
+                  v
+          CommunicationPlanner
+                  |
+                  v
+           CommunicationPlan
+           (language-neutral)
+                  |
+                  v
+       Lexical Knowledge Preflight
+                  |
+                  v
+             LanguagePlanner
+                  |
+                  v
+              LanguagePlan
+       (target-language structure,
+        blocks + realization units)
+                  |
+                  v
+            Lexical Binder
+                  |
+                  v
+       versioned SA <-> GF contract
+                  |
+                  v
+              GF / RGL
+                  |
+                  v
+         CommunicationResult
+       + coverage + runtime identity
 ```
 
-There is no direct `Frame -> engine` runtime path and no parallel `Sentence` result
-contract. `ConstructionPlan` is the renderer input contract; `SurfaceResult` is the
-single generation result contract.
+## Ownership boundary
 
-## PGF runtime
+SA owns **articulation**, not **content authority**.
 
-Place the precompiled grammar at:
+SA owns:
 
-```text
-runtime/semantik_architect.pgf
-```
+- communication planning over all supplied obligations;
+- grouping, segmentation, bounded block structure, list-vs-prose choice where allowed;
+- register, formality, politeness, audience adaptation and discourse framing;
+- target-language construction choice;
+- lexical orchestration and binding;
+- lowering to a versioned GF bridge contract;
+- output assembly, semantic coverage validation, diagnostics and runtime identity.
 
-or set `PGF_PATH` to another deployed `.pgf` file.
+SA does not own:
 
-A missing PGF is a deployment/readiness error. SemantiK never responds by compiling,
-synthesizing, or repairing GF source.
+- truth, provenance, certainty or authority decisions;
+- task priority, ethical decisions, civic outcomes or recommendation ranking;
+- selection of which supplied facts are important enough to keep;
+- raw-text understanding in the canonical path;
+- GF/RGL language development;
+- an internal duplicate grammar engine;
+- hidden language fallback;
+- article or long-form editorial planning;
+- live Wikimedia services as a required runtime dependency.
 
-Check readiness:
+## Locked invariants
 
-```bash
-python manage.py doctor
-```
+1. **No invention.** Output domain claims must come from the canonical input semantics or a declared deterministic derivation.
+2. **No silent omission.** Every communication obligation must be discharged or the request fails.
+3. **No content selection.** SA may reorganize obligations; it may not decide to remove them.
+4. **No status elevation.** Epistemic and modal distinctions supplied as communicatively relevant must not be flattened.
+5. **No hidden fallback.** Requested language/profile failure is an error, never a successful response in another language or pseudo-grammar.
+6. **One canonical runtime path.** Only the architecture defined by this repository is a runtime target.
+7. **GF is behind a contract.** Core code never imports PGF/GF runtime classes.
+8. **Validated profiles only.** A language is usable only for explicitly released conformance profiles.
+9. **Offline-first.** The canonical runtime requires no network service.
+10. **Deterministic by default.** Pinned input + config + runtime artifact set produces stable structured output.
+11. **Fail closed on semantic correctness.** Graceful degradation is allowed only for non-critical operational features.
+12. **Scale by artifacts, not language branches.** The 300th language must not require a new branch in SA core.
 
-Start the API:
+## Start here
 
-```bash
-python manage.py serve --reload
-```
-
-## Generation API
-
-The canonical endpoint is:
-
-```http
-POST /api/v1/generate/{lang_code}
-```
-
-Standard JSON requests require an explicit, canonical `frame_type`. SemantiK does not
-infer a frame family from payload shape and does not normalize retired aliases.
-
-Canonical biography example:
-
-```json
-{
-  "frame_type": "bio",
-  "subject": {
-    "name": "Marie Curie",
-    "qid": "Q7186",
-    "profession": "physicist",
-    "nationality": "Polish"
-  }
-}
-```
-
-`entity.person`, the top-level key `type`, flat person payloads, renderer ASTs, and
-backend-selection fields are not part of the standard semantic ingress contract.
-Ninai/function-style input is a separate protocol adapter that must normalize to the
-same canonical domain before planning.
-
-## Runtime languages
-
-Runtime language capability comes from the **loaded PGF concrete languages**, mapped
-to application language codes. Lexicon inventories and historical language lists do
-not create runtime capability. The currently deployed PGF exposes English and French.
-
-## Session state
-
-Optional `X-Session-ID` discourse context is process-local, bounded, and ephemeral.
-It is not a persistence layer or cross-process coordination mechanism.
-
-## Documentation
-
-The normative documentation starts at `docs/README.md`. In particular:
-
-- `docs/ARCHITECTURE.md`
-- `docs/RUNTIME_BOUNDARY.md`
-- `docs/API_GENERATION_CONTRACT.md`
-- `docs/GF_RUNTIME.md`
-- `docs/LANGUAGE_CAPABILITIES.md`
-- `docs/TESTING_AND_VALIDATION.md`
-
-Git history is the archive for superseded architecture; the active documentation tree
-contains only the current runtime contract.
+Read [`docs/00_START_HERE.md`](docs/00_START_HERE.md). The files named `*_LOCK.md` are normative architecture locks and require ADR-governed change. The executable implementation status is recorded in [`docs/22_IMPLEMENTATION_STATUS.md`](docs/22_IMPLEMENTATION_STATUS.md).

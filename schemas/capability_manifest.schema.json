@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:semantik-architect:schema:capability-manifest:1.0",
+  "title": "Capability Manifest v1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "runtime_set_id",
+    "languages"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "manifest_id": {
+      "type": "string"
+    },
+    "runtime_set_id": {
+      "type": "string"
+    },
+    "languages": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "concrete",
+          "profiles"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "DEVELOPMENT",
+              "CANDIDATE",
+              "RELEASED",
+              "RETIRED"
+            ]
+          },
+          "concrete": {
+            "type": "string"
+          },
+          "profiles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "profile_id",
+                "status",
+                "evidence_ref"
+              ],
+              "properties": {
+                "profile_id": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "CANDIDATE",
+                    "RELEASED",
+                    "RETIRED"
+                  ]
+                },
+                "evidence_ref": {
+                  "type": "string"
+                },
+                "extension_capabilities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
