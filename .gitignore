@@ -8,6 +8,7 @@ venv/
 .env
 .env.*
 .pytest_cache/
+.pytest-tmp/
 .mypy_cache/
 .coverage
 htmlcov/
@@ -18,3 +19,14 @@ Thumbs.db
 *.pgf
 *.o
 .levelupdiag/
+
+# Local helper tooling.
+GitSink.bat
+/SmartSnap.pyw
+
+# Local editor/backup artifacts.
+*.bak
+*.bak-*
+*.bak_*
+*.tmp
+*~

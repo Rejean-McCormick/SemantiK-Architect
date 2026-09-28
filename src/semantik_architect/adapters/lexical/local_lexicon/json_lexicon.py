@@ -22,6 +22,7 @@ from ....domain.language.lexical_policy import (
     VALID_LEXICAL_USES,
 )
 from ....domain.semantics.nodes import (
+    CollectionValue,
     ConceptRef,
     EntityRef,
     LiteralValue,
@@ -297,52 +298,39 @@ class RuntimeJsonLexiconAdapter:
             return obj.concept_ref
         return ref
 
-    def _surface_literal(self, request: CommunicationRequest, ref: str) -> str | None:
+    def _surface_literal(self, request: CommunicationRequest, ref: str, *, _stack: tuple[str, ...] = (), _budget: list[int] | None = None) -> str | None:
+        budget = _budget if _budget is not None else [0]
+        budget[0] += 1
+        if ref in _stack or len(_stack) > 32 or budget[0] > 10000:
+            raise SemantikArchitectError("SA-REQ-001", "Cyclic or excessive semantic collection", request_id=request.request_id)
         try:
             obj = request.semantic_graph.get(ref)
         except KeyError:
             return None
-        from .konstellation import statement_literal
-
-        explorer_value = statement_literal(request, ref)
-        if explorer_value is not None:
-            return explorer_value
+        if request.capability_profile == "konstellation-explorer-1":
+            from .konstellation import statement_literal
+            explorer_value = statement_literal(request, ref)
+            if explorer_value is not None:
+                return explorer_value
         lang = request.context.target_language
         locale = request.context.target_locale
         if isinstance(obj, EntityRef):
-            return (
-                obj.labels.get(locale or "")
-                or obj.labels.get(lang)
-                or obj.labels.get(lang.split("-", 1)[0])
-            )
+            return (obj.labels.get(locale or "") or obj.labels.get(lang) or obj.labels.get(lang.split("-", 1)[0]))
         if isinstance(obj, LiteralValue):
-            return (
-                self.locale_data.format_value(
-                    obj.value, language=lang, locale=locale, datatype=obj.datatype
-                )
-                if self.locale_data
-                else str(obj.value)
-            )
+            return self.locale_data.format_value(obj.value, language=lang, locale=locale, datatype=obj.datatype) if self.locale_data else str(obj.value)
         if isinstance(obj, QuantityValue):
-            base = (
-                self.locale_data.format_value(
-                    obj.value, language=lang, locale=locale, datatype="quantity"
-                )
-                if self.locale_data
-                else str(obj.value)
-            )
+            base = self.locale_data.format_value(obj.value, language=lang, locale=locale, datatype="quantity") if self.locale_data else str(obj.value)
             return f"{base} {obj.unit_ref}" if obj.unit_ref else base
         if isinstance(obj, TemporalValue):
-            return (
-                self.locale_data.format_value(
-                    obj.value,
-                    language=lang,
-                    locale=locale,
-                    datatype=obj.temporal_kind,
-                )
-                if self.locale_data
-                else str(obj.value)
-            )
+            return self.locale_data.format_value(obj.value, language=lang, locale=locale, datatype=obj.temporal_kind) if self.locale_data else str(obj.value)
+        if isinstance(obj, CollectionValue):
+            values=[]
+            for member in obj.members:
+                value=self._surface_literal(request, member, _stack=(*_stack, ref), _budget=budget)
+                if value is None:
+                    return None
+                values.append(value)
+            return ", ".join(values)
         return None
 
     def preflight(

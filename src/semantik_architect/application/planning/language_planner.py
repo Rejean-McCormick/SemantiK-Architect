@@ -42,6 +42,9 @@ class GenericLanguagePlanner:
         if request.capability_profile == 'konstellation-explorer-1':
             from .konstellation import plan
             return plan(request, communication_plan)
+        if request.capability_profile == 'konstellation-explorer-2':
+            from .konstellation import validate_request
+            validate_request(request, communication_plan)
         units=[]; blocks=[]; unit_seq=0
         for block_seq,item in enumerate(communication_plan.items,1):
             generated=[]
@@ -106,15 +109,9 @@ class GenericLanguagePlanner:
     def _qualifier_features(self,request:CommunicationRequest,stmt:SemanticStatement)->dict[str,object]:
         return {f"qualifier.{local_name(q.qualifier_ref)}":self._semantic_value(request,q.value_id) for q in stmt.qualifiers}
 
-    def _hinted_choice(self,request:CommunicationRequest,stmt:SemanticStatement,force,attachments:tuple[SemanticStatement,...],lexical_context:LexicalPlanningContext)->OperationChoice|None:
-        hinted=self._support_last(request,stmt.id,"sa:operation")
-        if hinted is None:
-            return None
-        operation_id=require_known_operation(str(hinted))
+    def _choice_from_maps(self,request:CommunicationRequest,stmt:SemanticStatement,operation_id:str,role_hint,slot_hint,feature_hint,attachments:tuple[SemanticStatement,...])->OperationChoice:
+        operation_id=require_known_operation(str(operation_id))
         rm=_roles(stmt)
-        role_hint=self._support_last(request,stmt.id,"sa:role-map") or {}
-        slot_hint=self._support_last(request,stmt.id,"sa:slot-map") or {}
-        feature_hint=self._support_last(request,stmt.id,"sa:feature-map") or {}
         if not isinstance(role_hint,dict) or not isinstance(slot_hint,dict) or not isinstance(feature_hint,dict):
             raise SemantikArchitectError("SA-LANG-003",f"Invalid planning hint for {stmt.id}",request_id=request.request_id)
         def resolve(spec):
@@ -126,7 +123,6 @@ class GenericLanguagePlanner:
             if isinstance(spec,str) and spec.startswith("ref:"):
                 return spec.split(":",1)[1]
             if isinstance(spec,str):
-                # exact role ref or local role name first; otherwise an explicit semantic ref/id
                 for role_ref,value_id in ((a.role_ref,a.value_id) for a in stmt.arguments):
                     if role_ref==spec or local_name(role_ref)==spec.lower().replace("-","_"):
                         return value_id
@@ -134,7 +130,6 @@ class GenericLanguagePlanner:
             raise SemantikArchitectError("SA-LANG-003",f"Invalid planning hint binding in {stmt.id}",request_id=request.request_id)
         roles={str(k):resolve(v) for k,v in role_hint.items()}
         slots={str(k):resolve(v) for k,v in slot_hint.items()}
-        # if no slot map is supplied, role bindings are also lexical slots; predicate is explicit
         if not slots:
             slots=dict(roles)
             if "predicate" not in slots:
@@ -143,6 +138,31 @@ class GenericLanguagePlanner:
         features={"polarity":stmt.polarity,**self._context_features(request),**self._qualifier_features(request,stmt),**{str(k):v for k,v in feature_hint.items()}}
         self._add_attachment_slots(request,attachments,roles,slots,features)
         return OperationChoice(operation_id,roles,slots,features)
+
+    def _hinted_choice(self,request:CommunicationRequest,stmt:SemanticStatement,force,attachments:tuple[SemanticStatement,...],lexical_context:LexicalPlanningContext)->OperationChoice|None:
+        hinted=self._support_last(request,stmt.id,"sa:operation")
+        if hinted is None:
+            return None
+        return self._choice_from_maps(
+            request,stmt,str(hinted),
+            self._support_last(request,stmt.id,"sa:role-map") or {},
+            self._support_last(request,stmt.id,"sa:slot-map") or {},
+            self._support_last(request,stmt.id,"sa:feature-map") or {},
+            attachments,
+        )
+
+    def _lexical_choice(self,request:CommunicationRequest,stmt:SemanticStatement,attachments:tuple[SemanticStatement,...],lexical_context:LexicalPlanningContext)->OperationChoice|None:
+        knowledge=lexical_context.entries.get(stmt.predicate_ref)
+        if knowledge is None:
+            return None
+        props=dict(knowledge.properties or {})
+        operation_id=props.get("preferred_operation")
+        if operation_id is None:
+            return None
+        return self._choice_from_maps(
+            request,stmt,str(operation_id),
+            props.get("role_map") or {},props.get("slot_map") or {},props.get("feature_map") or {},attachments,
+        )
 
     def _add_attachment_slots(self,request:CommunicationRequest,attachments:tuple[SemanticStatement,...],roles:dict[str,str],slots:dict[str,str],features:dict[str,object])->None:
         for idx,extra in enumerate(attachments,1):
@@ -198,6 +218,12 @@ class GenericLanguagePlanner:
             if item.force.value=="PRESENT" and len(refs)>=2:
                 return [OperationChoice("nominal.apposition",{"entity":refs[0],"description":refs[1]},{"entity":refs[0],"description":refs[1]}, self._context_features(request))]
             raise SemantikArchitectError("SA-LANG-003",f"Obligation {item.obligation_ids[0]} has no plannable statement",request_id=request.request_id)
+        independent=[]
+        for statement in statements:
+            knowledge=lexical_context.entries.get(statement.predicate_ref)
+            independent.append(bool(knowledge and knowledge.properties.get("independent_statement")))
+        if statements and all(independent):
+            return [self._choice_for_statement(request,statement,item.force,(),lexical_context) for statement in statements]
         primary=statements[0]; attachments=tuple(statements[1:])
         return [self._choice_for_statement(request,primary,item.force,attachments,lexical_context)]
 
@@ -205,6 +231,9 @@ class GenericLanguagePlanner:
         hinted=self._hinted_choice(request,stmt,force,attachments,lexical_context)
         if hinted is not None:
             return hinted
+        lexical=self._lexical_choice(request,stmt,attachments,lexical_context)
+        if lexical is not None:
+            return lexical
         rm=_roles(stmt); roles:dict[str,str]={}; slots:dict[str,str]={}; features={"polarity":stmt.polarity,**self._context_features(request),**self._qualifier_features(request,stmt)}
         agent=_first(rm,_AGENT); patient=_first(rm,_PATIENT); recipient=_first(rm,_RECIPIENT); loc=_first(rm,_LOCATION); possessor=_first(rm,_POSSESSOR); possessed=_first(rm,_POSSESSED); attr=_first(rm,_ATTRIBUTE); klass=_first(rm,_CLASS); event=_first(rm,_EVENT_TYPE)
         predicate_semantic=event or stmt.predicate_ref

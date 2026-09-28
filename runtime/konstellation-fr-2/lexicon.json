@@ -1,0 +1,629 @@
+{
+  "schema_version": "1.1",
+  "lexicon_id": "konstellation-explorer-fr-2",
+  "entries": [
+    {
+      "semantic_ref": "konstellation:selection-type",
+      "language": "fr",
+      "lexical_ref": "Type de sélection",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_classification",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:selection",
+          "class": "role:type"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:selection-type",
+          "class": "role:type"
+        },
+        "feature_map": {
+          "presentation": "selection_type"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:selection-identities",
+      "language": "fr",
+      "lexical_ref": "Identités sélectionnées",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "nominal.apposition",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:selection",
+          "description": "role:values"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:selection-identities",
+          "description": "role:values"
+        },
+        "feature_map": {
+          "presentation": "selection_identities"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:selection-link",
+      "language": "fr",
+      "lexical_ref": "Lien de sélection",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "nominal.apposition",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:selection",
+          "description": "role:target"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:selection-link",
+          "relation": "role:relation",
+          "target": "role:target"
+        },
+        "feature_map": {
+          "presentation": "selection_link"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:read-context",
+      "language": "fr",
+      "lexical_ref": "Contexte de lecture",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "nominal.apposition",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:dataset",
+          "description": "role:policy"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:read-context",
+          "dataset": "role:dataset",
+          "policy": "role:policy"
+        },
+        "feature_map": {
+          "presentation": "read_context"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:result-page",
+      "language": "fr",
+      "lexical_ref": "Page de résultats",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "nominal.apposition",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:selection",
+          "description": "role:members"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:result-page",
+          "members": "role:members",
+          "total": "role:total",
+          "page_count": "role:page_count",
+          "has_more": "role:has_more"
+        },
+        "feature_map": {
+          "presentation": "result_page"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:inspected-entity",
+      "language": "fr",
+      "lexical_ref": "Entité inspectée",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.existential",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:entity"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:inspected-entity",
+          "entity": "role:entity"
+        },
+        "feature_map": {
+          "presentation": "inspected_entity"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:reported-assertion",
+      "language": "fr",
+      "lexical_ref": "Assertion rapportée",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.transitive_event",
+        "independent_statement": true,
+        "role_map": {
+          "agent": "role:subject",
+          "predicate": "role:relation",
+          "patient": "role:value"
+        },
+        "slot_map": {
+          "agent": "role:subject",
+          "predicate": "role:relation",
+          "patient": "role:value"
+        },
+        "feature_map": {
+          "presentation": "reported_assertion"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:filter-in",
+      "language": "fr",
+      "lexical_ref": "Correspond à une valeur",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.transitive_event",
+        "independent_statement": true,
+        "role_map": {
+          "agent": "role:selection",
+          "predicate": "role:relation",
+          "patient": "role:values"
+        },
+        "slot_map": {
+          "filter": "ref:konstellation:filter-in",
+          "predicate": "role:relation",
+          "patient": "role:values"
+        },
+        "feature_map": {
+          "presentation": "filter_in"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:filter-none_of",
+      "language": "fr",
+      "lexical_ref": "Exclut ces valeurs",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.transitive_event",
+        "independent_statement": true,
+        "role_map": {
+          "agent": "role:selection",
+          "predicate": "role:relation",
+          "patient": "role:values"
+        },
+        "slot_map": {
+          "filter": "ref:konstellation:filter-none_of",
+          "predicate": "role:relation",
+          "patient": "role:values"
+        },
+        "feature_map": {
+          "presentation": "filter_none_of"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:filter-exists",
+      "language": "fr",
+      "lexical_ref": "Relation renseignée",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.intransitive_event",
+        "independent_statement": true,
+        "role_map": {
+          "agent": "role:selection",
+          "predicate": "role:relation"
+        },
+        "slot_map": {
+          "filter": "ref:konstellation:filter-exists",
+          "predicate": "role:relation"
+        },
+        "feature_map": {
+          "presentation": "filter_exists"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:filter-missing_in_view",
+      "language": "fr",
+      "lexical_ref": "Absence dans la vue de lecture",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.intransitive_event",
+        "independent_statement": true,
+        "role_map": {
+          "agent": "role:selection",
+          "predicate": "role:relation"
+        },
+        "slot_map": {
+          "filter": "ref:konstellation:filter-missing_in_view",
+          "predicate": "role:relation"
+        },
+        "feature_map": {
+          "presentation": "filter_missing_in_view"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:filter-overlaps",
+      "language": "fr",
+      "lexical_ref": "Chevauchement certain de période",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "nominal.apposition",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:selection",
+          "description": "role:interval"
+        },
+        "slot_map": {
+          "filter": "ref:konstellation:filter-overlaps",
+          "predicate": "role:relation",
+          "interval": "role:interval",
+          "match": "role:match"
+        },
+        "feature_map": {
+          "presentation": "filter_overlaps"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-status",
+      "language": "fr",
+      "lexical_ref": "Statut de l’assertion",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-status",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-certainty",
+      "language": "fr",
+      "lexical_ref": "Certitude",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-certainty",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-validationStatus",
+      "language": "fr",
+      "lexical_ref": "Statut de validation",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-validationStatus",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-validatedAs",
+      "language": "fr",
+      "lexical_ref": "Validée comme",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-validatedAs",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-authority",
+      "language": "fr",
+      "lexical_ref": "Autorité",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-authority",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-recognitionStatus",
+      "language": "fr",
+      "lexical_ref": "Reconnaissance",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-recognitionStatus",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-artifactStatus",
+      "language": "fr",
+      "lexical_ref": "Statut du corpus",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-artifactStatus",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-scope",
+      "language": "fr",
+      "lexical_ref": "Portée",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-scope",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-qualifiers",
+      "language": "fr",
+      "lexical_ref": "Qualificatifs",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-qualifiers",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-validationPolicyRef",
+      "language": "fr",
+      "lexical_ref": "Politique de validation",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-validationPolicyRef",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-readerLabels",
+      "language": "fr",
+      "lexical_ref": "Labels de lecture",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-readerLabels",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-conflictsWith",
+      "language": "fr",
+      "lexical_ref": "Divergences",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-conflictsWith",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation:assertion-ruleRef",
+      "language": "fr",
+      "lexical_ref": "Règle de dérivation",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:assertion",
+          "attribute": "role:value"
+        },
+        "slot_map": {
+          "predicate": "ref:konstellation:assertion-ruleRef",
+          "attribute": "role:value"
+        },
+        "feature_map": {
+          "presentation": "assertion_attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "konstellation-type:author",
+      "language": "fr",
+      "lexical_ref": "auteur",
+      "binding_kind": "literal"
+    },
+    {
+      "semantic_ref": "konstellation-type:human",
+      "language": "fr",
+      "lexical_ref": "personne",
+      "binding_kind": "literal"
+    },
+    {
+      "semantic_ref": "konstellation-relation:author",
+      "language": "fr",
+      "lexical_ref": "auteur",
+      "binding_kind": "literal"
+    },
+    {
+      "semantic_ref": "konstellation-relation:birth_place",
+      "language": "fr",
+      "lexical_ref": "lieu de naissance",
+      "binding_kind": "literal"
+    },
+    {
+      "semantic_ref": "konstellation-relation:citizenship",
+      "language": "fr",
+      "lexical_ref": "nationalité",
+      "binding_kind": "literal"
+    },
+    {
+      "semantic_ref": "konstellation-relation:corpus:position_documentee",
+      "language": "fr",
+      "lexical_ref": "position documentée",
+      "binding_kind": "literal"
+    },
+    {
+      "semantic_ref": "konstellation-relation:field_of_work",
+      "language": "fr",
+      "lexical_ref": "domaine d’activité",
+      "binding_kind": "literal"
+    },
+    {
+      "semantic_ref": "konstellation-relation:lifespan",
+      "language": "fr",
+      "lexical_ref": "période de vie",
+      "binding_kind": "literal"
+    },
+    {
+      "semantic_ref": "konstellation-relation:movement",
+      "language": "fr",
+      "lexical_ref": "courant",
+      "binding_kind": "literal"
+    },
+    {
+      "semantic_ref": "konstellation-relation:religious_tradition",
+      "language": "fr",
+      "lexical_ref": "tradition religieuse",
+      "binding_kind": "literal"
+    },
+    {
+      "semantic_ref": "konstellation-match:certain",
+      "language": "fr",
+      "lexical_ref": "chevauchement certain",
+      "binding_kind": "literal"
+    },
+    {
+      "semantic_ref": "konstellation-match:possible",
+      "language": "fr",
+      "lexical_ref": "chevauchement possible",
+      "binding_kind": "literal"
+    }
+  ],
+  "source_kind": "project",
+  "source_ref": "profile:konstellation-explorer-2",
+  "lexical_policy": {
+    "policy_version": "1.0",
+    "precedence": [
+      "request_override",
+      "domain",
+      "project",
+      "wikidata",
+      "gf_generic"
+    ],
+    "default_source_kind": "project",
+    "equal_precedence_conflict": "fail"
+  }
+}

@@ -1,4 +1,4 @@
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 from .adapters.inbound.python_sdk import SemantikArchitect
 from .domain.communication.request import CommunicationRequest

@@ -1,0 +1,59 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "grammar-fr",
+      "artifact_type": "grammar",
+      "path": "grammar.pgf",
+      "sha256": "fcc7890d0023eaf3b0531b46a51777bfde24c9d31098c49ab2192bab9a135189"
+    },
+    {
+      "artifact_id": "lex-fr",
+      "artifact_type": "lexical",
+      "path": "lexicon.json",
+      "sha256": "d309fc6ceacf9b306259312b7c959ecb0341796051ad28cb030a60c3abe5488c"
+    },
+    {
+      "artifact_id": "sa-gf-bridge-v1",
+      "artifact_type": "other",
+      "path": "bridge.json",
+      "sha256": "46b93fe1e5108d9d303cec12fc03c324965d5952be6d02c9a0a2fe0c030acf26"
+    },
+    {
+      "artifact_id": "capability-profile-konstellation-explorer-2",
+      "artifact_type": "other",
+      "path": "profile.json",
+      "sha256": "784da1a071cdb997b9eafb1cd73a6d7d6afd9b7d37211f73b00b239cee9f88e7"
+    },
+    {
+      "artifact_id": "conformance-suite-konstellation-explorer-2",
+      "artifact_type": "other",
+      "path": "conformance.suite.json",
+      "sha256": "ac20e1b2fa702065c982a57a55b90b727b6cb059e2aa00507d3f67faab27530a"
+    }
+  ],
+  "capability_manifest_ref": "capabilities.json",
+  "capability_manifest_sha256": "b12472190024250d0144390d53bc6fd23a0aee547802328305b7f651cf3ec5b4",
+  "conformance_evidence_refs": [
+    "conformance.evidence.json"
+  ],
+  "conformance_evidence_sha256": {
+    "conformance.evidence.json": "4fb987c8f0bd7d6802cfad13f24b949c7156e7980dcad5e970f5187f324cfda2"
+  },
+  "lexical_policy": {
+    "default_source_kind": "project",
+    "equal_precedence_conflict": "fail",
+    "policy_version": "1.0",
+    "precedence": [
+      "request_override",
+      "domain",
+      "project",
+      "wikidata",
+      "gf_generic"
+    ]
+  },
+  "runtime_set_id": "konstellation-fr-2",
+  "sa_gf_contract_version": "1.0",
+  "sa_version_range": ">=1.0,<2.0",
+  "schema_version": "1.0",
+  "status": "RELEASED"
+}

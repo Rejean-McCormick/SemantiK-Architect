@@ -1,0 +1,266 @@
+{
+  "schema_version": "1.0",
+  "contract_version": "1.0",
+  "operations": {
+    "clause.copular_classification": {
+      "requires": [
+        "predicate",
+        "class"
+      ],
+      "expression": "PresentClassification {predicate} {class}",
+      "consumes_features": [
+        "presentation",
+        "polarity",
+        "register",
+        "formality",
+        "politeness",
+        "relationship",
+        "tone_profile"
+      ]
+    },
+    "clause.transitive_event": {
+      "variants": [
+        {
+          "requires": [
+            "agent",
+            "predicate",
+            "patient"
+          ],
+          "expression": "PresentReportedAssertion {agent} {predicate} {patient}",
+          "when": {
+            "presentation": "reported_assertion"
+          },
+          "consumes_features": [
+            "presentation",
+            "polarity",
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        },
+        {
+          "requires": [
+            "filter",
+            "predicate",
+            "patient"
+          ],
+          "expression": "PresentFilterValues {filter} {predicate} {patient}",
+          "when": {
+            "presentation": "filter_in"
+          },
+          "consumes_features": [
+            "presentation",
+            "polarity",
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        },
+        {
+          "requires": [
+            "filter",
+            "predicate",
+            "patient"
+          ],
+          "expression": "PresentFilterValues {filter} {predicate} {patient}",
+          "when": {
+            "presentation": "filter_none_of"
+          },
+          "consumes_features": [
+            "presentation",
+            "polarity",
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        }
+      ]
+    },
+    "clause.intransitive_event": {
+      "variants": [
+        {
+          "requires": [
+            "filter",
+            "predicate"
+          ],
+          "expression": "PresentFilterUnary {filter} {predicate}",
+          "when": {
+            "presentation": "filter_exists"
+          },
+          "consumes_features": [
+            "presentation",
+            "polarity",
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        },
+        {
+          "requires": [
+            "filter",
+            "predicate"
+          ],
+          "expression": "PresentFilterUnary {filter} {predicate}",
+          "when": {
+            "presentation": "filter_missing_in_view"
+          },
+          "consumes_features": [
+            "presentation",
+            "polarity",
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        }
+      ]
+    },
+    "clause.copular_attribute": {
+      "requires": [
+        "predicate",
+        "attribute"
+      ],
+      "expression": "PresentAttribute {predicate} {attribute}",
+      "consumes_features": [
+        "presentation",
+        "polarity",
+        "register",
+        "formality",
+        "politeness",
+        "relationship",
+        "tone_profile"
+      ]
+    },
+    "clause.existential": {
+      "requires": [
+        "predicate",
+        "entity"
+      ],
+      "expression": "PresentEntity {predicate} {entity}",
+      "consumes_features": [
+        "presentation",
+        "polarity",
+        "register",
+        "formality",
+        "politeness",
+        "relationship",
+        "tone_profile"
+      ]
+    },
+    "nominal.apposition": {
+      "variants": [
+        {
+          "requires": [
+            "predicate",
+            "dataset",
+            "policy"
+          ],
+          "expression": "PresentReadContext {predicate} {dataset} {policy}",
+          "when": {
+            "presentation": "read_context"
+          },
+          "consumes_features": [
+            "presentation",
+            "polarity",
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        },
+        {
+          "requires": [
+            "predicate",
+            "members",
+            "total",
+            "page_count",
+            "has_more"
+          ],
+          "expression": "PresentResultPage {predicate} {members} {total} {page_count} {has_more}",
+          "when": {
+            "presentation": "result_page"
+          },
+          "consumes_features": [
+            "presentation",
+            "polarity",
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        },
+        {
+          "requires": [
+            "predicate",
+            "description"
+          ],
+          "expression": "PresentSelectionIdentities {predicate} {description}",
+          "when": {
+            "presentation": "selection_identities"
+          },
+          "consumes_features": [
+            "presentation",
+            "polarity",
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        },
+        {
+          "requires": [
+            "predicate",
+            "relation",
+            "target"
+          ],
+          "expression": "PresentSelectionLink {predicate} {relation} {target}",
+          "when": {
+            "presentation": "selection_link"
+          },
+          "consumes_features": [
+            "presentation",
+            "polarity",
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        },
+        {
+          "requires": [
+            "filter",
+            "predicate",
+            "interval",
+            "match"
+          ],
+          "expression": "PresentFilterOverlap {filter} {predicate} {interval} {match}",
+          "when": {
+            "presentation": "filter_overlaps"
+          },
+          "consumes_features": [
+            "presentation",
+            "polarity",
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        }
+      ]
+    }
+  }
+}

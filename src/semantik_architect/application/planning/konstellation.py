@@ -38,7 +38,7 @@ def validate_statement(stmt):
         raise SemantikArchitectError('SA-REQ-001', 'Unsupported Konstellation predicate, roles or polarity')
 
 
-def plan(request, communication_plan):
+def validate_request(request, communication_plan):
     if request.supporting_context or request.constraints.opening_policy != 'forbidden' or request.constraints.closing_policy != 'forbidden':
         raise SemantikArchitectError('SA-CON-001', 'Explorer profile requires explicit semantics without framing or planning overrides')
     if 'utterance' not in request.constraints.allowed_block_kinds:
@@ -48,24 +48,32 @@ def plan(request, communication_plan):
         raise SemantikArchitectError('SA-CON-001', 'Explorer profile does not silently apply unsupported discourse constraints')
     if request.constraints.ordering_policy_ref or request.constraints.terminology_profile_ref or request.constraints.output_format != 'structured':
         raise SemantikArchitectError('SA-CON-001', 'Unsupported explorer presentation constraints')
-    units, blocks = [], []
-    for index, item in enumerate(communication_plan.items, 1):
+    for item in communication_plan.items:
         if item.force.value != 'PRESENT':
             raise SemantikArchitectError('SA-REQ-001', 'Explorer statements must be reported with PRESENT force')
-        ids = []
+        if not item.semantic_refs:
+            raise SemantikArchitectError('SA-REQ-001', 'Empty explorer obligation')
         for ref in item.semantic_refs:
             statement = request.semantic_graph.get(ref)
             if not isinstance(statement, SemanticStatement):
                 raise SemantikArchitectError('SA-REQ-001', 'Explorer obligations must reference statements')
             validate_statement(statement)
+
+
+def plan(request, communication_plan):
+    """Legacy profile-1 canonical evidence display. Profile 2 uses generic SA planning."""
+    validate_request(request, communication_plan)
+    units, blocks = [], []
+    for index, item in enumerate(communication_plan.items, 1):
+        ids = []
+        for ref in item.semantic_refs:
+            statement = request.semantic_graph.get(ref)
             uid = f'u{len(units)+1}'
             ids.append(uid)
             units.append(RealizationUnit(uid, 'nominal.apposition',
                 {'entity': statement.predicate_ref, 'description': statement.id}, {},
                 {'entity': statement.predicate_ref, 'description': statement.id},
                 item.obligation_ids, (ref,), f'b{index}'))
-        if not ids:
-            raise SemantikArchitectError('SA-REQ-001', 'Empty explorer obligation')
         blocks.append(LanguageBlockPlan(f'b{index}', 'utterance', tuple(ids), item.obligation_ids))
     digest = sha256(request.request_id.encode()).hexdigest()[:20]
     return LanguagePlan(f'lp:{digest}', request.context.target_language,

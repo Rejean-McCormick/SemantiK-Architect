@@ -19,3 +19,9 @@ Binding values in role/slot maps use:
 - otherwise an explicit semantic ID/reference.
 
 These hints are supporting semantic context, not new claims. They MUST NOT add facts, delete obligations or override runtime language behavior. Language-specific realization still belongs to the admitted RuntimeSet/GF bridge.
+
+## Lexical planning metadata
+
+The same planning fields may be supplied by admitted lexical knowledge as `properties.preferred_operation`, `properties.role_map`, `properties.slot_map`, and `properties.feature_map`. This is the canonical way for a project/domain vocabulary to map its semantic roles onto SA operations without adding domain branches to the shared planner.
+
+Request `supporting_context` hints have precedence over lexical planning metadata. Lexical metadata is versioned with the RuntimeSet and therefore remains reproducible. `properties.independent_statement=true` requests one realization unit per statement when an obligation intentionally groups several equally important statements; it never permits dropping an obligation or semantic reference.

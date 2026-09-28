@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "konstellation-explorer",
+  "profile_version": 2,
+  "required_operations": [
+    "clause.copular_classification",
+    "clause.transitive_event",
+    "clause.copular_attribute",
+    "clause.existential",
+    "clause.intransitive_event",
+    "nominal.apposition"
+  ],
+  "required_features": [],
+  "required_block_kinds": [
+    "utterance"
+  ],
+  "test_suite_ref": "suite:konstellation-explorer-fr-2",
+  "notes": "Structured explorer realization through generic SA v1 operations; Konstellation supplies semantics only."
+}
