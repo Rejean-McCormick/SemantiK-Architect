@@ -14,6 +14,7 @@ _ERROR_REGISTRY: dict[str, tuple[str, str, bool]] = {
     "SA-LANG-003": ("LANGUAGE_PLANNING_FAILED", "language_planning", False),
     "SA-LEX-001": ("LEXICAL_KNOWLEDGE_MISSING", "lexical_preflight", False),
     "SA-LEX-002": ("LEXICAL_BINDING_FAILED", "lexical_binding", False),
+    "SA-LEX-003": ("LEXICAL_SOURCE_CONFLICT", "lexical_preflight", False),
     "SA-GF-001": ("GF_CONTRACT_INCOMPATIBLE", "realization", False),
     "SA-GF-002": ("REALIZATION_FAILED", "realization", False),
     "SA-RUN-001": ("RUNTIME_MISSING", "runtime", True),

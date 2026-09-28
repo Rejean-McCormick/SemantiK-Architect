@@ -39,6 +39,9 @@ class GenericLanguagePlanner:
     runtime metadata/bridge grammar or an explicitly injected planner strategy.
     """
     def plan(self, request:CommunicationRequest, communication_plan:CommunicationPlan, lexical_context:LexicalPlanningContext)->LanguagePlan:
+        if request.capability_profile == 'konstellation-explorer-1':
+            from .konstellation import plan
+            return plan(request, communication_plan)
         units=[]; blocks=[]; unit_seq=0
         for block_seq,item in enumerate(communication_plan.items,1):
             generated=[]

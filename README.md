@@ -1,10 +1,10 @@
 # SemantiK Architect
 
-**SemantiK Architect v1.0 — deterministic semantic-to-human communication engine**
+**SemantiK Architect v1.1 — deterministic semantic-to-human communication engine**
 
 SemantiK Architect (SA) is the **semantic-to-human communication layer** of the kOA ecosystem. It receives complete structured meaning selected by an upstream authority and turns that meaning into faithful, context-appropriate, multilingual communication. It does **not** decide what is true, what should be selected, or which supplied facts may be discarded.
 
-SA is designed for deterministic, offline-capable operation and delegates grammar, morphology, agreement, and language-specific realization to validated **Grammatical Framework (GF/RGL)** runtimes through a versioned SA↔GF contract.
+SA is designed for deterministic, offline-capable operation. Local **Wikidata Lexeme** projections are the default generic lexical knowledge source, while grammar, morphology, agreement, and language-specific realization remain delegated to validated **Grammatical Framework (GF/RGL)** runtimes through a versioned SA↔GF contract.
 
 ## Mission
 
@@ -91,12 +91,17 @@ SA does not own:
 5. **No hidden fallback.** Requested language/profile failure is an error, never a successful response in another language or pseudo-grammar.
 6. **One canonical runtime path.** Only the architecture defined by this repository is a runtime target.
 7. **GF is behind a contract.** Core code never imports PGF/GF runtime classes.
-8. **Validated profiles only.** A language is usable only for explicitly released conformance profiles.
-9. **Offline-first.** The canonical runtime requires no network service.
-10. **Deterministic by default.** Pinned input + config + runtime artifact set produces stable structured output.
-11. **Fail closed on semantic correctness.** Graceful degradation is allowed only for non-critical operational features.
-12. **Scale by artifacts, not language branches.** The 300th language must not require a new branch in SA core.
+8. **Wikidata for generic lexical knowledge; GF for grammar.** Generic GF lexicons are binding fallback, not semantic authority.
+9. **Validated profiles only.** A language is usable only for explicitly released conformance profiles.
+10. **Offline-first.** The canonical runtime requires no network service.
+11. **Deterministic by default.** Pinned input + config + runtime artifact set produces stable structured output.
+12. **Fail closed on semantic correctness.** Graceful degradation is allowed only for non-critical operational features.
+13. **Scale by artifacts, not language branches.** The 300th language must not require a new branch in SA core.
 
 ## Start here
 
 Read [`docs/00_START_HERE.md`](docs/00_START_HERE.md). The files named `*_LOCK.md` are normative architecture locks and require ADR-governed change. The executable implementation status is recorded in [`docs/22_IMPLEMENTATION_STATUS.md`](docs/22_IMPLEMENTATION_STATUS.md).
+
+## Konstellation Explorer
+
+Le profil candidat `konstellation-explorer-1`, ses sources GF et sa suite de conformité sont dans [profiles/konstellation-explorer-1](profiles/konstellation-explorer-1/README.md). La publication exige un PGF réel et une conformité réussie; aucun runtime fictif n’est activé.

@@ -9,6 +9,7 @@ from semantik_architect.adapters.lexical.common.normalization import (
 )
 from semantik_architect.adapters.lexical.local_wikidata.lexeme_dump import (
     lexeme_from_wikidata_record,
+    lexical_artifact_entries_from_wikidata_record,
 )
 from semantik_architect.adapters.realization.gf.pgf_runtime import PgfRuntime
 
@@ -54,3 +55,30 @@ def test_pgf_runtime_reports_unavailable_without_artifact(tmp_path):
         status["error"] or ""
     ).lower()
     assert asyncio.run(runtime.health_check()) is False
+
+
+def test_wikidata_lexeme_becomes_knowledge_not_fake_gf_binding():
+    record = {
+        "id": "L42",
+        "type": "lexeme",
+        "lemmas": {"fr": {"language": "fr", "value": "réparer"}},
+        "lexicalCategory": "Q36484",
+        "senses": [
+            {
+                "id": "L42-S1",
+                "claims": {
+                    "P5137": [
+                        {"mainsnak": {"datavalue": {"value": {"id": "Q999"}}}}
+                    ]
+                },
+            }
+        ],
+    }
+    entries = lexical_artifact_entries_from_wikidata_record(record, "fr")
+    assert len(entries) == 1
+    entry = entries[0]
+    assert entry["semantic_ref"] == "wikidata:Q999"
+    assert entry["lexical_ref"] == "wikidata:L42-S1"
+    assert entry["source_kind"] == "wikidata"
+    assert entry["use_for"] == "knowledge"
+    assert entry["binding_kind"] == "lexeme_ref"

@@ -15,6 +15,7 @@ Stable v1 machine codes:
 | SA-LANG-003 | LANGUAGE_PLANNING_FAILED | No |
 | SA-LEX-001 | LEXICAL_KNOWLEDGE_MISSING | No |
 | SA-LEX-002 | LEXICAL_BINDING_FAILED | No |
+| SA-LEX-003 | LEXICAL_SOURCE_CONFLICT | No |
 | SA-GF-001 | GF_CONTRACT_INCOMPATIBLE | No |
 | SA-GF-002 | REALIZATION_FAILED | Usually no; artifact/input must change |
 | SA-RUN-001 | RUNTIME_MISSING | Operationally possible after deployment fix |

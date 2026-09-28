@@ -50,6 +50,7 @@ class _ConformanceApp:
     def render(self, request):
         return {
             "plain_text": "ok",
+            "runtime": {"runtime_set_id":"runtime:test"},
             "coverage": [
                 {"obligation_id": item["obligation_id"], "status": "realized"}
                 for item in request.get("obligations", [])
@@ -66,12 +67,12 @@ def test_conformance_harness_checks_surface_and_coverage():
         "cases": [
             {
                 "case_id": "ok",
-                "request": {"obligations": [{"obligation_id": "o1"}]},
+                "request": {"context":{"target_language":"fr"},"capability_profile":"sa-core-1","obligations": [{"obligation_id": "o1"}]},
                 "expected": {"plain_text": "ok", "coverage_complete": True},
             },
             {
                 "case_id": "bad-surface",
-                "request": {"obligations": []},
+                "request": {"context":{"target_language":"fr"},"capability_profile":"sa-core-1","obligations": []},
                 "expected": {"plain_text": "different"},
             },
         ],

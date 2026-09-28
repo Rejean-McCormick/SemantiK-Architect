@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0",
+  "request_id": "sha256:b8492eb217462c922113b9ae88880f937671cb1e9ded5efb17d17e8d4037a0eb",
+  "semantic_graph": {
+    "graph_id": "sha256:b8492eb217462c922113b9ae88880f937671cb1e9ded5efb17d17e8d4037a0eb",
+    "nodes": [
+      {
+        "id": "n1",
+        "kind": "entity_ref",
+        "external_ref": "konstellation-selection:root"
+      },
+      {
+        "id": "n2",
+        "kind": "concept_ref",
+        "concept_ref": "konstellation-type:human"
+      },
+      {
+        "id": "n5",
+        "kind": "literal",
+        "value": "sha256:2fa79ca5d0ddfc197709d787119f91b78a96945d50d884a73197e1ca8ac55971",
+        "datatype": "artifact-reference"
+      },
+      {
+        "id": "n6",
+        "kind": "literal",
+        "value": "sha256:34f9a33f49a1b4f78400146cf864a8fdc5e38280c7e87b78f8547b8ee8d51ccc",
+        "datatype": "policy-reference"
+      }
+    ],
+    "statements": [
+      {
+        "id": "s3",
+        "predicate_ref": "konstellation:selection-type",
+        "arguments": [
+          {
+            "role_ref": "konstellation-role:selection",
+            "value_id": "n1"
+          },
+          {
+            "role_ref": "konstellation-role:type",
+            "value_id": "n2"
+          }
+        ],
+        "polarity": "positive",
+        "source_refs": []
+      },
+      {
+        "id": "s7",
+        "predicate_ref": "konstellation:read-context",
+        "arguments": [
+          {
+            "role_ref": "konstellation-role:dataset",
+            "value_id": "n5"
+          },
+          {
+            "role_ref": "konstellation-role:policy",
+            "value_id": "n6"
+          }
+        ],
+        "polarity": "positive",
+        "source_refs": []
+      }
+    ]
+  },
+  "obligations": [
+    {
+      "obligation_id": "o4",
+      "semantic_refs": [
+        "s3"
+      ],
+      "force": "PRESENT",
+      "ordering": "FIXED",
+      "source_refs": []
+    },
+    {
+      "obligation_id": "o8",
+      "semantic_refs": [
+        "s7"
+      ],
+      "force": "PRESENT",
+      "ordering": "FIXED",
+      "source_refs": []
+    }
+  ],
+  "supporting_context": [],
+  "context": {
+    "target_language": "fr",
+    "target_locale": "fr-CA",
+    "channel": "app",
+    "register": "encyclopedic"
+  },
+  "constraints": {
+    "allowed_block_kinds": [
+      "utterance",
+      "notice",
+      "list",
+      "label_value",
+      "heading"
+    ],
+    "opening_policy": "forbidden",
+    "closing_policy": "forbidden",
+    "list_policy": "allowed",
+    "output_format": "structured"
+  },
+  "capability_profile": "konstellation-explorer-1",
+  "runtime_selector": {
+    "runtime_set_id": "konstellation-fr-1"
+  }
+}

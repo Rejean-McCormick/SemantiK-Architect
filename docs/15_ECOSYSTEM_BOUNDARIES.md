@@ -35,7 +35,7 @@ The broader ecosystem may use Wikidata identifiers, dumps, Lexemes and open-sour
 Rules:
 
 - QIDs/Lexeme IDs are valid external references, not the only identity system;
-- local mirrors are first-class sources;
+- local mirrors are first-class sources and Wikidata Lexemes are the default generic lexical knowledge authority;
 - ZObjects/Ninai/Udiron/Wikifunctions types terminate at optional adapters;
 - reuse of good offline open-source components is preferred to needless rewriting;
 - the SA canonical model is not defined by Wikimedia protocols.
@@ -63,6 +63,8 @@ language repository / RGL work
         -> capability manifest RELEASED
         -> SA RuntimeSet activation
 ```
+
+GF/RGL owns grammar and morphology; generic GF dictionaries are realization fallback rather than SA semantic authority.
 
 SA MUST NOT patch the language after this boundary. A failing Albanian construction is fixed in the Albanian/GF development source, rebuilt, reconformed and released as a new immutable artifact.
 

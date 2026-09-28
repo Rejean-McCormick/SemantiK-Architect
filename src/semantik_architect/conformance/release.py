@@ -7,6 +7,7 @@ from typing import Any
 from ..adapters.runtime.filesystem.capabilities import ManifestCapabilityAdapter
 from ..application.ports.runtime_catalog import RuntimeCatalogPort
 from ..domain.language.operations import V1_OPERATION_IDS
+from ..adapters.lexical.local_lexicon import RuntimeJsonLexiconAdapter
 
 
 class RuntimeReleaseValidator:
@@ -40,6 +41,11 @@ class RuntimeReleaseValidator:
         grammar = descriptor.artifacts_of_type("grammar")
         if len(grammar) != 1:
             errors.append(f"grammar_artifact_count:{len(grammar)}")
+
+        try:
+            RuntimeJsonLexiconAdapter().validate_runtime(descriptor)
+        except Exception as exc:
+            errors.append(f"lexical_runtime_invalid:{exc}")
 
         bridge_artifacts = [
             artifact

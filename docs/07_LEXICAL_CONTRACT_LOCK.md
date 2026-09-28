@@ -29,16 +29,15 @@ After the `LanguagePlan` selects operations, the binder selects exact runtime le
 
 Bindings MUST be versioned and traceable to the lexical artifact identity.
 
-## Lexical sources
+## Lexical sources and authority
 
-Adapters may draw from:
+SA separates **lexical knowledge** from **grammatical realization**.
 
-- local Wikidata/Wikidata Lexeme mirrors;
-- Kristal-derived semantic/lexical projections;
-- GF dictionaries;
-- project-owned lexicons;
-- terminology packs;
-- domain dictionaries.
+- local Wikidata/Wikidata Lexeme mirrors are the default generic lexical knowledge authority;
+- project-owned lexicons and terminology/domain packs may explicitly override generic Wikidata lexicalization;
+- Kristal-derived semantic/lexical projections may provide admitted project/domain knowledge;
+- GF dictionaries are generic realization/binding fallback and MUST NOT become a competing semantic authority;
+- GF/RGL remains the authority for grammar, morphology, agreement and language-specific realization.
 
 No live service is mandatory.
 
@@ -48,7 +47,7 @@ The core uses namespace-qualified semantic/lexical references. Wikimedia QIDs/Le
 
 ## Precedence policy
 
-Lexical precedence MUST be explicit and versioned. A recommended policy shape is:
+Lexical precedence MUST be explicit and versioned. The default canonical policy is:
 
 ```text
 request terminology override
@@ -58,7 +57,9 @@ request terminology override
   > admitted generic GF lexicon
 ```
 
-The actual precedence is configuration/profile data, never hidden adapter order.
+A RuntimeSet MAY replace this ordering only with an explicit versioned `lexical_policy`. Artifact iteration order never has semantic meaning. Equal-precedence conflicts fail closed.
+
+Knowledge and binding are resolved independently: a Wikidata Lexeme may supply the selected sense/category while a GF lexical artifact supplies the executable `gf_expr` for the same semantic reference.
 
 ## Failure
 

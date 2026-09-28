@@ -25,7 +25,7 @@ class ConformanceReport:
 
     @property
     def passed(self) -> bool:
-        return all(item.passed for item in self.results)
+        return bool(self.results) and all(item.passed for item in self.results)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -33,6 +33,7 @@ class ConformanceReport:
             "suite_id": self.suite_id,
             "language": self.language,
             "capability_profile": self.capability_profile,
+            "profile_id": self.capability_profile,
             "runtime_set_id": self.runtime_set_id,
             "passed": self.passed,
             "results": [
@@ -57,10 +58,17 @@ class ConformanceHarness:
         for case in suite.get("cases", []):
             case_id = str(case.get("case_id") or "")
             try:
-                actual = self.app.render(case["request"])
+                request=case["request"]
+                if request.get('capability_profile') != suite['capability_profile'] or request.get('context',{}).get('target_language') != suite['language']:
+                    raise AssertionError('suite/request identity mismatch')
+                actual = self.app.render(request)
+                if actual.get('runtime',{}).get('runtime_set_id') != suite['runtime_set_id']:
+                    raise AssertionError('result runtime identity mismatch')
                 expected = case.get("expected") or {}
                 if "plain_text" in expected and actual.get("plain_text") != expected["plain_text"]:
                     raise AssertionError("plain_text mismatch")
+                for text in expected.get('contains', []):
+                    if text not in actual.get('plain_text', ''): raise AssertionError('Required text missing: '+text)
                 if expected.get("coverage_complete", True):
                     expected_ids = {
                         obligation["obligation_id"]

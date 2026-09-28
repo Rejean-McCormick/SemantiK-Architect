@@ -24,6 +24,8 @@ The repository contains executable implementations for:
 - deterministic output assembly and result identity;
 - required opening/closing discourse operations;
 - local deterministic lexical artifacts plus offline Wikidata Lexeme parsing utilities;
+- explicit fail-closed lexical-source precedence with Wikidata as generic lexical knowledge authority and GF generic lexicons as binding fallback;
+- source/sense provenance carried through lexical preflight and exact binding;
 - Python SDK, CLI, minimal HTTP adapter, health/readiness and output projections;
 - conformance harness and release validator;
 - architecture, contract, integration and failure-path tests.
