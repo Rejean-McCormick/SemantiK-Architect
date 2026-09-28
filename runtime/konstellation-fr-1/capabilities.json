@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "runtime_set_id": "konstellation-fr-1",
+  "languages": {
+    "fr": {
+      "status": "RELEASED",
+      "concrete": "KonstellationFre",
+      "profiles": [
+        {
+          "profile_id": "konstellation-explorer-1",
+          "status": "RELEASED",
+          "evidence_ref": "conformance.evidence.json"
+        }
+      ]
+    }
+  }
+}

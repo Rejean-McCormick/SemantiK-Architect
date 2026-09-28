@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "konstellation-explorer",
+  "profile_version": 1,
+  "required_operations": [
+    "nominal.apposition"
+  ],
+  "required_features": [],
+  "required_block_kinds": [
+    "utterance"
+  ],
+  "test_suite_ref": "suite:konstellation-explorer-fr-1"
+}

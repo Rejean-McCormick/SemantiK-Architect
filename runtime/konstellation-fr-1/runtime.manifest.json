@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "runtime_set_id": "konstellation-fr-1",
+  "sa_version_range": ">=1.0,<2.0",
+  "sa_gf_contract_version": "1.0",
+  "artifacts": [
+    {
+      "artifact_type": "grammar",
+      "artifact_id": "konstellation-fr",
+      "sha256": "ccd3ef8ea769d3d66233b316fc3822ff3ea532f117d10f490faee9cd64455268",
+      "path": "grammar.pgf"
+    },
+    {
+      "artifact_type": "lexical",
+      "artifact_id": "konstellation-fr-lexicon",
+      "sha256": "6f25bc46cf732f097220ecc977509145dbc3dbf7eca8cd9f711fdbae9034340b",
+      "path": "lexicon.json"
+    },
+    {
+      "artifact_type": "other",
+      "artifact_id": "sa-gf-bridge-v1",
+      "sha256": "2aaced5f20635482a29d2bbeda6ad30a782ceeecae07e25d60ae1e4d7e38c58a",
+      "path": "bridge.json"
+    },
+    {
+      "artifact_type": "other",
+      "artifact_id": "capability-profile-konstellation-explorer-1",
+      "sha256": "4310341c5f2f56b93c073b61a16f7979a82f1cdd6b6e19ce6a85b791070225b4",
+      "path": "profile.json"
+    },
+    {
+      "artifact_type": "other",
+      "artifact_id": "conformance-suite-konstellation-explorer-1",
+      "sha256": "48ef3d977f4bc1ee1206e57069bd9d8db2cb490bcfb7110735851fe75ea8da31",
+      "path": "conformance.suite.json"
+    }
+  ],
+  "capability_manifest_ref": "capabilities.json",
+  "capability_manifest_sha256": "45291bdf7f966cb0ec8d8818ae6fc20517905df7a9a64441de1ed4fd03cc5554",
+  "conformance_evidence_refs": [
+    "conformance.evidence.json"
+  ],
+  "conformance_evidence_sha256": {
+    "conformance.evidence.json": "0870085e6219ccf8df2396b80990d7cce7fa3fa007c27032f6787680fa00d732"
+  },
+  "status": "RELEASED"
+}

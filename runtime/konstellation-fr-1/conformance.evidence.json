@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "suite:konstellation-explorer-fr-1",
+  "language": "fr",
+  "capability_profile": "konstellation-explorer-1",
+  "profile_id": "konstellation-explorer-1",
+  "runtime_set_id": "konstellation-fr-1",
+  "passed": true,
+  "results": [
+    {
+      "case_id": "query",
+      "passed": true
+    },
+    {
+      "case_id": "page",
+      "passed": true
+    },
+    {
+      "case_id": "entity",
+      "passed": true
+    },
+    {
+      "case_id": "negative-filters",
+      "passed": true
+    }
+  ]
+}

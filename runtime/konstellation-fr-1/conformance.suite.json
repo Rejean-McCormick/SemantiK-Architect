@@ -1,0 +1,3151 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "suite:konstellation-explorer-fr-1",
+  "language": "fr",
+  "capability_profile": "konstellation-explorer-1",
+  "runtime_set_id": "konstellation-fr-1",
+  "cases": [
+    {
+      "case_id": "query",
+      "request": {
+        "schema_version": "1.0",
+        "request_id": "sha256:b8492eb217462c922113b9ae88880f937671cb1e9ded5efb17d17e8d4037a0eb",
+        "semantic_graph": {
+          "graph_id": "sha256:b8492eb217462c922113b9ae88880f937671cb1e9ded5efb17d17e8d4037a0eb",
+          "nodes": [
+            {
+              "id": "n1",
+              "kind": "entity_ref",
+              "external_ref": "konstellation-selection:root"
+            },
+            {
+              "id": "n2",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-type:human"
+            },
+            {
+              "id": "n5",
+              "kind": "literal",
+              "value": "sha256:2fa79ca5d0ddfc197709d787119f91b78a96945d50d884a73197e1ca8ac55971",
+              "datatype": "artifact-reference"
+            },
+            {
+              "id": "n6",
+              "kind": "literal",
+              "value": "sha256:34f9a33f49a1b4f78400146cf864a8fdc5e38280c7e87b78f8547b8ee8d51ccc",
+              "datatype": "policy-reference"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s3",
+              "predicate_ref": "konstellation:selection-type",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:selection",
+                  "value_id": "n1"
+                },
+                {
+                  "role_ref": "konstellation-role:type",
+                  "value_id": "n2"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": []
+            },
+            {
+              "id": "s7",
+              "predicate_ref": "konstellation:read-context",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:dataset",
+                  "value_id": "n5"
+                },
+                {
+                  "role_ref": "konstellation-role:policy",
+                  "value_id": "n6"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": []
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o4",
+            "semantic_refs": [
+              "s3"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": []
+          },
+          {
+            "obligation_id": "o8",
+            "semantic_refs": [
+              "s7"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": []
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "fr",
+          "target_locale": "fr-CA",
+          "channel": "app",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance",
+            "notice",
+            "list",
+            "label_value",
+            "heading"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "allowed",
+          "output_format": "structured"
+        },
+        "capability_profile": "konstellation-explorer-1",
+        "runtime_selector": {
+          "runtime_set_id": "konstellation-fr-1"
+        }
+      },
+      "expected": {
+        "coverage_complete": true,
+        "contains": [
+          "Contexte de lecture",
+          "sha256:2fa79ca5d0ddfc197709d787119f91b78a96945d50d884a73197e1ca8ac55971"
+        ]
+      }
+    },
+    {
+      "case_id": "page",
+      "request": {
+        "schema_version": "1.0",
+        "request_id": "sha256:660433439d6efb331babd81759ac31391bedbc853a9dc442c15bb911511cfc99",
+        "semantic_graph": {
+          "graph_id": "sha256:660433439d6efb331babd81759ac31391bedbc853a9dc442c15bb911511cfc99",
+          "nodes": [
+            {
+              "id": "n1",
+              "kind": "entity_ref",
+              "external_ref": "konstellation-selection:root"
+            },
+            {
+              "id": "n2",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-type:human"
+            },
+            {
+              "id": "n5",
+              "kind": "literal",
+              "value": "sha256:2fa79ca5d0ddfc197709d787119f91b78a96945d50d884a73197e1ca8ac55971",
+              "datatype": "artifact-reference"
+            },
+            {
+              "id": "n6",
+              "kind": "literal",
+              "value": "sha256:34f9a33f49a1b4f78400146cf864a8fdc5e38280c7e87b78f8547b8ee8d51ccc",
+              "datatype": "policy-reference"
+            },
+            {
+              "id": "n9",
+              "kind": "entity_ref",
+              "external_ref": "demo:p000",
+              "labels": {
+                "fr": "Augustin d’Hippone"
+              }
+            },
+            {
+              "id": "n10",
+              "kind": "entity_ref",
+              "external_ref": "demo:p001",
+              "labels": {
+                "fr": "Hypatie d’Alexandrie"
+              }
+            },
+            {
+              "id": "n11",
+              "kind": "entity_ref",
+              "external_ref": "demo:p002",
+              "labels": {
+                "fr": "Boèce"
+              }
+            },
+            {
+              "id": "n12",
+              "kind": "entity_ref",
+              "external_ref": "demo:p003",
+              "labels": {
+                "fr": "Thomas d’Aquin"
+              }
+            },
+            {
+              "id": "n13",
+              "kind": "entity_ref",
+              "external_ref": "demo:p004",
+              "labels": {
+                "fr": "Hildegarde de Bingen"
+              }
+            },
+            {
+              "id": "n14",
+              "kind": "entity_ref",
+              "external_ref": "demo:p005",
+              "labels": {
+                "fr": "Avicenne"
+              }
+            },
+            {
+              "id": "n15",
+              "kind": "entity_ref",
+              "external_ref": "demo:p006",
+              "labels": {
+                "fr": "Christine de Pizan"
+              }
+            },
+            {
+              "id": "n16",
+              "kind": "entity_ref",
+              "external_ref": "demo:p007",
+              "labels": {
+                "fr": "Érasme"
+              }
+            },
+            {
+              "id": "n17",
+              "kind": "entity_ref",
+              "external_ref": "demo:p008",
+              "labels": {
+                "fr": "Simone Weil"
+              }
+            },
+            {
+              "id": "n18",
+              "kind": "entity_ref",
+              "external_ref": "demo:p009",
+              "labels": {
+                "fr": "Émilie du Châtelet"
+              }
+            },
+            {
+              "id": "n19",
+              "kind": "entity_ref",
+              "external_ref": "demo:p010",
+              "labels": {
+                "fr": "Plotin"
+              }
+            },
+            {
+              "id": "n20",
+              "kind": "entity_ref",
+              "external_ref": "demo:p011",
+              "labels": {
+                "fr": "Marc Aurèle"
+              }
+            },
+            {
+              "id": "n21",
+              "kind": "entity_ref",
+              "external_ref": "demo:s000",
+              "labels": {
+                "fr": "Chercheur fictif 001"
+              }
+            },
+            {
+              "id": "n22",
+              "kind": "entity_ref",
+              "external_ref": "demo:s001",
+              "labels": {
+                "fr": "Chercheur fictif 002"
+              }
+            },
+            {
+              "id": "n23",
+              "kind": "entity_ref",
+              "external_ref": "demo:s002",
+              "labels": {
+                "fr": "Chercheur fictif 003"
+              }
+            },
+            {
+              "id": "n24",
+              "kind": "entity_ref",
+              "external_ref": "demo:s003",
+              "labels": {
+                "fr": "Chercheur fictif 004"
+              }
+            },
+            {
+              "id": "n25",
+              "kind": "entity_ref",
+              "external_ref": "demo:s004",
+              "labels": {
+                "fr": "Chercheur fictif 005"
+              }
+            },
+            {
+              "id": "n26",
+              "kind": "entity_ref",
+              "external_ref": "demo:s005",
+              "labels": {
+                "fr": "Chercheur fictif 006"
+              }
+            },
+            {
+              "id": "n27",
+              "kind": "entity_ref",
+              "external_ref": "demo:s006",
+              "labels": {
+                "fr": "Chercheur fictif 007"
+              }
+            },
+            {
+              "id": "n28",
+              "kind": "entity_ref",
+              "external_ref": "demo:s007",
+              "labels": {
+                "fr": "Chercheur fictif 008"
+              }
+            },
+            {
+              "id": "n29",
+              "kind": "entity_ref",
+              "external_ref": "demo:s008",
+              "labels": {
+                "fr": "Chercheur fictif 009"
+              }
+            },
+            {
+              "id": "n30",
+              "kind": "entity_ref",
+              "external_ref": "demo:s009",
+              "labels": {
+                "fr": "Chercheur fictif 010"
+              }
+            },
+            {
+              "id": "n31",
+              "kind": "entity_ref",
+              "external_ref": "demo:s010",
+              "labels": {
+                "fr": "Chercheur fictif 011"
+              }
+            },
+            {
+              "id": "n32",
+              "kind": "entity_ref",
+              "external_ref": "demo:s011",
+              "labels": {
+                "fr": "Chercheur fictif 012"
+              }
+            },
+            {
+              "id": "n33",
+              "kind": "collection",
+              "members": [
+                "n9",
+                "n10",
+                "n11",
+                "n12",
+                "n13",
+                "n14",
+                "n15",
+                "n16",
+                "n17",
+                "n18",
+                "n19",
+                "n20",
+                "n21",
+                "n22",
+                "n23",
+                "n24",
+                "n25",
+                "n26",
+                "n27",
+                "n28",
+                "n29",
+                "n30",
+                "n31",
+                "n32"
+              ],
+              "ordering": "FIXED"
+            },
+            {
+              "id": "n34",
+              "kind": "quantity",
+              "value": 132
+            },
+            {
+              "id": "n35",
+              "kind": "quantity",
+              "value": 24
+            },
+            {
+              "id": "n36",
+              "kind": "literal",
+              "value": true,
+              "datatype": "boolean"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s3",
+              "predicate_ref": "konstellation:selection-type",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:selection",
+                  "value_id": "n1"
+                },
+                {
+                  "role_ref": "konstellation-role:type",
+                  "value_id": "n2"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": []
+            },
+            {
+              "id": "s7",
+              "predicate_ref": "konstellation:read-context",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:dataset",
+                  "value_id": "n5"
+                },
+                {
+                  "role_ref": "konstellation-role:policy",
+                  "value_id": "n6"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": []
+            },
+            {
+              "id": "s37",
+              "predicate_ref": "konstellation:result-page",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:selection",
+                  "value_id": "n1"
+                },
+                {
+                  "role_ref": "konstellation-role:members",
+                  "value_id": "n33"
+                },
+                {
+                  "role_ref": "konstellation-role:total",
+                  "value_id": "n34"
+                },
+                {
+                  "role_ref": "konstellation-role:page_count",
+                  "value_id": "n35"
+                },
+                {
+                  "role_ref": "konstellation-role:has_more",
+                  "value_id": "n36"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": []
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o4",
+            "semantic_refs": [
+              "s3"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": []
+          },
+          {
+            "obligation_id": "o8",
+            "semantic_refs": [
+              "s7"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": []
+          },
+          {
+            "obligation_id": "o38",
+            "semantic_refs": [
+              "s37"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": []
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "fr",
+          "target_locale": "fr-CA",
+          "channel": "app",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance",
+            "notice",
+            "list",
+            "label_value",
+            "heading"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "allowed",
+          "output_format": "structured"
+        },
+        "capability_profile": "konstellation-explorer-1",
+        "runtime_selector": {
+          "runtime_set_id": "konstellation-fr-1"
+        }
+      },
+      "expected": {
+        "coverage_complete": true,
+        "contains": [
+          "Contexte de lecture",
+          "sha256:2fa79ca5d0ddfc197709d787119f91b78a96945d50d884a73197e1ca8ac55971"
+        ]
+      }
+    },
+    {
+      "case_id": "entity",
+      "request": {
+        "schema_version": "1.0",
+        "request_id": "sha256:d9c15c50bbbac7748c4699cc0e8c3a6b8901be1af0191f55596b73b5575726a4",
+        "semantic_graph": {
+          "graph_id": "sha256:d9c15c50bbbac7748c4699cc0e8c3a6b8901be1af0191f55596b73b5575726a4",
+          "nodes": [
+            {
+              "id": "n1",
+              "kind": "entity_ref",
+              "external_ref": "konstellation-selection:root"
+            },
+            {
+              "id": "n2",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-type:human"
+            },
+            {
+              "id": "n5",
+              "kind": "literal",
+              "value": "sha256:2fa79ca5d0ddfc197709d787119f91b78a96945d50d884a73197e1ca8ac55971",
+              "datatype": "artifact-reference"
+            },
+            {
+              "id": "n6",
+              "kind": "literal",
+              "value": "sha256:34f9a33f49a1b4f78400146cf864a8fdc5e38280c7e87b78f8547b8ee8d51ccc",
+              "datatype": "policy-reference"
+            },
+            {
+              "id": "n9",
+              "kind": "entity_ref",
+              "external_ref": "demo:p000",
+              "labels": {
+                "fr": "Augustin d’Hippone"
+              }
+            },
+            {
+              "id": "n12",
+              "kind": "entity_ref",
+              "external_ref": "demo:a00001",
+              "labels": {
+                "fr": "demo:a00001"
+              }
+            },
+            {
+              "id": "n13",
+              "kind": "entity_ref",
+              "external_ref": "demo:p000",
+              "labels": {
+                "fr": "Augustin d’Hippone"
+              }
+            },
+            {
+              "id": "n14",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-relation:field_of_work"
+            },
+            {
+              "id": "n15",
+              "kind": "entity_ref",
+              "external_ref": "demo:philosophy",
+              "labels": {
+                "fr": "Philosophie"
+              }
+            },
+            {
+              "id": "n17",
+              "kind": "literal",
+              "value": "sourced",
+              "datatype": "string"
+            },
+            {
+              "id": "n19",
+              "kind": "literal",
+              "value": "medium",
+              "datatype": "string"
+            },
+            {
+              "id": "n21",
+              "kind": "literal",
+              "value": "not_evaluated",
+              "datatype": "string"
+            },
+            {
+              "id": "n23",
+              "kind": "literal",
+              "value": "sourced_claim",
+              "datatype": "string"
+            },
+            {
+              "id": "n25",
+              "kind": "literal",
+              "value": "authority:demo",
+              "datatype": "string"
+            },
+            {
+              "id": "n27",
+              "kind": "literal",
+              "value": {
+                "domain": "demonstration"
+              },
+              "datatype": "json"
+            },
+            {
+              "id": "n29",
+              "kind": "literal",
+              "value": [],
+              "datatype": "json"
+            },
+            {
+              "id": "n32",
+              "kind": "entity_ref",
+              "external_ref": "demo:a00002",
+              "labels": {
+                "fr": "demo:a00002"
+              }
+            },
+            {
+              "id": "n33",
+              "kind": "entity_ref",
+              "external_ref": "demo:p000",
+              "labels": {
+                "fr": "Augustin d’Hippone"
+              }
+            },
+            {
+              "id": "n34",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-relation:field_of_work"
+            },
+            {
+              "id": "n35",
+              "kind": "entity_ref",
+              "external_ref": "demo:theology",
+              "labels": {
+                "fr": "Théologie"
+              }
+            },
+            {
+              "id": "n37",
+              "kind": "literal",
+              "value": "sourced",
+              "datatype": "string"
+            },
+            {
+              "id": "n39",
+              "kind": "literal",
+              "value": "medium",
+              "datatype": "string"
+            },
+            {
+              "id": "n41",
+              "kind": "literal",
+              "value": "not_evaluated",
+              "datatype": "string"
+            },
+            {
+              "id": "n43",
+              "kind": "literal",
+              "value": "sourced_claim",
+              "datatype": "string"
+            },
+            {
+              "id": "n45",
+              "kind": "literal",
+              "value": "authority:demo",
+              "datatype": "string"
+            },
+            {
+              "id": "n47",
+              "kind": "literal",
+              "value": {
+                "domain": "demonstration"
+              },
+              "datatype": "json"
+            },
+            {
+              "id": "n49",
+              "kind": "literal",
+              "value": [],
+              "datatype": "json"
+            },
+            {
+              "id": "n52",
+              "kind": "entity_ref",
+              "external_ref": "demo:a00003",
+              "labels": {
+                "fr": "demo:a00003"
+              }
+            },
+            {
+              "id": "n53",
+              "kind": "entity_ref",
+              "external_ref": "demo:p000",
+              "labels": {
+                "fr": "Augustin d’Hippone"
+              }
+            },
+            {
+              "id": "n54",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-relation:lifespan"
+            },
+            {
+              "id": "n55",
+              "kind": "temporal",
+              "temporal_kind": "interval",
+              "value": {
+                "startMin": 354,
+                "startMax": 354,
+                "endMin": 430,
+                "endMax": 430
+              }
+            },
+            {
+              "id": "n57",
+              "kind": "literal",
+              "value": "sourced",
+              "datatype": "string"
+            },
+            {
+              "id": "n59",
+              "kind": "literal",
+              "value": "medium",
+              "datatype": "string"
+            },
+            {
+              "id": "n61",
+              "kind": "literal",
+              "value": "not_evaluated",
+              "datatype": "string"
+            },
+            {
+              "id": "n63",
+              "kind": "literal",
+              "value": "sourced_claim",
+              "datatype": "string"
+            },
+            {
+              "id": "n65",
+              "kind": "literal",
+              "value": "authority:demo",
+              "datatype": "string"
+            },
+            {
+              "id": "n67",
+              "kind": "literal",
+              "value": {
+                "domain": "demonstration"
+              },
+              "datatype": "json"
+            },
+            {
+              "id": "n69",
+              "kind": "literal",
+              "value": [],
+              "datatype": "json"
+            },
+            {
+              "id": "n71",
+              "kind": "literal",
+              "value": "demo:interval-v1",
+              "datatype": "string"
+            },
+            {
+              "id": "n74",
+              "kind": "entity_ref",
+              "external_ref": "demo:a00004",
+              "labels": {
+                "fr": "demo:a00004"
+              }
+            },
+            {
+              "id": "n75",
+              "kind": "entity_ref",
+              "external_ref": "demo:p000",
+              "labels": {
+                "fr": "Augustin d’Hippone"
+              }
+            },
+            {
+              "id": "n76",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-relation:birth_place"
+            },
+            {
+              "id": "n77",
+              "kind": "entity_ref",
+              "external_ref": "demo:africa",
+              "labels": {
+                "fr": "Afrique du Nord"
+              }
+            },
+            {
+              "id": "n79",
+              "kind": "literal",
+              "value": "sourced",
+              "datatype": "string"
+            },
+            {
+              "id": "n81",
+              "kind": "literal",
+              "value": "medium",
+              "datatype": "string"
+            },
+            {
+              "id": "n83",
+              "kind": "literal",
+              "value": "not_evaluated",
+              "datatype": "string"
+            },
+            {
+              "id": "n85",
+              "kind": "literal",
+              "value": "sourced_claim",
+              "datatype": "string"
+            },
+            {
+              "id": "n87",
+              "kind": "literal",
+              "value": "authority:demo",
+              "datatype": "string"
+            },
+            {
+              "id": "n89",
+              "kind": "literal",
+              "value": {
+                "domain": "demonstration"
+              },
+              "datatype": "json"
+            },
+            {
+              "id": "n91",
+              "kind": "literal",
+              "value": [],
+              "datatype": "json"
+            },
+            {
+              "id": "n94",
+              "kind": "entity_ref",
+              "external_ref": "demo:a00005",
+              "labels": {
+                "fr": "demo:a00005"
+              }
+            },
+            {
+              "id": "n95",
+              "kind": "entity_ref",
+              "external_ref": "demo:p000",
+              "labels": {
+                "fr": "Augustin d’Hippone"
+              }
+            },
+            {
+              "id": "n96",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-relation:citizenship"
+            },
+            {
+              "id": "n97",
+              "kind": "entity_ref",
+              "external_ref": "demo:africa",
+              "labels": {
+                "fr": "Afrique du Nord"
+              }
+            },
+            {
+              "id": "n99",
+              "kind": "literal",
+              "value": "sourced",
+              "datatype": "string"
+            },
+            {
+              "id": "n101",
+              "kind": "literal",
+              "value": "medium",
+              "datatype": "string"
+            },
+            {
+              "id": "n103",
+              "kind": "literal",
+              "value": "not_evaluated",
+              "datatype": "string"
+            },
+            {
+              "id": "n105",
+              "kind": "literal",
+              "value": "sourced_claim",
+              "datatype": "string"
+            },
+            {
+              "id": "n107",
+              "kind": "literal",
+              "value": "authority:demo",
+              "datatype": "string"
+            },
+            {
+              "id": "n109",
+              "kind": "literal",
+              "value": {
+                "domain": "demonstration"
+              },
+              "datatype": "json"
+            },
+            {
+              "id": "n111",
+              "kind": "literal",
+              "value": [],
+              "datatype": "json"
+            },
+            {
+              "id": "n114",
+              "kind": "entity_ref",
+              "external_ref": "demo:a00006",
+              "labels": {
+                "fr": "demo:a00006"
+              }
+            },
+            {
+              "id": "n115",
+              "kind": "entity_ref",
+              "external_ref": "demo:p000",
+              "labels": {
+                "fr": "Augustin d’Hippone"
+              }
+            },
+            {
+              "id": "n116",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-relation:movement"
+            },
+            {
+              "id": "n117",
+              "kind": "entity_ref",
+              "external_ref": "demo:platonism",
+              "labels": {
+                "fr": "Platonisme"
+              }
+            },
+            {
+              "id": "n119",
+              "kind": "literal",
+              "value": "sourced",
+              "datatype": "string"
+            },
+            {
+              "id": "n121",
+              "kind": "literal",
+              "value": "medium",
+              "datatype": "string"
+            },
+            {
+              "id": "n123",
+              "kind": "literal",
+              "value": "not_evaluated",
+              "datatype": "string"
+            },
+            {
+              "id": "n125",
+              "kind": "literal",
+              "value": "sourced_claim",
+              "datatype": "string"
+            },
+            {
+              "id": "n127",
+              "kind": "literal",
+              "value": "authority:demo",
+              "datatype": "string"
+            },
+            {
+              "id": "n129",
+              "kind": "literal",
+              "value": {
+                "domain": "demonstration"
+              },
+              "datatype": "json"
+            },
+            {
+              "id": "n131",
+              "kind": "literal",
+              "value": [],
+              "datatype": "json"
+            },
+            {
+              "id": "n134",
+              "kind": "entity_ref",
+              "external_ref": "demo:a00007",
+              "labels": {
+                "fr": "demo:a00007"
+              }
+            },
+            {
+              "id": "n135",
+              "kind": "entity_ref",
+              "external_ref": "demo:p000",
+              "labels": {
+                "fr": "Augustin d’Hippone"
+              }
+            },
+            {
+              "id": "n136",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-relation:religious_tradition"
+            },
+            {
+              "id": "n137",
+              "kind": "entity_ref",
+              "external_ref": "demo:christian",
+              "labels": {
+                "fr": "Tradition chrétienne"
+              }
+            },
+            {
+              "id": "n139",
+              "kind": "literal",
+              "value": "sourced",
+              "datatype": "string"
+            },
+            {
+              "id": "n141",
+              "kind": "literal",
+              "value": "medium",
+              "datatype": "string"
+            },
+            {
+              "id": "n143",
+              "kind": "literal",
+              "value": "not_evaluated",
+              "datatype": "string"
+            },
+            {
+              "id": "n145",
+              "kind": "literal",
+              "value": "sourced_claim",
+              "datatype": "string"
+            },
+            {
+              "id": "n147",
+              "kind": "literal",
+              "value": "authority:demo",
+              "datatype": "string"
+            },
+            {
+              "id": "n149",
+              "kind": "literal",
+              "value": {
+                "domain": "demonstration"
+              },
+              "datatype": "json"
+            },
+            {
+              "id": "n151",
+              "kind": "literal",
+              "value": [],
+              "datatype": "json"
+            },
+            {
+              "id": "n154",
+              "kind": "entity_ref",
+              "external_ref": "demo:a00008",
+              "labels": {
+                "fr": "demo:a00008"
+              }
+            },
+            {
+              "id": "n155",
+              "kind": "entity_ref",
+              "external_ref": "demo:w000-0",
+              "labels": {
+                "fr": "Les Confessions"
+              }
+            },
+            {
+              "id": "n156",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-relation:author"
+            },
+            {
+              "id": "n157",
+              "kind": "entity_ref",
+              "external_ref": "demo:p000",
+              "labels": {
+                "fr": "Augustin d’Hippone"
+              }
+            },
+            {
+              "id": "n159",
+              "kind": "literal",
+              "value": "sourced",
+              "datatype": "string"
+            },
+            {
+              "id": "n161",
+              "kind": "literal",
+              "value": "medium",
+              "datatype": "string"
+            },
+            {
+              "id": "n163",
+              "kind": "literal",
+              "value": "not_evaluated",
+              "datatype": "string"
+            },
+            {
+              "id": "n165",
+              "kind": "literal",
+              "value": "sourced_claim",
+              "datatype": "string"
+            },
+            {
+              "id": "n167",
+              "kind": "literal",
+              "value": "authority:demo",
+              "datatype": "string"
+            },
+            {
+              "id": "n169",
+              "kind": "literal",
+              "value": {
+                "domain": "demonstration"
+              },
+              "datatype": "json"
+            },
+            {
+              "id": "n171",
+              "kind": "literal",
+              "value": [],
+              "datatype": "json"
+            },
+            {
+              "id": "n174",
+              "kind": "entity_ref",
+              "external_ref": "demo:a00009",
+              "labels": {
+                "fr": "demo:a00009"
+              }
+            },
+            {
+              "id": "n175",
+              "kind": "entity_ref",
+              "external_ref": "demo:w000-1",
+              "labels": {
+                "fr": "La Cité de Dieu"
+              }
+            },
+            {
+              "id": "n176",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-relation:author"
+            },
+            {
+              "id": "n177",
+              "kind": "entity_ref",
+              "external_ref": "demo:p000",
+              "labels": {
+                "fr": "Augustin d’Hippone"
+              }
+            },
+            {
+              "id": "n179",
+              "kind": "literal",
+              "value": "sourced",
+              "datatype": "string"
+            },
+            {
+              "id": "n181",
+              "kind": "literal",
+              "value": "medium",
+              "datatype": "string"
+            },
+            {
+              "id": "n183",
+              "kind": "literal",
+              "value": "not_evaluated",
+              "datatype": "string"
+            },
+            {
+              "id": "n185",
+              "kind": "literal",
+              "value": "sourced_claim",
+              "datatype": "string"
+            },
+            {
+              "id": "n187",
+              "kind": "literal",
+              "value": "authority:demo",
+              "datatype": "string"
+            },
+            {
+              "id": "n189",
+              "kind": "literal",
+              "value": {
+                "domain": "demonstration"
+              },
+              "datatype": "json"
+            },
+            {
+              "id": "n191",
+              "kind": "literal",
+              "value": [],
+              "datatype": "json"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s3",
+              "predicate_ref": "konstellation:selection-type",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:selection",
+                  "value_id": "n1"
+                },
+                {
+                  "role_ref": "konstellation-role:type",
+                  "value_id": "n2"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": []
+            },
+            {
+              "id": "s7",
+              "predicate_ref": "konstellation:read-context",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:dataset",
+                  "value_id": "n5"
+                },
+                {
+                  "role_ref": "konstellation-role:policy",
+                  "value_id": "n6"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": []
+            },
+            {
+              "id": "s10",
+              "predicate_ref": "konstellation:inspected-entity",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:entity",
+                  "value_id": "n9"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": []
+            },
+            {
+              "id": "s16",
+              "predicate_ref": "konstellation:reported-assertion",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n12"
+                },
+                {
+                  "role_ref": "konstellation-role:subject",
+                  "value_id": "n13"
+                },
+                {
+                  "role_ref": "konstellation-role:relation",
+                  "value_id": "n14"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n15"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00001",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s18",
+              "predicate_ref": "konstellation:assertion-status",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n12"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n17"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00001",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s20",
+              "predicate_ref": "konstellation:assertion-certainty",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n12"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n19"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00001",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s22",
+              "predicate_ref": "konstellation:assertion-validationStatus",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n12"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n21"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00001",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s24",
+              "predicate_ref": "konstellation:assertion-validatedAs",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n12"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n23"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00001",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s26",
+              "predicate_ref": "konstellation:assertion-authority",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n12"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n25"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00001",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s28",
+              "predicate_ref": "konstellation:assertion-scope",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n12"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n27"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00001",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s30",
+              "predicate_ref": "konstellation:assertion-conflictsWith",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n12"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n29"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00001",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s36",
+              "predicate_ref": "konstellation:reported-assertion",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n32"
+                },
+                {
+                  "role_ref": "konstellation-role:subject",
+                  "value_id": "n33"
+                },
+                {
+                  "role_ref": "konstellation-role:relation",
+                  "value_id": "n34"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n35"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00002",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s38",
+              "predicate_ref": "konstellation:assertion-status",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n32"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n37"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00002",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s40",
+              "predicate_ref": "konstellation:assertion-certainty",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n32"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n39"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00002",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s42",
+              "predicate_ref": "konstellation:assertion-validationStatus",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n32"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n41"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00002",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s44",
+              "predicate_ref": "konstellation:assertion-validatedAs",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n32"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n43"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00002",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s46",
+              "predicate_ref": "konstellation:assertion-authority",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n32"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n45"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00002",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s48",
+              "predicate_ref": "konstellation:assertion-scope",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n32"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n47"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00002",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s50",
+              "predicate_ref": "konstellation:assertion-conflictsWith",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n32"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n49"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00002",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s56",
+              "predicate_ref": "konstellation:reported-assertion",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n52"
+                },
+                {
+                  "role_ref": "konstellation-role:subject",
+                  "value_id": "n53"
+                },
+                {
+                  "role_ref": "konstellation-role:relation",
+                  "value_id": "n54"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n55"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00003",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s58",
+              "predicate_ref": "konstellation:assertion-status",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n52"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n57"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00003",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s60",
+              "predicate_ref": "konstellation:assertion-certainty",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n52"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n59"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00003",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s62",
+              "predicate_ref": "konstellation:assertion-validationStatus",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n52"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n61"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00003",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s64",
+              "predicate_ref": "konstellation:assertion-validatedAs",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n52"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n63"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00003",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s66",
+              "predicate_ref": "konstellation:assertion-authority",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n52"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n65"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00003",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s68",
+              "predicate_ref": "konstellation:assertion-scope",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n52"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n67"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00003",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s70",
+              "predicate_ref": "konstellation:assertion-conflictsWith",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n52"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n69"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00003",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s72",
+              "predicate_ref": "konstellation:assertion-ruleRef",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n52"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n71"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00003",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s78",
+              "predicate_ref": "konstellation:reported-assertion",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n74"
+                },
+                {
+                  "role_ref": "konstellation-role:subject",
+                  "value_id": "n75"
+                },
+                {
+                  "role_ref": "konstellation-role:relation",
+                  "value_id": "n76"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n77"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00004",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s80",
+              "predicate_ref": "konstellation:assertion-status",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n74"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n79"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00004",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s82",
+              "predicate_ref": "konstellation:assertion-certainty",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n74"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n81"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00004",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s84",
+              "predicate_ref": "konstellation:assertion-validationStatus",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n74"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n83"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00004",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s86",
+              "predicate_ref": "konstellation:assertion-validatedAs",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n74"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n85"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00004",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s88",
+              "predicate_ref": "konstellation:assertion-authority",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n74"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n87"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00004",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s90",
+              "predicate_ref": "konstellation:assertion-scope",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n74"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n89"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00004",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s92",
+              "predicate_ref": "konstellation:assertion-conflictsWith",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n74"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n91"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00004",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s98",
+              "predicate_ref": "konstellation:reported-assertion",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n94"
+                },
+                {
+                  "role_ref": "konstellation-role:subject",
+                  "value_id": "n95"
+                },
+                {
+                  "role_ref": "konstellation-role:relation",
+                  "value_id": "n96"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n97"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00005",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s100",
+              "predicate_ref": "konstellation:assertion-status",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n94"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n99"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00005",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s102",
+              "predicate_ref": "konstellation:assertion-certainty",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n94"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n101"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00005",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s104",
+              "predicate_ref": "konstellation:assertion-validationStatus",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n94"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n103"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00005",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s106",
+              "predicate_ref": "konstellation:assertion-validatedAs",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n94"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n105"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00005",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s108",
+              "predicate_ref": "konstellation:assertion-authority",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n94"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n107"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00005",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s110",
+              "predicate_ref": "konstellation:assertion-scope",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n94"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n109"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00005",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s112",
+              "predicate_ref": "konstellation:assertion-conflictsWith",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n94"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n111"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00005",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s118",
+              "predicate_ref": "konstellation:reported-assertion",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n114"
+                },
+                {
+                  "role_ref": "konstellation-role:subject",
+                  "value_id": "n115"
+                },
+                {
+                  "role_ref": "konstellation-role:relation",
+                  "value_id": "n116"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n117"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00006",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s120",
+              "predicate_ref": "konstellation:assertion-status",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n114"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n119"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00006",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s122",
+              "predicate_ref": "konstellation:assertion-certainty",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n114"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n121"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00006",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s124",
+              "predicate_ref": "konstellation:assertion-validationStatus",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n114"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n123"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00006",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s126",
+              "predicate_ref": "konstellation:assertion-validatedAs",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n114"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n125"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00006",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s128",
+              "predicate_ref": "konstellation:assertion-authority",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n114"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n127"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00006",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s130",
+              "predicate_ref": "konstellation:assertion-scope",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n114"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n129"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00006",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s132",
+              "predicate_ref": "konstellation:assertion-conflictsWith",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n114"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n131"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00006",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s138",
+              "predicate_ref": "konstellation:reported-assertion",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n134"
+                },
+                {
+                  "role_ref": "konstellation-role:subject",
+                  "value_id": "n135"
+                },
+                {
+                  "role_ref": "konstellation-role:relation",
+                  "value_id": "n136"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n137"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00007",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s140",
+              "predicate_ref": "konstellation:assertion-status",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n134"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n139"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00007",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s142",
+              "predicate_ref": "konstellation:assertion-certainty",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n134"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n141"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00007",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s144",
+              "predicate_ref": "konstellation:assertion-validationStatus",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n134"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n143"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00007",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s146",
+              "predicate_ref": "konstellation:assertion-validatedAs",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n134"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n145"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00007",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s148",
+              "predicate_ref": "konstellation:assertion-authority",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n134"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n147"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00007",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s150",
+              "predicate_ref": "konstellation:assertion-scope",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n134"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n149"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00007",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s152",
+              "predicate_ref": "konstellation:assertion-conflictsWith",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n134"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n151"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00007",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s158",
+              "predicate_ref": "konstellation:reported-assertion",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n154"
+                },
+                {
+                  "role_ref": "konstellation-role:subject",
+                  "value_id": "n155"
+                },
+                {
+                  "role_ref": "konstellation-role:relation",
+                  "value_id": "n156"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n157"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00008",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s160",
+              "predicate_ref": "konstellation:assertion-status",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n154"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n159"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00008",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s162",
+              "predicate_ref": "konstellation:assertion-certainty",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n154"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n161"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00008",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s164",
+              "predicate_ref": "konstellation:assertion-validationStatus",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n154"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n163"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00008",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s166",
+              "predicate_ref": "konstellation:assertion-validatedAs",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n154"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n165"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00008",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s168",
+              "predicate_ref": "konstellation:assertion-authority",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n154"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n167"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00008",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s170",
+              "predicate_ref": "konstellation:assertion-scope",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n154"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n169"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00008",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s172",
+              "predicate_ref": "konstellation:assertion-conflictsWith",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n154"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n171"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00008",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s178",
+              "predicate_ref": "konstellation:reported-assertion",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n174"
+                },
+                {
+                  "role_ref": "konstellation-role:subject",
+                  "value_id": "n175"
+                },
+                {
+                  "role_ref": "konstellation-role:relation",
+                  "value_id": "n176"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n177"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00009",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s180",
+              "predicate_ref": "konstellation:assertion-status",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n174"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n179"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00009",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s182",
+              "predicate_ref": "konstellation:assertion-certainty",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n174"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n181"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00009",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s184",
+              "predicate_ref": "konstellation:assertion-validationStatus",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n174"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n183"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00009",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s186",
+              "predicate_ref": "konstellation:assertion-validatedAs",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n174"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n185"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00009",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s188",
+              "predicate_ref": "konstellation:assertion-authority",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n174"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n187"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00009",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s190",
+              "predicate_ref": "konstellation:assertion-scope",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n174"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n189"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00009",
+                "demo:catalogue"
+              ]
+            },
+            {
+              "id": "s192",
+              "predicate_ref": "konstellation:assertion-conflictsWith",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:assertion",
+                  "value_id": "n174"
+                },
+                {
+                  "role_ref": "konstellation-role:value",
+                  "value_id": "n191"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": [
+                "demo:a00009",
+                "demo:catalogue"
+              ]
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o4",
+            "semantic_refs": [
+              "s3"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": []
+          },
+          {
+            "obligation_id": "o8",
+            "semantic_refs": [
+              "s7"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": []
+          },
+          {
+            "obligation_id": "o11",
+            "semantic_refs": [
+              "s10"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": []
+          },
+          {
+            "obligation_id": "o31",
+            "semantic_refs": [
+              "s16",
+              "s18",
+              "s20",
+              "s22",
+              "s24",
+              "s26",
+              "s28",
+              "s30"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": [
+              "demo:a00001",
+              "demo:catalogue"
+            ]
+          },
+          {
+            "obligation_id": "o51",
+            "semantic_refs": [
+              "s36",
+              "s38",
+              "s40",
+              "s42",
+              "s44",
+              "s46",
+              "s48",
+              "s50"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": [
+              "demo:a00002",
+              "demo:catalogue"
+            ]
+          },
+          {
+            "obligation_id": "o73",
+            "semantic_refs": [
+              "s56",
+              "s58",
+              "s60",
+              "s62",
+              "s64",
+              "s66",
+              "s68",
+              "s70",
+              "s72"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": [
+              "demo:a00003",
+              "demo:catalogue"
+            ]
+          },
+          {
+            "obligation_id": "o93",
+            "semantic_refs": [
+              "s78",
+              "s80",
+              "s82",
+              "s84",
+              "s86",
+              "s88",
+              "s90",
+              "s92"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": [
+              "demo:a00004",
+              "demo:catalogue"
+            ]
+          },
+          {
+            "obligation_id": "o113",
+            "semantic_refs": [
+              "s98",
+              "s100",
+              "s102",
+              "s104",
+              "s106",
+              "s108",
+              "s110",
+              "s112"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": [
+              "demo:a00005",
+              "demo:catalogue"
+            ]
+          },
+          {
+            "obligation_id": "o133",
+            "semantic_refs": [
+              "s118",
+              "s120",
+              "s122",
+              "s124",
+              "s126",
+              "s128",
+              "s130",
+              "s132"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": [
+              "demo:a00006",
+              "demo:catalogue"
+            ]
+          },
+          {
+            "obligation_id": "o153",
+            "semantic_refs": [
+              "s138",
+              "s140",
+              "s142",
+              "s144",
+              "s146",
+              "s148",
+              "s150",
+              "s152"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": [
+              "demo:a00007",
+              "demo:catalogue"
+            ]
+          },
+          {
+            "obligation_id": "o173",
+            "semantic_refs": [
+              "s158",
+              "s160",
+              "s162",
+              "s164",
+              "s166",
+              "s168",
+              "s170",
+              "s172"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": [
+              "demo:a00008",
+              "demo:catalogue"
+            ]
+          },
+          {
+            "obligation_id": "o193",
+            "semantic_refs": [
+              "s178",
+              "s180",
+              "s182",
+              "s184",
+              "s186",
+              "s188",
+              "s190",
+              "s192"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": [
+              "demo:a00009",
+              "demo:catalogue"
+            ]
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "fr",
+          "target_locale": "fr-CA",
+          "channel": "app",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance",
+            "notice",
+            "list",
+            "label_value",
+            "heading"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "allowed",
+          "output_format": "structured"
+        },
+        "capability_profile": "konstellation-explorer-1",
+        "runtime_selector": {
+          "runtime_set_id": "konstellation-fr-1"
+        }
+      },
+      "expected": {
+        "coverage_complete": true,
+        "contains": [
+          "Contexte de lecture",
+          "sha256:2fa79ca5d0ddfc197709d787119f91b78a96945d50d884a73197e1ca8ac55971"
+        ]
+      }
+    },
+    {
+      "case_id": "negative-filters",
+      "request": {
+        "schema_version": "1.0",
+        "request_id": "sha256:f64d9c741cdf1e6a9d5331ce97893e893aa244e3b2ae838d3f635388a495d447",
+        "semantic_graph": {
+          "graph_id": "sha256:f64d9c741cdf1e6a9d5331ce97893e893aa244e3b2ae838d3f635388a495d447",
+          "nodes": [
+            {
+              "id": "n1",
+              "kind": "entity_ref",
+              "external_ref": "konstellation-selection:root"
+            },
+            {
+              "id": "n2",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-type:human"
+            },
+            {
+              "id": "n4",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-relation:field_of_work"
+            },
+            {
+              "id": "n5",
+              "kind": "entity_ref",
+              "external_ref": "demo:philosophy",
+              "labels": {
+                "fr": "Philosophie"
+              }
+            },
+            {
+              "id": "n6",
+              "kind": "collection",
+              "members": [
+                "n5"
+              ],
+              "ordering": "FIXED"
+            },
+            {
+              "id": "n8",
+              "kind": "concept_ref",
+              "concept_ref": "konstellation-relation:movement"
+            },
+            {
+              "id": "n11",
+              "kind": "literal",
+              "value": "sha256:2fa79ca5d0ddfc197709d787119f91b78a96945d50d884a73197e1ca8ac55971",
+              "datatype": "artifact-reference"
+            },
+            {
+              "id": "n12",
+              "kind": "literal",
+              "value": "sha256:34f9a33f49a1b4f78400146cf864a8fdc5e38280c7e87b78f8547b8ee8d51ccc",
+              "datatype": "policy-reference"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s3",
+              "predicate_ref": "konstellation:selection-type",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:selection",
+                  "value_id": "n1"
+                },
+                {
+                  "role_ref": "konstellation-role:type",
+                  "value_id": "n2"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": []
+            },
+            {
+              "id": "s7",
+              "predicate_ref": "konstellation:filter-none_of",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:selection",
+                  "value_id": "n1"
+                },
+                {
+                  "role_ref": "konstellation-role:relation",
+                  "value_id": "n4"
+                },
+                {
+                  "role_ref": "konstellation-role:values",
+                  "value_id": "n6"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": []
+            },
+            {
+              "id": "s9",
+              "predicate_ref": "konstellation:filter-missing_in_view",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:selection",
+                  "value_id": "n1"
+                },
+                {
+                  "role_ref": "konstellation-role:relation",
+                  "value_id": "n8"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": []
+            },
+            {
+              "id": "s13",
+              "predicate_ref": "konstellation:read-context",
+              "arguments": [
+                {
+                  "role_ref": "konstellation-role:dataset",
+                  "value_id": "n11"
+                },
+                {
+                  "role_ref": "konstellation-role:policy",
+                  "value_id": "n12"
+                }
+              ],
+              "polarity": "positive",
+              "source_refs": []
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o10",
+            "semantic_refs": [
+              "s3",
+              "s7",
+              "s9"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": []
+          },
+          {
+            "obligation_id": "o14",
+            "semantic_refs": [
+              "s13"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED",
+            "source_refs": []
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "fr",
+          "target_locale": "fr-CA",
+          "channel": "app",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance",
+            "notice",
+            "list",
+            "label_value",
+            "heading"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "allowed",
+          "output_format": "structured"
+        },
+        "capability_profile": "konstellation-explorer-1",
+        "runtime_selector": {
+          "runtime_set_id": "konstellation-fr-1"
+        }
+      },
+      "expected": {
+        "coverage_complete": true,
+        "contains": [
+          "Absence dans la vue de lecture",
+          "Exclut ces valeurs"
+        ]
+      }
+    }
+  ]
+}
