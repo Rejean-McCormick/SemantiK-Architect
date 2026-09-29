@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "suite:konstellation-explorer-fr-3-prototype",
+  "language": "fr",
+  "capability_profile": "konstellation-explorer-3",
+  "profile_id": "konstellation-explorer-3",
+  "runtime_set_id": "konstellation-fr-3",
+  "passed": true,
+  "results": [
+    {
+      "case_id": "A001-core",
+      "passed": true
+    },
+    {
+      "case_id": "H131-second-clause",
+      "passed": true
+    },
+    {
+      "case_id": "H223-core",
+      "passed": true
+    },
+    {
+      "case_id": "K003-classification",
+      "passed": true
+    },
+    {
+      "case_id": "P014-core",
+      "passed": true
+    }
+  ]
+}

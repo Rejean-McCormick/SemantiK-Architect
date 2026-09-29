@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "request_id": "sha256:37748d271c5281979eaa6bce404542566507a5eb917746033d5a23e0bfe5a2bb",
+  "semantic_graph": {
+    "graph_id": "g:H223-core",
+    "nodes": [
+      {
+        "id": "n_agent",
+        "kind": "entity_ref",
+        "external_ref": "theophile:leon-xiii"
+      },
+      {
+        "id": "n_patient",
+        "kind": "entity_ref",
+        "external_ref": "theophile:propriete-privee-prevoyance-famille"
+      }
+    ],
+    "statements": [
+      {
+        "id": "s1",
+        "predicate_ref": "theophile:defendre",
+        "arguments": [
+          {
+            "role_ref": "role:agent",
+            "value_id": "n_agent"
+          },
+          {
+            "role_ref": "role:patient",
+            "value_id": "n_patient"
+          }
+        ],
+        "polarity": "positive",
+        "source_refs": [
+          "theophile-source:rn#Rerum novarum, développement sur la propriété et la famille"
+        ]
+      }
+    ]
+  },
+  "obligations": [
+    {
+      "obligation_id": "o1",
+      "semantic_refs": [
+        "s1"
+      ],
+      "force": "PRESENT",
+      "ordering": "FIXED",
+      "source_refs": [
+        "theophile-source:rn#Rerum novarum, développement sur la propriété et la famille"
+      ]
+    }
+  ],
+  "supporting_context": [],
+  "context": {
+    "target_language": "fr",
+    "target_locale": "fr-CA",
+    "channel": "offline-build",
+    "register": "encyclopedic"
+  },
+  "constraints": {
+    "allowed_block_kinds": [
+      "utterance"
+    ],
+    "opening_policy": "forbidden",
+    "closing_policy": "forbidden",
+    "list_policy": "forbidden",
+    "output_format": "structured"
+  },
+  "capability_profile": "konstellation-explorer-3",
+  "runtime_selector": {
+    "runtime_set_id": "konstellation-fr-3"
+  }
+}

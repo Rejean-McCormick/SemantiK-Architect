@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "request_id": "sha256:bb6ced3288e21f59be4470c0c78c98caf7c3eb24e8553079531405ef06ddfdac",
+  "semantic_graph": {
+    "graph_id": "g:A001-core",
+    "nodes": [
+      {
+        "id": "n_agent",
+        "kind": "entity_ref",
+        "external_ref": "theophile:augustin"
+      },
+      {
+        "id": "n_patient",
+        "kind": "entity_ref",
+        "external_ref": "theophile:existence-libre-arbitre"
+      }
+    ],
+    "statements": [
+      {
+        "id": "s1",
+        "predicate_ref": "theophile:defendre",
+        "arguments": [
+          {
+            "role_ref": "role:agent",
+            "value_id": "n_agent"
+          },
+          {
+            "role_ref": "role:patient",
+            "value_id": "n_patient"
+          }
+        ],
+        "polarity": "positive",
+        "source_refs": [
+          "theophile-source:aug_grace#Chapitres 2–4"
+        ]
+      }
+    ]
+  },
+  "obligations": [
+    {
+      "obligation_id": "o1",
+      "semantic_refs": [
+        "s1"
+      ],
+      "force": "PRESENT",
+      "ordering": "FIXED",
+      "source_refs": [
+        "theophile-source:aug_grace#Chapitres 2–4"
+      ]
+    }
+  ],
+  "supporting_context": [],
+  "context": {
+    "target_language": "fr",
+    "target_locale": "fr-CA",
+    "channel": "offline-build",
+    "register": "encyclopedic"
+  },
+  "constraints": {
+    "allowed_block_kinds": [
+      "utterance"
+    ],
+    "opening_policy": "forbidden",
+    "closing_policy": "forbidden",
+    "list_policy": "forbidden",
+    "output_format": "structured"
+  },
+  "capability_profile": "konstellation-explorer-3",
+  "runtime_selector": {
+    "runtime_set_id": "konstellation-fr-3"
+  }
+}

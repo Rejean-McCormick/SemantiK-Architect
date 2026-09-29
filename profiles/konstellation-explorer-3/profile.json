@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "konstellation-explorer",
+  "profile_version": 3,
+  "required_operations": [
+    "clause.transitive_event",
+    "clause.copular_classification"
+  ],
+  "required_features": [],
+  "required_block_kinds": ["utterance"],
+  "test_suite_ref": "suite:konstellation-explorer-fr-3-prototype",
+  "notes": "Prototype: proposition content is supplied as typed semantic references; SA/GF assembles the French sentence. No full upstream position sentence is used as a realization slot."
+}

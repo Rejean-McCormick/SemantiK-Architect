@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "request_id": "sha256:7b66811c258bfbcb132678cebf31347d695c39cffa344636345b4f2a540d064c",
+  "semantic_graph": {
+    "graph_id": "g:K003-classification",
+    "nodes": [
+      {
+        "id": "n_entity",
+        "kind": "entity_ref",
+        "external_ref": "theophile:immaculee-conception"
+      },
+      {
+        "id": "n_class",
+        "kind": "entity_ref",
+        "external_ref": "theophile:dogme"
+      }
+    ],
+    "statements": [
+      {
+        "id": "s1",
+        "predicate_ref": "theophile:classified-as",
+        "arguments": [
+          {
+            "role_ref": "role:entity",
+            "value_id": "n_entity"
+          },
+          {
+            "role_ref": "role:class",
+            "value_id": "n_class"
+          }
+        ],
+        "polarity": "positive",
+        "source_refs": [
+          "theophile-source:ccc_mary#CEC 491 ; citation de la définition de 1854"
+        ]
+      }
+    ]
+  },
+  "obligations": [
+    {
+      "obligation_id": "o1",
+      "semantic_refs": [
+        "s1"
+      ],
+      "force": "PRESENT",
+      "ordering": "FIXED",
+      "source_refs": [
+        "theophile-source:ccc_mary#CEC 491 ; citation de la définition de 1854"
+      ]
+    }
+  ],
+  "supporting_context": [],
+  "context": {
+    "target_language": "fr",
+    "target_locale": "fr-CA",
+    "channel": "offline-build",
+    "register": "encyclopedic"
+  },
+  "constraints": {
+    "allowed_block_kinds": [
+      "utterance"
+    ],
+    "opening_policy": "forbidden",
+    "closing_policy": "forbidden",
+    "list_policy": "forbidden",
+    "output_format": "structured"
+  },
+  "capability_profile": "konstellation-explorer-3",
+  "runtime_selector": {
+    "runtime_set_id": "konstellation-fr-3"
+  }
+}

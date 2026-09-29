@@ -74,3 +74,11 @@ def test_explorer_does_not_drop_discourse_constraints(tmp_path):
     app=candidate(tmp_path);request=json.loads((PROFILE/'requests/query.json').read_text())
     request['context']['tone_profile']='persuasive'
     with pytest.raises(SemantikArchitectError): app.render(request)
+
+
+def test_candidate_plan_is_available_for_review_without_realization(tmp_path):
+    app=candidate(tmp_path); suite=json.loads((PROFILE/'conformance.suite.json').read_text())
+    plan=app.plan(suite['cases'][0]['request'])
+    assert plan.language=='fr'
+    assert plan.units
+    assert all(unit.operation_id for unit in plan.units)

@@ -1,0 +1,168 @@
+{
+  "schema_version": "1.1",
+  "lexicon_id": "konstellation-explorer-fr-3-prototype",
+  "source_kind": "project",
+  "source_ref": "prototype:konstellation-explorer-3",
+  "lexical_policy": {
+    "policy_version": "1.0",
+    "precedence": [
+      "request_override",
+      "domain",
+      "project",
+      "wikidata",
+      "gf_generic"
+    ],
+    "default_source_kind": "project",
+    "equal_precedence_conflict": "fail"
+  },
+  "entries": [
+    {
+      "semantic_ref": "theophile:defendre",
+      "language": "fr",
+      "lexical_ref": "Defendre_V2",
+      "binding_kind": "gf_expr",
+      "category": "V2",
+      "properties": {
+        "preferred_operation": "clause.transitive_event",
+        "independent_statement": true,
+        "role_map": {
+          "agent": "role:agent",
+          "patient": "role:patient"
+        },
+        "slot_map": {
+          "agent": "role:agent",
+          "predicate": "ref:theophile:defendre",
+          "patient": "role:patient"
+        }
+      }
+    },
+    {
+      "semantic_ref": "theophile:stimuler",
+      "language": "fr",
+      "lexical_ref": "Stimuler_V2",
+      "binding_kind": "gf_expr",
+      "category": "V2",
+      "properties": {
+        "preferred_operation": "clause.transitive_event",
+        "independent_statement": true,
+        "role_map": {
+          "agent": "role:agent",
+          "patient": "role:patient"
+        },
+        "slot_map": {
+          "agent": "role:agent",
+          "predicate": "ref:theophile:stimuler",
+          "patient": "role:patient"
+        }
+      }
+    },
+    {
+      "semantic_ref": "theophile:affirmer",
+      "language": "fr",
+      "lexical_ref": "Affirmer_V2",
+      "binding_kind": "gf_expr",
+      "category": "V2",
+      "properties": {
+        "preferred_operation": "clause.transitive_event",
+        "independent_statement": true,
+        "role_map": {
+          "agent": "role:agent",
+          "patient": "role:patient"
+        },
+        "slot_map": {
+          "agent": "role:agent",
+          "predicate": "ref:theophile:affirmer",
+          "patient": "role:patient"
+        }
+      }
+    },
+    {
+      "semantic_ref": "theophile:classified-as",
+      "language": "fr",
+      "lexical_ref": "classification",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_classification",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:entity",
+          "class": "role:class"
+        },
+        "slot_map": {
+          "entity": "role:entity",
+          "class": "role:class"
+        }
+      }
+    },
+    {
+      "semantic_ref": "theophile:augustin",
+      "language": "fr",
+      "lexical_ref": "Augustin_NP",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "theophile:foi",
+      "language": "fr",
+      "lexical_ref": "Foi_NP",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "theophile:leon-xiii",
+      "language": "fr",
+      "lexical_ref": "LeonXIII_NP",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "theophile:jean-paul-ii",
+      "language": "fr",
+      "lexical_ref": "JeanPaulII_NP",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "theophile:immaculee-conception",
+      "language": "fr",
+      "lexical_ref": "ImmaculeeConception_NP",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "theophile:existence-libre-arbitre",
+      "language": "fr",
+      "lexical_ref": "ExistenceLibreArbitre_NP",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "theophile:enquete-intellectuelle-anselme",
+      "language": "fr",
+      "lexical_ref": "EnqueteIntellectuelleAnselme_NP",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "theophile:propriete-privee-prevoyance-famille",
+      "language": "fr",
+      "lexical_ref": "ProprietePriveePrevoyanceFamille_NP",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "theophile:priorite-travail-capital",
+      "language": "fr",
+      "lexical_ref": "PrioriteTravailCapital_NP",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "theophile:dogme",
+      "language": "fr",
+      "lexical_ref": "Dogme_ClassNP",
+      "binding_kind": "gf_expr",
+      "category": "ClassNP"
+    }
+  ]
+}

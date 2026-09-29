@@ -27,7 +27,7 @@ The repository contains executable implementations for:
 - explicit fail-closed lexical-source precedence with Wikidata as generic lexical knowledge authority and GF generic lexicons as binding fallback;
 - source/sense provenance carried through lexical preflight and exact binding;
 - Python SDK, CLI, minimal HTTP adapter, health/readiness and output projections;
-- conformance harness and release validator;
+- conformance harness, reusable multilingual candidate-matrix runner, and release validator;
 - architecture, contract, integration and failure-path tests.
 
 ## External release inputs

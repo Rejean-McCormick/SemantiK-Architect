@@ -8,6 +8,14 @@
 - Carries source/sense provenance through preflight and binding.
 - Adds real P5137 sense→Q extraction and a local Wikidata lexical-artifact builder.
 
+
+## 1.1.2 — 2026-09-29
+
+- Added `CandidateMatrixConformance`, a reusable review-only matrix runner for multiple immutable candidate language/profile bundles.
+- Added `CandidateConformance.plan()` so tooling can inspect the validated target-language `LanguagePlan` and SA↔GF operations before surface realization.
+- Kept language construction outside SA: the matrix consumes already-built candidate bundles and never writes release manifests or activation state.
+- Added integration coverage proving matrix execution remains candidate-only and preserves the existing fail-closed conformance path.
+
 ## 1.1.1 — 2026-09-28
 
 - Added generic lexical planning metadata (`preferred_operation`, role/slot/feature maps, independent statement realization).

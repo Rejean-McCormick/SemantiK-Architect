@@ -48,7 +48,7 @@ class CandidateConformance:
             if not file.is_relative_to(self.root) or hashlib.sha256(file.read_bytes()).hexdigest() != expected:
                 raise ValueError('Candidate artifact integrity failure: ' + name)
 
-    def render(self, data):
+    def _prepare(self, data):
         self.verify()
         request = CommunicationRequest.from_dict(data)
         RequestValidator().validate(request)
@@ -62,8 +62,17 @@ class CandidateConformance:
         if ({u.operation_id for u in plan.units} - set(self.profile.required_operations) or
             {b.kind for b in plan.blocks} - set(self.profile.required_block_kinds)):
             raise ValueError('Candidate plan exceeds profile')
+        CoverageValidator().validate_plan(request, plan)
+        return request, lexical, plan
+
+    def plan(self, data):
+        """Return the validated candidate LanguagePlan without realizing surface text."""
+        _request, _lexical, plan = self._prepare(data)
+        return plan
+
+    def render(self, data):
+        request, lexical, plan = self._prepare(data)
         coverage = CoverageValidator()
-        coverage.validate_plan(request, plan)
         bindings = self.lexicon.bind(request, plan, lexical, self.runtime)
         realized = self.realizer.realize(plan, bindings, self.runtime)
         result = OutputAssembler().assemble(request, plan, realized, self.runtime, sa_version='1.0.0')

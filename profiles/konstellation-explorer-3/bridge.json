@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "contract_version": "1.0",
+  "operations": {
+    "clause.transitive_event": {
+      "requires": ["agent", "predicate", "patient"],
+      "expression": "RealizeTransitive {agent} {predicate} {patient}",
+      "consumes_features": [
+        "polarity", "register", "formality", "politeness", "relationship", "tone_profile"
+      ]
+    },
+    "clause.copular_classification": {
+      "requires": ["entity", "class"],
+      "expression": "RealizeClassification {entity} {class}",
+      "consumes_features": [
+        "polarity", "register", "formality", "politeness", "relationship", "tone_profile"
+      ]
+    }
+  }
+}

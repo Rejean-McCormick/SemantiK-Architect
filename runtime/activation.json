@@ -1,6 +1,7 @@
 {
   "bindings": {
-    "fr|konstellation-explorer-2": "konstellation-fr-2"
+    "fr|konstellation-explorer-2": "konstellation-fr-2",
+    "fr|konstellation-explorer-3": "konstellation-fr-3"
   },
   "schema_version": "1.0"
 }
