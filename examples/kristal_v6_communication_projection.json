@@ -1,0 +1,110 @@
+{
+  "contract": "semantik.kristal-v6.communication-projection/1.0",
+  "kristal_standard": "6.0.0",
+  "state_ref": {
+    "state_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "artifact_type": "kristal_state",
+    "schema_version": "6.0",
+    "artifact_status": "working",
+    "content_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "applicability": {
+      "domain": "operations",
+      "subdomain": "orgo",
+      "language": "fr"
+    }
+  },
+  "selected_assertions": [
+    {
+      "assertion_id": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "record_role": "decision",
+      "valuations": [
+        {
+          "dimension": "decision_support",
+          "value_semantics": "ordinal",
+          "value_state": "known",
+          "value": "high"
+        }
+      ],
+      "actionability": {
+        "mode": "human_review",
+        "requires_human_validation": true,
+        "reason_codes": [
+          "expertise_required"
+        ]
+      }
+    }
+  ],
+  "communication_request": {
+    "schema_version": "1.0",
+    "request_id": "example:kristal-v6:decision-review",
+    "semantic_graph": {
+      "graph_id": "graph:kristal-v6-review",
+      "nodes": [
+        {
+          "id": "n_case",
+          "kind": "entity_ref",
+          "external_ref": "orgo:case/42",
+          "labels": {
+            "fr": "dossier 42"
+          }
+        },
+        {
+          "id": "n_review",
+          "kind": "concept_ref",
+          "concept_ref": "local-concept:expert_review"
+        }
+      ],
+      "statements": [
+        {
+          "id": "s_review",
+          "predicate_ref": "local-predicate:requires_review",
+          "arguments": [
+            {
+              "role_ref": "semantic-role:target",
+              "value_id": "n_case"
+            },
+            {
+              "role_ref": "semantic-role:review_type",
+              "value_id": "n_review"
+            }
+          ],
+          "polarity": "positive",
+          "source_refs": [
+            "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          ]
+        }
+      ]
+    },
+    "obligations": [
+      {
+        "obligation_id": "o_review",
+        "semantic_refs": [
+          "s_review"
+        ],
+        "force": "PRESENT",
+        "ordering": "FREE",
+        "source_refs": [
+          "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        ]
+      }
+    ],
+    "supporting_context": [],
+    "context": {
+      "target_language": "fr",
+      "target_locale": "fr-CA",
+      "register": "operational",
+      "channel": "app"
+    },
+    "constraints": {
+      "allowed_block_kinds": [
+        "notice",
+        "utterance"
+      ],
+      "opening_policy": "allowed",
+      "closing_policy": "allowed",
+      "list_policy": "allowed",
+      "output_format": "structured"
+    },
+    "capability_profile": "orgo-operational-1"
+  }
+}

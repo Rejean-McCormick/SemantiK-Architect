@@ -129,6 +129,8 @@ Examples:
 
 This supporting context MUST be distinguishable from obligations. SA MUST NOT silently promote supporting metadata into a new domain claim.
 
+For Kristal v6 projections, `record_role`, `valuations[]`, `applicability`, and `actionability` are supporting context by default. Their presence or magnitude MUST NOT change the obligation set. An upstream ACL/projection must explicitly select the assertion and map the communicative force.
+
 ## CommunicationContext
 
 Context controls articulation, not factual selection.

@@ -39,3 +39,7 @@ Status: **normative terminology**
 **LexicalPlanningContext** — ephemeral language-specific lexical facts used by the LanguagePlanner before final construction selection.
 
 **LexicalBindingSet** — immutable mapping from LanguagePlan lexical slots to exact runtime lexical references consumed by the realizer.
+
+**Kristal v6 communication projection** — explicit ACL boundary object linking a pinned Kristal State and selected assertion metadata to one canonical `CommunicationRequest`; metadata remains supporting context unless explicitly mapped into an obligation.
+
+**Actionability (Kristal v6)** — upstream policy metadata such as `automatic`, `human_review`, or `human_decision`; SA preserves it as context but never treats it as execution authority or a communicative force.

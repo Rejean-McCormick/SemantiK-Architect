@@ -1,39 +1,31 @@
-# SemantiK Architect v1.1 — Validation Report
+# SemantiK Architect 1.2.0 — Validation Report
 
-Validation date: **2026-09-27**
+Validation date: **2026-10-01**
 
 ## Result
 
-**PASS** for the repository core, lexical-authority refinement, contracts, schemas, deterministic runtime path, and architecture guardrails.
+**PASS** for the repository core, Kristal v6 communication boundary, schemas, multilingual candidate matrix, deterministic runtime path and architecture guardrails.
 
 ## Automated validation
 
-- `PYTHONPATH=src python -m pytest -q`: **36 passed**.
-- `python -m compileall`: PASS for `src/`, `tools/`, and `tests/`.
-- JSON Schema meta-validation: **11 schemas PASS**.
-- `tools/validate_repository.py`: PASS.
-- Wikidata Lexeme P5137 sense→Q mapping smoke test: PASS.
-- Knowledge-only `lexeme_ref` is never admitted as an executable GF binding.
-- Equal-precedence lexical conflicts fail closed with `SA-LEX-003`.
-- Existing lexical artifact v1.0 runtimes remain accepted.
+- `PYTHONPATH=src:. python tools/validate_repository.py`: **PASS**;
+- pytest: **47 passed**;
+- JSON Schema meta-validation: **12 schemas PASS**;
+- `semantik.kristal-v6.communication-projection/1.0` canonical example: **PASS**;
+- `KristalV6Acl` selected-assertion traceability: **PASS**;
+- `actionability=automatic` non-inference: **PASS** — no obligation or communicative force is created/changed;
+- unknown Kristal actionability mode: fail-closed;
+- LevelUpDiag 2.2.0 `S30`: **PASS** against this snapshot;
+- LevelUpDiag 2.2.0 `S10`: **PASS** after removing misplaced `.gf` grammar-development sources.
 
-## Lexical architecture validated
+## Architecture adjustment
 
-The generic lexical authority is now local Wikidata/Wikidata Lexeme projection. GF/RGL remains grammar and morphology authority. Domain/project terminology may override generic Wikidata lexicalization, and generic GF lexical artifacts remain binding/realization fallback.
+Grammar-development `.gf` sources were removed from the SemantiK Architect profile directories. Grammar source authority remains GF/Wordbench. Candidate/released PGF/runtime artifacts may still participate in SA conformance/runtime workflows.
 
-Canonical default precedence:
+## Kristal v6 boundary
 
-`request_override > domain > project > wikidata > gf_generic`
+SemantiK Architect does not ingest raw `kristal_state` as a request. An upstream owner/Da’at mapping supplies one explicit communication projection. Selected Kristal assertion IDs must remain visible in `source_refs`. `record_role`, `valuations[]`, `applicability`, and `actionability` are preserved as supporting context unless the upstream mapping explicitly selects the underlying assertion as a communication obligation.
 
-Lexical knowledge and executable realization binding are resolved independently and retain source/sense provenance.
+## Runtime note
 
-## Repository inventory
-
-- Python source modules: **86**
-- Test modules: **16**
-- Documentation Markdown files under `docs/`: **48**
-- JSON Schemas: **11**
-
-## Production boundary
-
-A production language/profile still requires a released PGF grammar, SA↔GF bridge, lexical artifacts, capability profile, and passing conformance evidence. Wikidata lexical knowledge does not replace GF realization and does not require live Wikimedia services.
+The SmartSnap contains profile/runtime manifests whose real PGF artifacts are not all present. Full deployed RuntimeSet acceptance therefore remains an external release-input concern and is not silently downgraded to a fallback renderer.

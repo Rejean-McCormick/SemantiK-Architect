@@ -15,3 +15,5 @@ def test_examples_validate():
     res_schema=json.loads(Path('schemas/communication_result.schema.json').read_text())
     jsonschema.validate(json.loads(Path('examples/orgo_fr_request.json').read_text()),req_schema)
     jsonschema.validate(json.loads(Path('examples/orgo_fr_result.json').read_text()),res_schema)
+    k6_schema=json.loads(Path('schemas/kristal_v6_communication_projection.schema.json').read_text())
+    jsonschema.validate(json.loads(Path('examples/kristal_v6_communication_projection.json').read_text()),k6_schema)

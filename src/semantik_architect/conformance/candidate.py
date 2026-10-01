@@ -18,6 +18,7 @@ from ..adapters.realization.gf import GfBridgeRealizer
 from ..adapters.runtime.filesystem.capabilities import ManifestCapabilityAdapter
 from ..domain.communication.request import CommunicationRequest
 from ..domain.errors import SemantikArchitectError
+from ..domain.language.operations import require_known_operation
 
 
 class CandidateConformance:
@@ -30,12 +31,29 @@ class CandidateConformance:
         if not required <= self.lock.get('inputs', {}).keys():
             raise ValueError('Incomplete pipeline lock')
         self.verify()
+        raw_extensions = self.lock.get('extension_capabilities', [])
+        if not isinstance(raw_extensions, list):
+            raise ValueError('extension_capabilities must be a list when present')
+        self.extension_capabilities = tuple(
+            require_known_operation(str(item)) for item in raw_extensions
+        )
+        if len(set(self.extension_capabilities)) != len(self.extension_capabilities):
+            raise ValueError('extension_capabilities must be unique')
         kinds = [('grammar', 'grammar', 'grammar.pgf'), ('lexical', 'lexical', 'lexicon.json'),
                  ('other', 'sa-gf-bridge-v1', 'bridge.json'),
                  ('other', 'capability-profile-' + self.lock['profile_id'], 'profile.json')]
         self.runtime = RuntimeSetDescriptor(runtime_set_id, self.lock['sa_gf_contract_version'],
             'CANDIDATE', tuple(RuntimeArtifact(k, i, self.lock['inputs'][n], self.root/n) for k,i,n in kinds),
-            {'languages': {self.lock['language']: {'status':'CANDIDATE', 'concrete':self.lock['concrete']}}}, {}, self.root)
+            {'languages': {self.lock['language']: {
+                'status':'CANDIDATE',
+                'concrete':self.lock['concrete'],
+                'profiles': [{
+                    'profile_id': self.lock['profile_id'],
+                    'status': 'CANDIDATE',
+                    'evidence_ref': 'candidate-conformance',
+                    'extension_capabilities': list(self.extension_capabilities),
+                }],
+            }}}, {}, self.root)
         self.lexicon = RuntimeJsonLexiconAdapter(locale_data=BasicLocaleDataAdapter())
         self.realizer = realizer or GfBridgeRealizer()
         self.profile = ManifestCapabilityAdapter().get_profile(self.runtime, self.lock['profile_id'])
@@ -59,9 +77,15 @@ class CandidateConformance:
         cp = CommunicationPlanner().plan(request)
         lexical = self.lexicon.preflight(request, cp, self.runtime)
         plan = GenericLanguagePlanner().plan(request, cp, lexical)
-        if ({u.operation_id for u in plan.units} - set(self.profile.required_operations) or
-            {b.kind for b in plan.blocks} - set(self.profile.required_block_kinds)):
-            raise ValueError('Candidate plan exceeds profile')
+        allowed_operations = set(self.profile.required_operations) | set(self.extension_capabilities)
+        disallowed_operations = {u.operation_id for u in plan.units} - allowed_operations
+        unsupported_blocks = {b.kind for b in plan.blocks} - set(self.profile.required_block_kinds)
+        if disallowed_operations or unsupported_blocks:
+            raise ValueError(
+                'Candidate plan exceeds profile/extensions: '
+                f'operations={sorted(disallowed_operations)} '
+                f'blocks={sorted(unsupported_blocks)}'
+            )
         CoverageValidator().validate_plan(request, plan)
         return request, lexical, plan
 

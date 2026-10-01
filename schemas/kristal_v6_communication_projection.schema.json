@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:semantik-architect:schema:kristal-v6-communication-projection:1.0",
+  "title": "SemantiK Architect Kristal v6 Communication Projection v1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "kristal_standard",
+    "state_ref",
+    "selected_assertions",
+    "communication_request"
+  ],
+  "properties": {
+    "contract": {
+      "const": "semantik.kristal-v6.communication-projection/1.0"
+    },
+    "kristal_standard": {
+      "const": "6.0.0"
+    },
+    "state_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state_id",
+        "artifact_type",
+        "schema_version",
+        "artifact_status"
+      ],
+      "properties": {
+        "state_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "const": "kristal_state"
+        },
+        "schema_version": {
+          "const": "6.0"
+        },
+        "artifact_status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "content_hash": {
+          "type": [
+            "string",
+            "object"
+          ]
+        },
+        "applicability": {
+          "type": "object"
+        }
+      }
+    },
+    "selected_assertions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "assertion_id"
+        ],
+        "properties": {
+          "assertion_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "record_role": {
+            "enum": [
+              "authoritative_constraint",
+              "observed_state",
+              "organizational_rule",
+              "derived_state",
+              "decision",
+              "action",
+              "reference_knowledge",
+              "structural"
+            ]
+          },
+          "valuations": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "applicability": {
+            "type": "object"
+          },
+          "actionability": {
+            "type": "object",
+            "required": [
+              "mode"
+            ],
+            "properties": {
+              "mode": {
+                "enum": [
+                  "automatic",
+                  "human_review",
+                  "human_decision",
+                  "manual",
+                  "prohibited",
+                  "insufficient_information",
+                  "not_applicable"
+                ]
+              },
+              "requires_human_validation": {
+                "type": "boolean"
+              },
+              "reason_codes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "communication_request": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "schema_version",
+        "semantic_graph",
+        "obligations",
+        "context",
+        "constraints",
+        "capability_profile"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        }
+      }
+    }
+  }
+}

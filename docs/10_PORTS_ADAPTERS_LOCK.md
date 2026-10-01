@@ -51,7 +51,7 @@ Emits operational telemetry without making telemetry availability a semantic dep
 Every external semantic model has an ACL/mapping layer:
 
 ```text
-Kristal -> Kristal ACL -> canonical request
+Kristal v6 -> explicit communication projection -> KristalV6Acl -> canonical request
 Orgo -> Orgo ACL -> canonical request
 eThikos -> eThikos ACL -> canonical request
 KeenKonnect/Konnaxion -> ACL -> canonical request
@@ -59,6 +59,11 @@ Abstract-Wiki/ZObject optional -> ACL -> canonical request
 ```
 
 ACLs may use upstream domain knowledge. The SA core must not.
+
+
+### Kristal v6 ACL rule
+
+`KristalV6Acl` consumes only `semantik.kristal-v6.communication-projection/1.0`. It MUST reject raw-state-as-request shortcuts, untraceable selected assertions, unknown actionability modes, or attempts to infer obligations from valuations/actionability. Kristal metadata may be preserved as supporting context; only the explicit mapped `CommunicationRequest.obligations` controls what SA must say.
 
 ## Adapter rules
 

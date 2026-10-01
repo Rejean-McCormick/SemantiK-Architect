@@ -6,9 +6,11 @@ Status: **normative boundary guidance**
 
 Integration does not transfer ownership. SA consumes semantic projections and returns communication projections.
 
-## Kristal
+## Kristal v6
 
-Kristal owns structured epistemic state, provenance, certainty/status/authority and artifact identity. SA may verbalize required distinctions but does not create a competing truth ledger.
+Kristal owns `kristal_state`, referent/assertion identity, typed `valuations[]`, `coordinates`, `applicability`, provenance/evidence, validation/recognition, `record_role`, `actionability`, lineage/conflict/supersession and artifact identity. SA may verbalize explicitly selected distinctions but does not create a competing knowledge ledger.
+
+The boundary is an explicit `semantik.kristal-v6.communication-projection/1.0`, not raw state ingestion. `record_role`, valuations and actionability remain supporting context unless an upstream mapping explicitly makes the underlying assertion a communication obligation. `actionability = automatic` is not an instruction to SA and never becomes a directive by itself.
 
 ## SenTient
 
@@ -69,3 +71,5 @@ GF/RGL owns grammar and morphology; generic GF dictionaries are realization fall
 SA MUST NOT patch the language after this boundary. A failing Albanian construction is fixed in the Albanian/GF development source, rebuilt, reconformed and released as a new immutable artifact.
 
 GF Observatory is evidence/observation infrastructure, not a runtime grammar authority. The immutable released artifact + capability/conformance manifest is what SA executes.
+
+The SemantiK Architect repository MUST NOT carry grammar-development `.gf` sources. Candidate/released PGF artifacts may be referenced for conformance/runtime purposes, but grammar source authority remains GF/Wordbench.

@@ -27,7 +27,7 @@ The repository contains executable implementations for:
 - explicit fail-closed lexical-source precedence with Wikidata as generic lexical knowledge authority and GF generic lexicons as binding fallback;
 - source/sense provenance carried through lexical preflight and exact binding;
 - Python SDK, CLI, minimal HTTP adapter, health/readiness and output projections;
-- conformance harness, reusable multilingual candidate-matrix runner, and release validator;
+- conformance harness, reusable multilingual candidate-matrix runner with fail-closed per-language candidate `extension_capabilities`, and release validator;
 - architecture, contract, integration and failure-path tests.
 
 ## External release inputs
@@ -45,7 +45,7 @@ Language development remains outside SA. A language becomes callable only after 
 
 ## Ecosystem ACL status
 
-The canonical ACL interface and canonical-schema adapter are implemented. Product-specific ACLs are added only when the corresponding upstream structured semantic contract is explicit. SA does not infer structured meaning from free text inside an ACL.
+The canonical ACL interface, canonical-schema adapter, and `KristalV6Acl` are implemented. The Kristal adapter consumes the explicit `semantik.kristal-v6.communication-projection/1.0` boundary, verifies selected-assertion traceability, and preserves v6 role/valuation/applicability/actionability metadata as supporting context. Other product-specific ACLs are added only when the upstream structured semantic contract is explicit. SA does not infer structured meaning from free text or from metadata magnitude inside an ACL.
 
 ## Deliberately absent
 

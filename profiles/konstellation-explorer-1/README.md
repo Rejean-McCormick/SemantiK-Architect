@@ -9,7 +9,7 @@ Le profil s'appelle `konstellation-explorer-1`, avec un RuntimeSet d'exemple `ko
 ## Compilation et publication
 
 1. Installer GF et les bindings Python PGF compatibles avec SA (`pip install -e '.[gf]'`).
-2. Compiler les sources dans GF Wordbench et obtenir une release READY vérifiée contenant `Konstellation.pgf`. La commande GF est `gf -make KonstellationFre.gf` dans ce dossier.
+2. Construire la grammaire dans le dépôt GF/Wordbench autoritaire et obtenir une release READY vérifiée contenant `Konstellation.pgf`. Les sources `.gf` ne résident plus dans SemantiK Architect.
 3. Utiliser `examples/konstellation-fr.json` du dépôt runtime-orchestrator, avec le chemin de cette release Wordbench. Installer les deux packages Python depuis leurs dépôts.
 4. L'orchestrateur prépare un candidat isolé, vérifie les hashes, exécute SA avec `conformance --suite … --runtime-set-id konstellation-fr-1 --candidate-dir … --output …`, puis valide, promeut et active seulement après succès.
 5. Démarrer le serveur SA sur le runtime publié et configurer Konstellation avec ce runtime, ce profil, la langue `fr` et le contrat `1.0`.

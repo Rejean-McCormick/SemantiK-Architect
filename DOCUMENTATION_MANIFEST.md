@@ -46,6 +46,7 @@ A code implementation that conflicts with a lock is wrong unless the lock has fi
 - `docs/20_GLOSSARY.md`
 - `docs/22_IMPLEMENTATION_STATUS.md`
 - `docs/reference/*`
+- `docs/reference/KRISTAL_V6_COMMUNICATION_PROJECTION.md`
 - `docs/adr/*`
 
 ## Contract schemas
@@ -61,5 +62,6 @@ A code implementation that conflicts with a lock is wrong unless the lock has fi
 - `schemas/lexical_artifact.schema.json`
 - `schemas/conformance_suite.schema.json`
 - `schemas/runtime_activation.schema.json`
+- `schemas/kristal_v6_communication_projection.schema.json`
 
 Schemas are intentionally narrower than the conceptual model. They lock transport-level structure while permitting versioned semantic vocabularies and extension registries.

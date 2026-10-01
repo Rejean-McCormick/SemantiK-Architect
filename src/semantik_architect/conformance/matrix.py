@@ -34,6 +34,7 @@ class CandidateMatrixLanguageResult:
     candidate_root: str
     cases: tuple[CandidateMatrixCaseResult, ...]
     metadata: Mapping[str, Any]
+    extension_capabilities: tuple[str, ...] = ()
 
     @property
     def passed(self) -> bool:
@@ -54,6 +55,7 @@ class CandidateMatrixLanguageResult:
             "total_cases": len(self.cases),
             "cases": [case.to_dict() for case in self.cases],
             "metadata": dict(self.metadata),
+            "extension_capabilities": list(self.extension_capabilities),
         }
 
 
@@ -193,6 +195,7 @@ class CandidateMatrixConformance:
             candidate_root=str(root),
             cases=tuple(case_results),
             metadata=dict(metadata or {}),
+            extension_capabilities=tuple(str(x) for x in app.extension_capabilities),
         )
 
     def run(self, candidates: Iterable[Mapping[str, Any]]) -> CandidateMatrixReport:

@@ -6,6 +6,6 @@ This profile is additive. It does not modify `konstellation-explorer-1`, `konste
 
 The prototype uses typed GF categories (`NP`, `V2`, `ClassNP`) and SemantiK Architect `gf_expr` bindings. Compile in this directory with:
 
-    gf -make KonstellationFre.gf
+    # compilation effectuée dans GF/Wordbench; copier uniquement l'artefact PGF candidat/admis
 
 The resulting `Konstellation.pgf` must then be released as a new RuntimeSet (`konstellation-fr-3`) through SemantiK Runtime Orchestrator. Do not reuse the expression-level fixture as a production PGF.

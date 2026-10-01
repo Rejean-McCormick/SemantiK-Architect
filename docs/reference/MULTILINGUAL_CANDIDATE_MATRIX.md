@@ -65,3 +65,34 @@ Before running a candidate, the matrix requires the suite language, capability p
 ## Release semantics
 
 A matrix `PASS` is development evidence only. It is **not** equivalent to `RELEASED` under the Language Conformance Lock. Production release still requires all release gates, immutable evidence pinning and an admitted RuntimeSet.
+
+
+## Candidate extension capabilities (SA 1.2.1)
+
+A candidate `pipeline.lock.json` may declare an additive `extension_capabilities` array.
+Each entry must be a known SA↔GF operation ID. The operations are admitted in addition
+to the selected profile's `required_operations` for **candidate conformance only**.
+
+This mirrors the production capability-manifest model already consumed by
+`ManifestCapabilityAdapter.require_plan`: a stable common profile plus explicit
+per-language extensions. It does not weaken the binary release semantics of the base profile.
+
+Example:
+
+```json
+{
+  "profile_id": "semantik-multilingual-core-1",
+  "extension_capabilities": ["clause.passive_event"]
+}
+```
+
+Rules are fail-closed:
+
+- the field, when present, must be an array;
+- every operation ID must exist in the SA↔GF v1 operation catalog;
+- duplicates are rejected;
+- the matrix report exposes the admitted extensions for each language;
+- absence of the field remains backward compatible and means no extensions.
+
+The field never releases or activates an operation. It only lets an immutable candidate
+prove that operation through the existing SA planning, lexical binding and GF bridge path.

@@ -1,41 +1,66 @@
-param(
-    [string]$RepoRoot = "C:\mycode\SemantiK_Architect\SemantiK_Architect"
+﻿param(
+    [string]$RepoRoot = "C:\mycode\SemantiK_Architect\SemantiK_Architect",
+    [switch]$Force
 )
 
 $ErrorActionPreference = "Stop"
 $OverlayRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ManifestPath = Join-Path $OverlayRoot "overlay-manifest.json"
+if (-not (Test-Path $ManifestPath -PathType Leaf)) { throw "overlay-manifest.json missing" }
+$Manifest = Get-Content -Raw -Encoding UTF8 $ManifestPath | ConvertFrom-Json
 $Stamp = Get-Date -Format "yyyyMMdd-HHmmss"
 
-$files = @(
-    "pyproject.toml",
-    "CHANGELOG_v1_1.md",
-    "docs\22_IMPLEMENTATION_STATUS.md",
-    "docs\reference\MULTILINGUAL_CANDIDATE_MATRIX.md",
-    "src\semantik_architect\__init__.py",
-    "src\semantik_architect\conformance\__init__.py",
-    "src\semantik_architect\conformance\candidate.py",
-    "src\semantik_architect\conformance\matrix.py",
-    "src\semantik_architect\adapters\realization\gf\pgf_runtime.py",
-    "tests\integration\test_candidate_matrix.py",
-    "tests\integration\test_konstellation.py",
-    "tests\unit\test_pgf_runtime_gf_cli.py"
-)
+function Get-Sha256([string]$Path) {
+    return (Get-FileHash -Algorithm SHA256 -Path $Path).Hash.ToLowerInvariant()
+}
 
-foreach ($rel in $files) {
+if (-not (Test-Path $RepoRoot -PathType Container)) { throw "RepoRoot not found: $RepoRoot" }
+$Pyproject = Join-Path $RepoRoot "pyproject.toml"
+$KristalAcl = Join-Path $RepoRoot "src\semantik_architect\adapters\ecosystem\kristal_v6.py"
+if (-not (Test-Path $Pyproject -PathType Leaf)) { throw "Not a SemantiK Architect repo: pyproject.toml missing" }
+if (-not (Test-Path $KristalAcl -PathType Leaf)) { throw "Kristal v6 baseline not detected: kristal_v6.py missing" }
+$ProjectText = Get-Content -Raw -Encoding UTF8 $Pyproject
+if ($ProjectText -notmatch 'version\s*=\s*"1\.2\.0"' -and -not $Force) {
+    throw "Expected Kristal v6 SemantiK Architect 1.2.0 baseline. Use -Force only after manual review."
+}
+
+foreach ($entry in $Manifest.files) {
+    $rel = [string]$entry.path
     $src = Join-Path $OverlayRoot $rel
     $dst = Join-Path $RepoRoot $rel
-    if (-not (Test-Path $src -PathType Leaf)) {
-        throw "Overlay file missing: $src"
+    if (-not (Test-Path $src -PathType Leaf)) { throw "Overlay file missing: $src" }
+    if ($null -ne $entry.base_sha256 -and (Test-Path $dst -PathType Leaf) -and -not $Force) {
+        $actual = Get-Sha256 $dst
+        $expected = ([string]$entry.base_sha256).ToLowerInvariant()
+        if ($actual -ne $expected) {
+            throw "Baseline hash mismatch for $rel. Expected $expected, got $actual. Refusing to overwrite Kristal v6 evolution; review or use -Force deliberately."
+        }
     }
+}
+
+$BackupRoot = Join-Path $RepoRoot (".overlay-backups\kristal-v6-1.2.1-" + $Stamp)
+New-Item -ItemType Directory -Force -Path $BackupRoot | Out-Null
+
+foreach ($entry in $Manifest.files) {
+    $rel = [string]$entry.path
+    $src = Join-Path $OverlayRoot $rel
+    $dst = Join-Path $RepoRoot $rel
     $parent = Split-Path -Parent $dst
     New-Item -ItemType Directory -Force -Path $parent | Out-Null
     if (Test-Path $dst -PathType Leaf) {
-        Copy-Item $dst "$dst.backup-$Stamp" -Force
-        Write-Host "Backup: $dst.backup-$Stamp"
+        $backup = Join-Path $BackupRoot $rel
+        New-Item -ItemType Directory -Force -Path (Split-Path -Parent $backup) | Out-Null
+        Copy-Item $dst $backup -Force
     }
     Copy-Item $src $dst -Force
-    Write-Host "Applied: $dst"
+    $actualNew = Get-Sha256 $dst
+    $expectedNew = ([string]$entry.new_sha256).ToLowerInvariant()
+    if ($actualNew -ne $expectedNew) { throw "Post-copy hash mismatch: $rel" }
+    Write-Host "Applied: $rel"
 }
 
-Write-Host "Overlay v0.2.0 applied: multilingual candidate matrix + GF CLI UTF-8 correction."
-Write-Host "No language source modified; no RuntimeSet released or activated; no network access used."
+Write-Host ""
+Write-Host "SemantiK Architect Kristal v6 updated to 1.2.1."
+Write-Host "Kristal v6 ACL/schema/migration were preserved; only candidate extension-capability support was added."
+Write-Host "Backup: $BackupRoot"
+Write-Host "Recommended validation: PYTHONPATH=src:. python tools/validate_repository.py"

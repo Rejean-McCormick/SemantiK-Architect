@@ -1,4 +1,14 @@
-# SemantiK Architect v1.1 — lexical authority refinement
+# SemantiK Architect changelog
+
+## 1.2.0 — 2026-10-01
+
+- Added `KristalV6Acl` for the final Kristal Standard `6.0.0` boundary.
+- Added `semantik.kristal-v6.communication-projection/1.0` schema and example.
+- Kept `CommunicationRequest` v1.0 unchanged as the canonical core input.
+- Required explicit assertion selection and source-ref traceability; raw Kristal State is not interpreted as a communication request.
+- Preserved `record_role`, typed `valuations[]`, `applicability`, and `actionability` as supporting semantic context.
+- Explicitly forbade deriving communication obligations from valuation magnitude or actionability mode.
+
 
 - Makes local Wikidata Lexeme projections the default generic lexical knowledge authority.
 - Keeps GF/RGL as grammar/morphology authority and generic GF lexicons as realization fallback.

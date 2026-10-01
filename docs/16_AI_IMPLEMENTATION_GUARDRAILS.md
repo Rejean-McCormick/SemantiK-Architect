@@ -37,6 +37,8 @@ An AI agent MUST NOT:
 - silently turn supporting metadata into a communication obligation;
 - silently drop an obligation to satisfy length/style constraints;
 - put Orgo/eThikos/Kristal field names into generic domain types;
+- infer a communication obligation from Kristal `record_role`, a valuation value, or `actionability`;
+- treat `actionability = automatic` as a SemantiK execution command;
 - add a new infrastructure framework to domain/application code;
 - add microservices, queues, CQRS or Event Sourcing without an accepted ADR;
 - make a remote API mandatory for canonical rendering;

@@ -70,3 +70,71 @@ def test_candidate_matrix_runs_candidate_suite_without_releasing(tmp_path):
     assert language['passed_cases'] == language['total_cases']
     assert all(case['operation_ids'] for case in language['cases'])
     assert language['metadata']['source'] == 'test-matrix'
+
+
+def test_candidate_matrix_allows_declared_extension_capability(tmp_path):
+    root = _candidate_root(tmp_path)
+    lock_path = root / 'pipeline.lock.json'
+    lock = json.loads(lock_path.read_text(encoding='utf-8'))
+    lock['extension_capabilities'] = ['clause.passive_event']
+    lock_path.write_text(json.dumps(lock), encoding='utf-8')
+
+    def factory(candidate_root, runtime_set_id):
+        app = CandidateConformance(
+            candidate_root,
+            runtime_set_id,
+            realizer=GfBridgeRealizer(runtime_factory=FixturePgf),
+        )
+        assert app.extension_capabilities == ('clause.passive_event',)
+        manifest_row = app.runtime.capability_manifest['languages']['fr']['profiles'][0]
+        assert manifest_row['extension_capabilities'] == ['clause.passive_event']
+        return app
+
+    report = CandidateMatrixConformance(factory).run([{
+        'candidate_root': root,
+        'runtime_set_id': root.name,
+    }])
+    payload = report.to_dict()
+    assert payload['languages'][0]['extension_capabilities'] == ['clause.passive_event']
+
+
+def test_candidate_rejects_unknown_extension_capability(tmp_path):
+    root = _candidate_root(tmp_path)
+    lock_path = root / 'pipeline.lock.json'
+    lock = json.loads(lock_path.read_text(encoding='utf-8'))
+    lock['extension_capabilities'] = ['clause.not-real']
+    lock_path.write_text(json.dumps(lock), encoding='utf-8')
+    try:
+        CandidateConformance(root, root.name, realizer=GfBridgeRealizer(runtime_factory=FixturePgf))
+    except Exception as exc:
+        assert 'Unknown SA' in str(exc) or 'operation' in str(exc).lower()
+    else:
+        raise AssertionError('unknown extension capability was accepted')
+
+
+def test_candidate_rejects_duplicate_extension_capabilities(tmp_path):
+    root = _candidate_root(tmp_path)
+    lock_path = root / 'pipeline.lock.json'
+    lock = json.loads(lock_path.read_text(encoding='utf-8'))
+    lock['extension_capabilities'] = ['clause.passive_event', 'clause.passive_event']
+    lock_path.write_text(json.dumps(lock), encoding='utf-8')
+    try:
+        CandidateConformance(root, root.name, realizer=GfBridgeRealizer(runtime_factory=FixturePgf))
+    except ValueError as exc:
+        assert 'unique' in str(exc)
+    else:
+        raise AssertionError('duplicate extension capabilities were accepted')
+
+
+def test_candidate_rejects_non_list_extension_capabilities(tmp_path):
+    root = _candidate_root(tmp_path)
+    lock_path = root / 'pipeline.lock.json'
+    lock = json.loads(lock_path.read_text(encoding='utf-8'))
+    lock['extension_capabilities'] = 'clause.passive_event'
+    lock_path.write_text(json.dumps(lock), encoding='utf-8')
+    try:
+        CandidateConformance(root, root.name, realizer=GfBridgeRealizer(runtime_factory=FixturePgf))
+    except ValueError as exc:
+        assert 'must be a list' in str(exc)
+    else:
+        raise AssertionError('non-list extension capabilities were accepted')
