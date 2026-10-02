@@ -34,6 +34,7 @@ V1_OPERATIONS: tuple[OperationDefinition, ...] = (
     OperationDefinition("nominal.apposition", ("entity", "description")),
     OperationDefinition("comparison.comparative", ("left", "right", "dimension")),
     OperationDefinition("comparison.superlative", ("entity", "set", "dimension")),
+    OperationDefinition("math.informalize_formula", ("expression",)),
 )
 
 V1_OPERATION_IDS = frozenset(item.operation_id for item in V1_OPERATIONS)

@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "math-natural",
+  "profile_version": 1,
+  "extends": ["math-pure-1"],
+  "required_operations": ["math.informalize_formula"],
+  "required_features": ["math_mode", "math_formula_ir"],
+  "required_block_kinds": ["utterance"],
+  "register_requirements": ["mathematical"],
+  "test_suite_ref": "suite:math-natural-informath-1",
+  "notes": "Candidate controlled-NLG math profile. Uses the same Formula IR semantics as math-pure-1 while admitting Informath variation generation."
+}

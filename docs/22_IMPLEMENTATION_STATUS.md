@@ -50,3 +50,18 @@ The canonical ACL interface, canonical-schema adapter, and `KristalV6Acl` are im
 ## Deliberately absent
 
 The repository contains no family grammar engine, safe-mode renderer, alternate pseudo-grammar, language fallback, raw-text understanding engine, business-state store, or article-generation pipeline.
+
+## 1.3 alpha mathematical articulation
+
+Implemented in the current snapshot:
+
+- MathKristal Formula IR 1.0.0 ACL validation and canonical graph projection;
+- explicit formula articulation anchors and source traceability;
+- `math-pure-1` / `math-natural-1` language planning;
+- Formula IR → Dedukti serialization;
+- versioned math symbol registry with external alignment fields;
+- Informath RealizerPort adapter and composite realization routing;
+- SDK/CLI math projection/render surfaces;
+- Euler candidate artifacts and contract tests.
+
+Not released in this snapshot: a production Informath RuntimeSet. The profile remains candidate until a concrete Informath runtime is pinned and passes conformance.

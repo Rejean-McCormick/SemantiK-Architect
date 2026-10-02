@@ -1,17 +1,25 @@
-# SemantiK Architect 1.2.1 — Kristal v6 + multilingual candidate extensions
+# SemantiK Architect 1.3.0-alpha.1 — MathKristal / Informath integration
 
-SemantiK Architect remains a deterministic semantic-to-human multilingual communication engine. Version 1.2.1 preserves the **Kristal v6 communication projection** boundary introduced in 1.2.0 and adds fail-closed per-language candidate `extension_capabilities` for multilingual SA↔GF conformance.
+SemantiK Architect is a deterministic semantic-to-human multilingual communication engine. The 1.3 alpha keeps the Kristal v6 articulation boundary and adds the first **mathematical communication profile**: MathKristal Formula IR is projected explicitly into the canonical semantic graph, planned as a mathematical articulation operation, and delegated to **Informath / MathCore / GF** for verbal realization.
 
-## 1.2.1 multilingual candidate completion
+## What 1.3 adds
 
-Candidate `pipeline.lock.json` files may now declare known SA↔GF operations in `extension_capabilities`. These extensions are admitted only during candidate conformance, are reflected in the candidate capability manifest and matrix report, and never imply `RELEASED` or activation. Existing candidate bundles without the field remain valid.
+- `MathKristalFormulaAcl` for `mathkristal.formula-ir` 1.0.0;
+- full structural traceability from Formula IR nodes into the canonical semantic graph;
+- `math-pure-1` and `math-natural-1` planning paths;
+- `math.informalize_formula` as an additive realization operation;
+- `InformathMathRealizer`, invoked through the existing `RealizerPort`;
+- Formula IR → Dedukti projection and versioned Informath symbol registries;
+- a candidate Euler profile and schemas/examples;
+- Python SDK and CLI surfaces: `project-math` and `render-math`;
+- no embedded French/English mathematical grammar and no hidden template fallback.
 
-This change does **not** move language grammar into SemantiK Architect: GF/RGL remains the authority for morphology, word order, governed case/adpositions and final realization.
+The profile remains **candidate-only** until a concrete Informath runtime is pinned, hashed, and passes language/profile conformance.
 
 ## Canonical pipeline
 
 ```text
-external domain model / Kristal v6
+external domain model / Kristal v6 / MathKristal Formula IR
         ↓ explicit ACL / communication projection
 CommunicationRequest
         ↓
@@ -22,50 +30,69 @@ CommunicationPlan
 LanguagePlanner
         ↓
 LanguagePlan / RealizationUnit
-        ↓ exact lexical binding
-versioned SA↔GF bridge
-        ↓
-PGF/GF
+        ↓ exact lexical binding when required
+RealizerPort
+        ├─ generic language → versioned SA↔GF bridge → PGF/GF
+        └─ mathematical language → Informath → MathCore/Informath → GF/RGL
         ↓
 CommunicationResult + coverage + RuntimeSet identity
 ```
 
+There is still one application pipeline. Only the realization adapter is specialized by an explicit operation/profile; no semantic or grammatical fallback is inferred at runtime.
+
+## MathKristal integration
+
+SemantiK Architect does not parse LaTeX to guess mathematics. It consumes a structure-first Formula IR through:
+
+```text
+semantik.mathkristal-formula-ir.communication-projection/1.0
+```
+
+The caller explicitly supplies the Formula IR and selects the expression/proposition to articulate. The ACL maps every relevant formula node to canonical graph nodes/statements, adds one explicit `present-formula` articulation anchor, and stores the original Formula IR as supporting context for the specialized realizer.
+
+Example:
+
+```bash
+PYTHONPATH=src:. python -m semantik_architect.adapters.inbound.cli.main \
+  --runtime-root runtime \
+  project-math examples/mathkristal_euler_formula.json \
+  --language fr --mode PURE
+```
+
+`PURE` targets the unique/verbose MathCore-style realization. `NATURAL` allows an admitted Informath runtime to request controlled variations. SemantiK never upgrades either rendering to mathematical truth.
+
+See:
+
+- [`docs/reference/MATHKRISTAL_FORMULA_IR_PROJECTION.md`](docs/reference/MATHKRISTAL_FORMULA_IR_PROJECTION.md)
+- [`docs/reference/INFORMATH_MATH_REALIZATION.md`](docs/reference/INFORMATH_MATH_REALIZATION.md)
+- [`profiles/math-pure-1/`](profiles/math-pure-1/)
+
 ## Kristal v6 integration
 
-SemantiK Architect does **not** treat raw `kristal_state` as a communication request and does not infer what should be said from valuation magnitude, record role, or actionability.
+`KristalV6Acl` remains unchanged in authority: raw `kristal_state` is never interpreted as a communication request. Upstream selection is explicit, all selected assertions remain traceable through `source_refs`, and valuations/actionability stay supporting context rather than becoming communication obligations.
 
-The adapter `KristalV6Acl` accepts `semantik.kristal-v6.communication-projection/1.0`:
+MathKristal Formula IR can also be wrapped in the existing Kristal v6 communication projection when the corresponding proposition/assertion is present in an authoritative v6 state.
 
-- pins Kristal Standard `6.0.0`;
-- references one `kristal_state`;
-- explicitly selects the assertions to communicate;
-- requires every selected assertion to remain traceable through `source_refs` in the mapped canonical request;
-- preserves `record_role`, `valuations`, `applicability`, and `actionability` as supporting context;
-- never creates communication obligations from `actionability = automatic` or a high valuation.
+## Lexical and grammar authorities
 
-This keeps authority clear: Kristal owns its knowledge/state artifact, the upstream owner/Da’at owns the mapping decision, and SemantiK Architect owns articulation only.
+The established authority split remains:
 
-See [`docs/reference/KRISTAL_V6_COMMUNICATION_PROJECTION.md`](docs/reference/KRISTAL_V6_COMMUNICATION_PROJECTION.md).
-
-## Other 1.1.x capabilities retained
-
-- reusable review-only multilingual `CandidateMatrixConformance`;
-- explicit lexical planning metadata and deterministic lexical-source precedence;
-- local Wikidata Lexeme support;
-- immutable RuntimeSet/capability/conformance model;
-- strict SA↔GF bridge and fail-closed realization;
-- offline canonical runtime path.
+```text
+Wikidata / Wikidata Lexeme → generic lexical knowledge
+Domain/project terminology → explicit overrides
+Informath symbol registry → formal-math ↔ GF concept bindings
+GF/RGL → morphology, syntax, word order, agreement, final realization
+SemantiK Architect → communication planning and articulation only
+```
 
 ## Validation
-
-Run:
 
 ```bash
 PYTHONPATH=src:. python tools/validate_repository.py
 ```
 
-The repository validator compiles sources, executes pytest, and validates all declared JSON schemas.
+Current snapshot validation: **58 tests pass; 16 JSON Schemas validate**.
 
 ## Fail-closed invariant
 
-Canonical rendering has **no hidden fallback**. Missing runtime/language capability, unmappable semantics, invalid lexical binding or GF failure remains an explicit error rather than silently changing language or meaning.
+Missing Formula IR structure, unmapped math symbols, unavailable Informath, unsupported language, invalid RuntimeSet identity, lexical gaps, or GF/Informath failures are explicit errors. SemantiK Architect does not silently substitute prose templates or change mathematical meaning.

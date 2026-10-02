@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:semantik-architect:schema:mathkristal-formula-projection:1.0",
+  "title": "SemantiK Architect MathKristal Formula IR Communication Projection v1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract", "formula_ir", "mode"],
+  "properties": {
+    "contract": {"const": "semantik.mathkristal-formula-ir.communication-projection/1.0"},
+    "formula_ir": {"type": "object"},
+    "selected_ref": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:.+$"},
+    "mode": {"enum": ["PURE", "NATURAL"]},
+    "request_id": {"type": "string", "minLength": 1}
+  }
+}

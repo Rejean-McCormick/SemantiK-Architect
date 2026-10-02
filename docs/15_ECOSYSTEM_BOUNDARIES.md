@@ -73,3 +73,7 @@ SA MUST NOT patch the language after this boundary. A failing Albanian construct
 GF Observatory is evidence/observation infrastructure, not a runtime grammar authority. The immutable released artifact + capability/conformance manifest is what SA executes.
 
 The SemantiK Architect repository MUST NOT carry grammar-development `.gf` sources. Candidate/released PGF artifacts may be referenced for conformance/runtime purposes, but grammar source authority remains GF/Wordbench.
+
+## MathKristal / Informath boundary
+
+MathKristal owns mathematical identity, Formula IR and mathematical epistemic state. SemantiK owns articulation only. Informath owns the MathCore/Informath mathematical language mapping and GF-backed multilingual realization. Wikidata/Wikidata Lexeme may provide lexical alignments but does not become the mathematical truth authority.

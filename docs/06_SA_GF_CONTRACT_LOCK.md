@@ -98,3 +98,18 @@ GF realizes linguistic units. List numbering, Markdown bullets, UI cards and oth
 The executable v1 adapter format is defined in `reference/GF_BRIDGE_SPEC.md` and schema `schemas/gf_bridge_spec.schema.json`. A successful bridge variant must consume every semantic lexical slot and every communicatively relevant feature of the `RealizationUnit`; unused semantic inputs are a contract failure, not a warning.
 
 The v1 operation registry includes non-factual `discourse.greeting` and `discourse.closing` operations for required bounded framing. They carry no domain claim and do not discharge business obligations.
+
+## Mathematical realization extension (ADR-0014)
+
+`math.informalize_formula` is an admitted additive operation in the SemantiK operation registry, but its canonical backend is **Informath**, not the generic SA↔GF bridge specification. Informath owns the MathCore/Informath abstract syntax and delegates final multilingual grammar to GF/RGL.
+
+The SemantiK-side contract is therefore limited to:
+
+- validated Formula IR supporting context;
+- explicit mathematical articulation mode (`PURE` or `NATURAL`);
+- deterministic Formula IR → formal projection;
+- a versioned symbol registry;
+- a pinned Informath runtime identity;
+- fail-closed realization and conformance evidence.
+
+This exception does not authorize arbitrary alternate grammar engines. It is a domain-specialized GF-backed bridge accepted by ADR-0014.

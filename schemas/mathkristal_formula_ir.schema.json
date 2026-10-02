@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mathkristal:schema:formula-ir:1.0.0",
+  "title": "MathKristal Formula IR 1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract", "version", "representation_ref", "expression_ref", "closure", "root", "nodes"],
+  "properties": {
+    "contract": {"const": "mathkristal.formula-ir"},
+    "version": {"const": "1.0.0"},
+    "representation_ref": {"const": "urn:mathkristal:representation:ast"},
+    "expression_ref": {"$ref": "#/$defs/ref"},
+    "proposition_ref": {"$ref": "#/$defs/ref"},
+    "formal_context_ref": {"$ref": "#/$defs/ref"},
+    "closure": {"enum": ["closed", "open"]},
+    "root": {"$ref": "#/$defs/nid"},
+    "nodes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/node"}}
+  },
+  "$defs": {
+    "ref": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:.+$"},
+    "nid": {"type": "string", "pattern": "^n:[A-Za-z0-9_.-]+$"},
+    "args": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nid"}},
+    "node": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind", "ref"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "referent"}, "ref": {"$ref": "#/$defs/ref"}}},
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "variable"}, "domain_ref": {"$ref": "#/$defs/ref"}, "type_node_id": {"$ref": "#/$defs/nid"}}},
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind", "literal_type", "value"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "literal"}, "literal_type": {"enum": ["integer", "rational", "decimal", "string", "boolean"]}, "value": {}}},
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind", "function_ref", "arguments"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "apply"}, "function_ref": {"$ref": "#/$defs/ref"}, "arguments": {"$ref": "#/$defs/args"}}},
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind", "operator_ref", "arguments"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "operation"}, "operator_ref": {"$ref": "#/$defs/ref"}, "arguments": {"$ref": "#/$defs/args"}}},
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind", "relation_ref", "arguments"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "relation"}, "relation_ref": {"$ref": "#/$defs/ref"}, "arguments": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/nid"}}}},
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind", "quantifier", "variable_id", "body_id"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "quantifier"}, "quantifier": {"enum": ["forall", "exists"]}, "variable_id": {"$ref": "#/$defs/nid"}, "body_id": {"$ref": "#/$defs/nid"}}},
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind", "variable_ids", "body_id"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "lambda"}, "variable_ids": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nid"}}, "body_id": {"$ref": "#/$defs/nid"}}},
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind", "items"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "tuple"}, "items": {"type": "array", "items": {"$ref": "#/$defs/nid"}}}},
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind", "rows"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "matrix"}, "rows": {"type": "array", "items": {"type": "array", "items": {"$ref": "#/$defs/nid"}}}}},
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind", "cases"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "piecewise"}, "cases": {"type": "array", "items": {"type": "object", "required": ["value_id", "condition_id"], "additionalProperties": false, "properties": {"value_id": {"$ref": "#/$defs/nid"}, "condition_id": {"$ref": "#/$defs/nid"}}}}, "otherwise_id": {"$ref": "#/$defs/nid"}}},
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind", "variable_id", "predicate_id"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "set_builder"}, "variable_id": {"$ref": "#/$defs/nid"}, "predicate_id": {"$ref": "#/$defs/nid"}, "expression_id": {"$ref": "#/$defs/nid"}}},
+        {"type": "object", "additionalProperties": false, "required": ["id", "kind", "base_id", "index_ids"], "properties": {"id": {"$ref": "#/$defs/nid"}, "kind": {"const": "indexed_family"}, "base_id": {"$ref": "#/$defs/nid"}, "index_ids": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nid"}}}}
+      ]
+    }
+  }
+}

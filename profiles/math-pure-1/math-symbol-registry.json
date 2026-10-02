@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "registry_id": "mathkristal-euler-informath-1",
+  "source_refs": ["MathKristal Formula IR 1.0.0", "Informath symbol-table contract"],
+  "symbols": {
+    "urn:mathkristal:number-system:C": {"dedukti_id":"Complex", "dedukti_declaration":"Complex : Set", "gf_mapping":"\"complex number\""},
+    "urn:mathkristal:number:imaginary-unit": {"dedukti_id":"imaginary_unit", "dedukti_declaration":"imaginary_unit : Elem Complex", "gf_mapping":"\"imaginary unit\""},
+    "urn:mathkristal:operation:multiplication": {"dedukti_id":"times_complex", "dedukti_declaration":"times_complex : Elem Complex -> Elem Complex -> Elem Complex", "gf_mapping":"\"the product of #1 and #2\"", "openmath_ref":"arith1.times"},
+    "urn:mathkristal:operation:addition": {"dedukti_id":"plus_complex", "dedukti_declaration":"plus_complex : Elem Complex -> Elem Complex -> Elem Complex", "gf_mapping":"\"the sum of #1 and #2\"", "openmath_ref":"arith1.plus"},
+    "urn:mathkristal:function:complex-exponential": {"dedukti_id":"complex_exp", "dedukti_declaration":"complex_exp : Elem Complex -> Elem Complex", "gf_mapping":"\"the exponential of #1\""},
+    "urn:mathkristal:function:cosine": {"dedukti_id":"cosine", "dedukti_declaration":"cosine : Elem Complex -> Elem Complex", "gf_mapping":"\"the cosine of #1\""},
+    "urn:mathkristal:function:sine": {"dedukti_id":"sine", "dedukti_declaration":"sine : Elem Complex -> Elem Complex", "gf_mapping":"\"the sine of #1\""},
+    "urn:mathkristal:relation:equality": {"dedukti_id":"EqComplex", "dedukti_declaration":"EqComplex : Elem Complex -> Elem Complex -> Prop", "gf_mapping":"\"#1 is equal to #2\""}
+  }
+}

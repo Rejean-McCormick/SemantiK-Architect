@@ -39,6 +39,9 @@ class GenericLanguagePlanner:
     runtime metadata/bridge grammar or an explicitly injected planner strategy.
     """
     def plan(self, request:CommunicationRequest, communication_plan:CommunicationPlan, lexical_context:LexicalPlanningContext)->LanguagePlan:
+        if request.capability_profile in {'math-pure-1','math-natural-1'}:
+            from .math import plan
+            return plan(request, communication_plan)
         if request.capability_profile == 'konstellation-explorer-1':
             from .konstellation import plan
             return plan(request, communication_plan)

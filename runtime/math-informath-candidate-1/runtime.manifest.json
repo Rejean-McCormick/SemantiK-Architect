@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "runtime_set_id": "math-informath-candidate-1",
+  "created_at": "2026-10-02T13:19:00Z",
+  "sa_version_range": ">=1.0,<2.0",
+  "sa_gf_contract_version": "1.0",
+  "gf_version": "Informath-managed",
+  "rgl_identity": "Informath 0.4 candidate",
+  "artifacts": [
+    {
+      "artifact_type": "other",
+      "artifact_id": "capability-profile-math-pure-1",
+      "sha256": "ef3b47211576b8484b6b742f472aaca5f5dd0eb4ea0e8ce59c49a6e2d94e9f6a",
+      "path": "profile.json",
+      "provenance_ref": "profile:math-pure-1"
+    },
+    {
+      "artifact_type": "other",
+      "artifact_id": "informath-config-0.4",
+      "sha256": "23330286316cc4407ad275a016be2aa37fe3fe928e3c12f952ceb6aee3f6e13a",
+      "path": "informath.config.json",
+      "provenance_ref": "profile:math-pure-1"
+    },
+    {
+      "artifact_type": "other",
+      "artifact_id": "math-symbol-registry-euler-1",
+      "sha256": "82d5dc8d786983a28ff1d5d2d629f8273d99ef956726c60beedbceb8cc753723",
+      "path": "math-symbol-registry.json",
+      "provenance_ref": "profile:math-pure-1"
+    },
+    {
+      "artifact_type": "other",
+      "artifact_id": "capability-profile-math-natural-1",
+      "sha256": "65bd5031557d79ffbc419e32d0503d53fe2b8194482e4ce250cf6088d3085ec6",
+      "path": "profile-natural.json",
+      "provenance_ref": "profile:math-natural-1"
+    }
+  ],
+  "capability_manifest_ref": "capabilities.json",
+  "conformance_evidence_refs": [],
+  "status": "CANDIDATE",
+  "capability_manifest_sha256": "6d14a47bbdd859554094ff34aec15926a7e9ce6f01447ca9bdbe1ffa455af03e",
+  "conformance_evidence_sha256": {},
+  "lexical_policy": {
+    "policy_version": "1.0",
+    "precedence": [
+      "request_override",
+      "domain",
+      "project",
+      "wikidata",
+      "gf_generic"
+    ],
+    "default_source_kind": "project",
+    "equal_precedence_conflict": "fail"
+  }
+}

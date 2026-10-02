@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:semantik-architect:schema:math-symbol-registry:1.0",
+  "title": "SemantiK Math Symbol Registry v1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "registry_id", "symbols"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "registry_id": {"type": "string", "minLength": 1},
+    "source_refs": {"type": "array", "items": {"type": "string"}},
+    "symbols": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["dedukti_id", "dedukti_declaration", "gf_mapping"],
+        "properties": {
+          "dedukti_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_]*$"},
+          "dedukti_declaration": {"type": "string", "minLength": 1},
+          "gf_mapping": {"type": "string", "minLength": 1},
+          "wikidata_item_ref": {"type": "string"},
+          "wikidata_lexeme_ref": {"type": "string"},
+          "openmath_ref": {"type": "string"},
+          "mmt_ref": {"type": "string"}
+        }
+      }
+    }
+  }
+}

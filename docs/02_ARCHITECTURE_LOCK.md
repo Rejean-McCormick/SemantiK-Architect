@@ -149,3 +149,18 @@ A compliant implementation MUST satisfy all of the following:
 8. no duplicated general-purpose grammar engine;
 9. no per-language branches in core;
 10. changes to locked boundaries require ADR-governed change.
+
+## 1.3 mathematical realization specialization
+
+ADR-0014 adds one specialized realization backend without changing the application pipeline. `RealizerPort` remains the only realization boundary. Generic language operations are realized by the versioned SA↔GF bridge; `math.informalize_formula` is realized by the versioned Informath adapter, which delegates MathCore/Informath grammar to GF/RGL.
+
+```text
+LanguagePlan
+    |
+    v
+RealizerPort
+    |-- generic operations --> SA↔GF bridge --> PGF/GF
+    `-- math.informalize_formula --> Informath --> MathCore/Informath --> GF/RGL
+```
+
+The math adapter MUST NOT contain language-specific morphology, word-order rules, or a hidden prose-template fallback. Missing Informath capability fails closed.

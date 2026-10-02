@@ -1,0 +1,89 @@
+{
+  "contract": "mathkristal.formula-ir",
+  "version": "1.0.0",
+  "representation_ref": "urn:mathkristal:representation:ast",
+  "expression_ref": "urn:mathkristal:expression:euler-formula",
+  "proposition_ref": "urn:mathkristal:proposition:euler-formula",
+  "formal_context_ref": "urn:mathkristal:context:euler-power-series",
+  "closure": "closed",
+  "root": "n:forall-z",
+  "nodes": [
+    {
+      "id": "n:z",
+      "kind": "variable",
+      "domain_ref": "urn:mathkristal:number-system:C"
+    },
+    {
+      "id": "n:i",
+      "kind": "referent",
+      "ref": "urn:mathkristal:number:imaginary-unit"
+    },
+    {
+      "id": "n:iz",
+      "kind": "operation",
+      "operator_ref": "urn:mathkristal:operation:multiplication",
+      "arguments": [
+        "n:i",
+        "n:z"
+      ]
+    },
+    {
+      "id": "n:exp-iz",
+      "kind": "apply",
+      "function_ref": "urn:mathkristal:function:complex-exponential",
+      "arguments": [
+        "n:iz"
+      ]
+    },
+    {
+      "id": "n:cos-z",
+      "kind": "apply",
+      "function_ref": "urn:mathkristal:function:cosine",
+      "arguments": [
+        "n:z"
+      ]
+    },
+    {
+      "id": "n:sin-z",
+      "kind": "apply",
+      "function_ref": "urn:mathkristal:function:sine",
+      "arguments": [
+        "n:z"
+      ]
+    },
+    {
+      "id": "n:i-sin-z",
+      "kind": "operation",
+      "operator_ref": "urn:mathkristal:operation:multiplication",
+      "arguments": [
+        "n:i",
+        "n:sin-z"
+      ]
+    },
+    {
+      "id": "n:rhs",
+      "kind": "operation",
+      "operator_ref": "urn:mathkristal:operation:addition",
+      "arguments": [
+        "n:cos-z",
+        "n:i-sin-z"
+      ]
+    },
+    {
+      "id": "n:eq",
+      "kind": "relation",
+      "relation_ref": "urn:mathkristal:relation:equality",
+      "arguments": [
+        "n:exp-iz",
+        "n:rhs"
+      ]
+    },
+    {
+      "id": "n:forall-z",
+      "kind": "quantifier",
+      "quantifier": "forall",
+      "variable_id": "n:z",
+      "body_id": "n:eq"
+    }
+  ]
+}

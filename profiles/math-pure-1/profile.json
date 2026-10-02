@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "math-pure",
+  "profile_version": 1,
+  "required_operations": ["math.informalize_formula"],
+  "required_features": ["math_mode", "math_formula_ir"],
+  "required_block_kinds": ["utterance"],
+  "register_requirements": ["mathematical"],
+  "test_suite_ref": "suite:math-pure-informath-1",
+  "notes": "Candidate MathKristal Formula IR -> Informath/MathCore articulation profile. No release is implied until a pinned Informath runtime passes conformance."
+}

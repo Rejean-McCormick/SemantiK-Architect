@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "informath_version": "0.4",
+  "executable": "RunInformath",
+  "language_codes": {"en":"Eng","fr":"Fre","de":"Ger","sv":"Swe"},
+  "base_args": [],
+  "pure_args": [],
+  "natural_args": ["-variations", "-synonyms=1", "-symbolics=0"],
+  "timeout_seconds": 20
+}

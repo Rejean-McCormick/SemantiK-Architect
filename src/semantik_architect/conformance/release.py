@@ -9,15 +9,19 @@ from ..application.ports.runtime_catalog import RuntimeCatalogPort
 from ..domain.language.operations import V1_OPERATION_IDS
 from ..adapters.lexical.local_lexicon import RuntimeJsonLexiconAdapter
 
+_MATH_OPERATIONS = frozenset({"math.informalize_formula"})
+
 
 class RuntimeReleaseValidator:
-    """Cross-validates a RuntimeSet beyond simple artifact hashing."""
+    """Cross-validates a RuntimeSet beyond simple artifact hashing.
 
-    def __init__(
-        self,
-        catalog: RuntimeCatalogPort,
-        capabilities: ManifestCapabilityAdapter,
-    ) -> None:
+    Generic SA operations use the SA↔GF bridge. Mathematical articulation may
+    instead use the ADR-0014 Informath backend. Backend requirements are derived
+    from released capability profiles; candidate-only artifacts can therefore be
+    integrity-valid without pretending to be release-ready.
+    """
+
+    def __init__(self, catalog: RuntimeCatalogPort, capabilities: ManifestCapabilityAdapter) -> None:
         self.catalog = catalog
         self.capabilities = capabilities
 
@@ -28,52 +32,29 @@ class RuntimeReleaseValidator:
             raise ValueError(f"Expected JSON object: {path}")
         return data
 
+    @staticmethod
+    def _artifacts(descriptor, prefix: str):
+        return [a for a in descriptor.artifacts if a.artifact_type == "other" and a.artifact_id.startswith(prefix)]
+
     def validate(self, runtime_set_id: str) -> dict[str, Any]:
         base = self.catalog.validate(runtime_set_id)
         errors = list(base.get("errors", []))
-        descriptor = next(
-            (item for item in self.catalog.list_runtime_sets() if item.runtime_set_id == runtime_set_id),
-            None,
-        )
+        descriptor = next((item for item in self.catalog.list_runtime_sets() if item.runtime_set_id == runtime_set_id), None)
         if descriptor is None:
             return {"runtime_set_id": runtime_set_id, "valid": False, "errors": errors or ["runtime_set_not_found"]}
-
-        grammar = descriptor.artifacts_of_type("grammar")
-        if len(grammar) != 1:
-            errors.append(f"grammar_artifact_count:{len(grammar)}")
 
         try:
             RuntimeJsonLexiconAdapter().validate_runtime(descriptor)
         except Exception as exc:
             errors.append(f"lexical_runtime_invalid:{exc}")
 
-        bridge_artifacts = [
-            artifact
-            for artifact in descriptor.artifacts
-            if artifact.artifact_type == "other"
-            and artifact.artifact_id.startswith("sa-gf-bridge")
-        ]
-        bridge_operations: set[str] = set()
-        if len(bridge_artifacts) != 1 or bridge_artifacts[0].path is None:
-            errors.append(f"bridge_artifact_count:{len(bridge_artifacts)}")
-        else:
-            try:
-                bridge = self._load_json(bridge_artifacts[0].path)
-                if str(bridge.get("contract_version")) != descriptor.sa_gf_contract_version:
-                    errors.append("bridge_contract_version_mismatch")
-                bridge_operations = set((bridge.get("operations") or {}).keys())
-                unknown = sorted(bridge_operations - V1_OPERATION_IDS)
-                if unknown:
-                    errors.append(f"unknown_bridge_operations:{','.join(unknown)}")
-            except Exception as exc:
-                errors.append(f"invalid_bridge_spec:{exc}")
-
-        evidence_refs = set(descriptor.manifest.get("conformance_evidence_refs", []))
         languages = descriptor.capability_manifest.get("languages", {})
         if not isinstance(languages, dict):
             errors.append("invalid_capability_languages")
             languages = {}
 
+        released_profiles: list[tuple[str, str, Any, str]] = []
+        evidence_refs = set(descriptor.manifest.get("conformance_evidence_refs", []))
         for language, language_row in languages.items():
             if not isinstance(language_row, dict) or language_row.get("status") != "RELEASED":
                 continue
@@ -94,14 +75,61 @@ class RuntimeReleaseValidator:
                 if profile is None:
                     errors.append(f"profile_artifact_missing:{language}:{identity}")
                     continue
-                missing_ops = sorted(set(profile.required_operations) - bridge_operations)
-                if missing_ops:
-                    errors.append(
-                        f"profile_bridge_operations_missing:{language}:{identity}:{','.join(missing_ops)}"
-                    )
+                released_profiles.append((str(language), identity, profile, evidence_ref))
 
-        return {
-            "runtime_set_id": runtime_set_id,
-            "valid": not errors,
-            "errors": errors,
-        }
+        generic_required = any(set(profile.required_operations) - _MATH_OPERATIONS for _, _, profile, _ in released_profiles)
+        math_required = any(set(profile.required_operations) & _MATH_OPERATIONS for _, _, profile, _ in released_profiles)
+
+        bridge_operations: set[str] = set()
+        if generic_required:
+            grammar = descriptor.artifacts_of_type("grammar")
+            if len(grammar) != 1:
+                errors.append(f"grammar_artifact_count:{len(grammar)}")
+            bridge_artifacts = self._artifacts(descriptor, "sa-gf-bridge")
+            if len(bridge_artifacts) != 1 or bridge_artifacts[0].path is None:
+                errors.append(f"bridge_artifact_count:{len(bridge_artifacts)}")
+            else:
+                try:
+                    bridge = self._load_json(bridge_artifacts[0].path)
+                    if str(bridge.get("contract_version")) != descriptor.sa_gf_contract_version:
+                        errors.append("bridge_contract_version_mismatch")
+                    bridge_operations = set((bridge.get("operations") or {}).keys())
+                    unknown = sorted(bridge_operations - V1_OPERATION_IDS)
+                    if unknown:
+                        errors.append(f"unknown_bridge_operations:{','.join(unknown)}")
+                except Exception as exc:
+                    errors.append(f"invalid_bridge_spec:{exc}")
+
+        if math_required:
+            configs = self._artifacts(descriptor, "informath-config")
+            registries = self._artifacts(descriptor, "math-symbol-registry")
+            if len(configs) != 1 or configs[0].path is None:
+                errors.append(f"informath_config_artifact_count:{len(configs)}")
+            else:
+                try:
+                    config = self._load_json(configs[0].path)
+                    if config.get("schema_version") != "1.0" or not config.get("informath_version"):
+                        errors.append("informath_config_invalid")
+                except Exception as exc:
+                    errors.append(f"informath_config_invalid:{exc}")
+            if len(registries) != 1 or registries[0].path is None:
+                errors.append(f"math_symbol_registry_artifact_count:{len(registries)}")
+            else:
+                try:
+                    registry = self._load_json(registries[0].path)
+                    if registry.get("schema_version") != "1.0" or not isinstance(registry.get("symbols"), dict):
+                        errors.append("math_symbol_registry_invalid")
+                except Exception as exc:
+                    errors.append(f"math_symbol_registry_invalid:{exc}")
+
+        for language, identity, profile, _ in released_profiles:
+            required = set(profile.required_operations)
+            generic_ops = required - _MATH_OPERATIONS
+            math_ops = required & _MATH_OPERATIONS
+            missing_generic = sorted(generic_ops - bridge_operations)
+            if missing_generic:
+                errors.append(f"profile_bridge_operations_missing:{language}:{identity}:{','.join(missing_generic)}")
+            if math_ops and not math_required:
+                errors.append(f"profile_math_backend_missing:{language}:{identity}")
+
+        return {"runtime_set_id": runtime_set_id, "valid": not errors, "errors": errors}

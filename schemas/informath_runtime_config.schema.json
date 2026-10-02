@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:semantik-architect:schema:informath-runtime-config:1.0",
+  "title": "Informath Runtime Config v1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "informath_version", "executable", "language_codes", "base_args", "pure_args", "natural_args"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "informath_version": {"type": "string", "minLength": 1},
+    "executable": {"type": "string", "minLength": 1},
+    "informath_root": {"type": "string"},
+    "language_codes": {"type": "object", "additionalProperties": {"type": "string", "minLength": 2}},
+    "base_args": {"type": "array", "items": {"type": "string"}},
+    "pure_args": {"type": "array", "items": {"type": "string"}},
+    "natural_args": {"type": "array", "items": {"type": "string"}},
+    "timeout_seconds": {"type": "number", "exclusiveMinimum": 0}
+  }
+}

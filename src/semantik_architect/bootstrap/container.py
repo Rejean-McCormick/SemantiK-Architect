@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from ..adapters.runtime.filesystem import FilesystemRuntimeCatalog, ManifestCapabilityAdapter
 from ..adapters.lexical.local_lexicon import RuntimeJsonLexiconAdapter
-from ..adapters.realization.gf import GfBridgeRealizer
+from ..adapters.realization.composite import CompositeRealizer
 from ..adapters.locale import BasicLocaleDataAdapter
 from ..observability import NullTelemetry
 from ..application.use_cases import RenderCommunication, ValidateRequest, ListCapabilities, ValidateRuntime, ExplainGeneration
@@ -24,7 +24,7 @@ def build_container(runtime_root:str|Path, *, sa_version:str="1.0.0", realizer=N
     capabilities=ManifestCapabilityAdapter()
     locale_data=BasicLocaleDataAdapter()
     lexicon=RuntimeJsonLexiconAdapter(locale_data=locale_data)
-    realizer=realizer or GfBridgeRealizer()
+    realizer=realizer or CompositeRealizer()
     return ApplicationContainer(
         render=RenderCommunication(runtime_catalog=catalog,capabilities=capabilities,lexical_knowledge=lexicon,lexical_binding=lexicon,realizer=realizer,sa_version=sa_version,telemetry=NullTelemetry()),
         validate_request=ValidateRequest(),

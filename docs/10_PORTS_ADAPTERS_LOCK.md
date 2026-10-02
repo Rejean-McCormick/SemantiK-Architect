@@ -77,3 +77,9 @@ ACLs may use upstream domain knowledge. The SA core must not.
 ## Network policy
 
 The canonical runtime path must function with network disabled when local artifacts are supplied. Optional network-backed adapters are explicit and must obey timeouts/retries/circuit-breaker policy.
+
+## MathKristal / Informath adapters
+
+`MathKristalFormulaAcl` is an ecosystem ACL. It terminates Formula IR at the boundary and maps it into `CommunicationRequest`.
+
+`InformathMathRealizer` implements `RealizerPort` for `math.informalize_formula`. `CompositeRealizer` performs explicit operation routing between the generic GF bridge and the Informath math bridge. Routing is determined only by planned operation identity; it is not a language fallback mechanism.

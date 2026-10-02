@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "capabilities:math-informath-candidate-1",
+  "runtime_set_id": "math-informath-candidate-1",
+  "languages": {
+    "en": {"status":"CANDIDATE","concrete":"InformathEng","profiles":[{"profile_id":"math-pure-1","status":"CANDIDATE","evidence_ref":"pending:informath-en"},{"profile_id":"math-natural-1","status":"CANDIDATE","evidence_ref":"pending:informath-en-natural"}]},
+    "fr": {"status":"CANDIDATE","concrete":"InformathFre","profiles":[{"profile_id":"math-pure-1","status":"CANDIDATE","evidence_ref":"pending:informath-fr"},{"profile_id":"math-natural-1","status":"CANDIDATE","evidence_ref":"pending:informath-fr-natural"}]},
+    "de": {"status":"CANDIDATE","concrete":"InformathGer","profiles":[{"profile_id":"math-pure-1","status":"CANDIDATE","evidence_ref":"pending:informath-de"},{"profile_id":"math-natural-1","status":"CANDIDATE","evidence_ref":"pending:informath-de-natural"}]},
+    "sv": {"status":"CANDIDATE","concrete":"InformathSwe","profiles":[{"profile_id":"math-pure-1","status":"CANDIDATE","evidence_ref":"pending:informath-sv"},{"profile_id":"math-natural-1","status":"CANDIDATE","evidence_ref":"pending:informath-sv-natural"}]}
+  }
+}

@@ -15,6 +15,8 @@ def main(argv:list[str]|None=None)->int:
     sub=p.add_subparsers(dest='command',required=True)
     for name in ('render','validate-request','explain'):
         sp=sub.add_parser(name); sp.add_argument('request',help='request JSON path or - for stdin')
+    mp=sub.add_parser('project-math'); mp.add_argument('formula',help='MathKristal projection or Formula IR JSON path'); mp.add_argument('--language',required=True); mp.add_argument('--locale'); mp.add_argument('--mode',choices=['PURE','NATURAL'],default='PURE'); mp.add_argument('--profile')
+    mr=sub.add_parser('render-math'); mr.add_argument('formula',help='MathKristal projection or Formula IR JSON path'); mr.add_argument('--language',required=True); mr.add_argument('--locale'); mr.add_argument('--mode',choices=['PURE','NATURAL'],default='PURE'); mr.add_argument('--profile')
     sub.add_parser('capabilities')
     vr=sub.add_parser('validate-runtime'); vr.add_argument('runtime_set_id')
     cf=sub.add_parser('conformance'); cf.add_argument('suite', nargs='?'); cf.add_argument('--suite', dest='suite_option'); cf.add_argument('--runtime-set-id'); cf.add_argument('--output'); cf.add_argument('--candidate-dir')
@@ -24,6 +26,12 @@ def main(argv:list[str]|None=None)->int:
         if args.command=='render': out=app.render(_load(args.request))
         elif args.command=='validate-request': out=app.validate_request(_load(args.request))
         elif args.command=='explain': out=app.explain(_load(args.request))
+        elif args.command=='project-math':
+            raw=_load(args.formula); payload=raw if raw.get('contract')== 'semantik.mathkristal-formula-ir.communication-projection/1.0' else {'contract':'semantik.mathkristal-formula-ir.communication-projection/1.0','formula_ir':raw}
+            out=app.project_mathkristal(payload,target_language=args.language,target_locale=args.locale,mode=args.mode,capability_profile=args.profile)
+        elif args.command=='render-math':
+            raw=_load(args.formula); payload=raw if raw.get('contract')== 'semantik.mathkristal-formula-ir.communication-projection/1.0' else {'contract':'semantik.mathkristal-formula-ir.communication-projection/1.0','formula_ir':raw}
+            out=app.render_mathkristal(payload,target_language=args.language,target_locale=args.locale,mode=args.mode,capability_profile=args.profile)
         elif args.command=='capabilities': out=app.capabilities()
         elif args.command=='validate-runtime': out=app.validate_runtime(args.runtime_set_id)
         elif args.command=='conformance':
