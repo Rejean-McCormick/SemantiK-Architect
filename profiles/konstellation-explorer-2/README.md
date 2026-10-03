@@ -14,6 +14,4 @@ Profile 2 replaces the profile-1 canonical-JSON display strategy with SA-native 
 
 `konstellation-explorer-1` remains immutable and compatible for canonical evidence display. This profile is additive and must be released as a distinct RuntimeSet, conventionally `konstellation-fr-2`.
 
-The supplied GF grammar is deliberately conservative: it structures French evidence presentation without inventing propositions beyond the request. Richer RGL realization can evolve behind the same SA operation/lexical contracts.
-
-Les sources GF/RGL sont maintenues hors de SemantiK Architect dans GF/Wordbench. Ce dossier ne porte que les contrats/artefacts nécessaires à la conformance SA.
+The corresponding GF grammar is maintained and released from GF/Wordbench. This profile carries only SA-side planning, bridge, lexical and conformance artifacts; richer RGL realization can evolve behind the same contracts without moving grammar-source authority into SA.

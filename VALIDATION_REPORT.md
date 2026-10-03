@@ -1,29 +1,42 @@
-# Validation Report — SemantiK Architect 1.3.0-alpha.1
+# Validation Report — SemantiK Architect 1.3.0-alpha.2
 
-Date: 2026-10-02
+Date: 2026-10-03
 
 ## Repository validation
 
 - Python compilation: **PASS**
-- pytest: **58 passed**
+- pytest: **60 passed**
 - JSON Schema meta-validation: **16 schemas PASS**
-- MathKristal Euler Formula IR schema: **PASS**
-- MathKristal communication projection: **PASS**
-- Math planner `math.informalize_formula`: **PASS**
-- Formula IR → Dedukti structural encoding: **PASS**
-- Informath adapter command/language/symbol-table assembly with injected runner: **PASS**
-- existing Kristal v6 ACL tests: **PASS**
-- existing lexical/GF/conformance/runtime tests: **PASS**
+- portable Kristal `kristal_state/6.0` ACL traceability/non-inference: **PASS**
+- Kristal/Kristall design baseline `7.0.0-draft.3.2`: **PASS**
+- MathKristal / Informath schema and projection tests: **PASS**
+- architecture boundary test against EncyK/Kompiler/Médiathèque/IK runtime imports: **PASS**
+- grammar-development `.gf` sources in SA repository: **none**
+- bundled deployed RuntimeSets: **none** (intentional; source control ships no language runtime by default)
 
-## Candidate runtime
+## LevelUpDiag 2.3.0
 
-`math-informath-candidate-1`: **integrity-valid CANDIDATE**.
+`standard`: **WARN, no FAIL**.
 
-It is intentionally not `RELEASED`: this snapshot does not bundle a production Informath binary/PGF nor language conformance evidence. Release remains fail-closed.
+- S10 Architecture Lock: PASS
+- S20 Python Architecture Integrity: PASS
+- S30 Contract & Schema Integrity: PASS
+- S40 RuntimeSet & Capability Model: WARN (no RuntimeSet deployed)
+- S50 SA↔GF Contract: PASS
+- S60 Faithfulness & Planning Invariants: PASS
+- S70 Public SDK / CLI / HTTP Surface: PASS
+- S80 Canonical Validation & Conformance: WARN only for absent real-language release inputs
 
-## Commands
+`deep`: **WARN, no FAIL**. S90, S100, S110 and S120 all PASS.
 
-```bash
-PYTHONPATH=src:. python tools/validate_repository.py
-PYTHONPATH=src:. python -m semantik_architect.adapters.inbound.cli.main --runtime-root runtime validate-runtime math-informath-candidate-1
-```
+## Cleanup performed
+
+- removed stale Konstellation RuntimeSet directories marked RELEASED without their pinned `grammar.pgf`;
+- removed stale `runtime/activation.json` that referenced those incomplete sets;
+- removed grammar-development `.gf` sources and an old PGF backup from SA profiles; grammar authority remains GF/Wordbench;
+- retained only the portable v6 communication projection while documenting Kristall v7 as the additive upstream semantic authority;
+- normalized DaaT (`daat`) and Kompiler/source-authority boundaries without introducing runtime dependencies.
+
+## Expected warnings
+
+A clean source snapshot contains no production PGF/RuntimeSet. Real-language acceptance therefore remains unavailable until immutable runtime artifacts are released externally and mounted/deployed through SemantiK Runtime Orchestrator.

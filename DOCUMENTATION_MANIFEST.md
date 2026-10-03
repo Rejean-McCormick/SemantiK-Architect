@@ -47,6 +47,7 @@ A code implementation that conflicts with a lock is wrong unless the lock has fi
 - `docs/22_IMPLEMENTATION_STATUS.md`
 - `docs/reference/*`
 - `docs/reference/KRISTAL_V6_COMMUNICATION_PROJECTION.md`
+- `docs/reference/KRISTAL_KRISTALL_V7_ALIGNMENT.md`
 - `docs/reference/MATHKRISTAL_FORMULA_IR_PROJECTION.md`
 - `docs/reference/INFORMATH_MATH_REALIZATION.md`
 - `docs/adr/*`

@@ -46,3 +46,9 @@ def test_rejects_unknown_actionability_mode():
     data["selected_assertions"][0]["actionability"] = {"mode":"execute_now"}
     with pytest.raises(KristalV6ProjectionError, match="Unsupported actionability"):
         KristalV6Acl().map_request(data, target_language="fr", capability_profile="orgo-operational-1")
+
+
+def test_kristal_portable_contract_and_v7_design_baseline_are_explicit():
+    assert KristalV6Acl.STANDARD == "6.0.0"
+    assert KristalV6Acl.PORTABLE_CONTRACT == "kristal_state/6.0"
+    assert KristalV6Acl.KRISTALL_DESIGN_BASELINE == "7.0.0-draft.3.2"

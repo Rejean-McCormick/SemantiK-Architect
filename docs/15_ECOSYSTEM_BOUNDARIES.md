@@ -4,17 +4,33 @@ Status: **normative boundary guidance**
 
 ## Authority principle
 
-Integration does not transfer ownership. SA consumes semantic projections and returns communication projections.
+Integration does not transfer ownership. SemantiK Architect consumes explicit semantic/communication projections and returns communication projections. It is an articulation authority, not a source store, ingestion engine, context-ranking system, knowledge ledger, workflow authority or execution engine.
 
-## Kristal v6
+## EncyK
 
-Kristal owns `kristal_state`, referent/assertion identity, typed `valuations[]`, `coordinates`, `applicability`, provenance/evidence, validation/recognition, `record_role`, `actionability`, lineage/conflict/supersession and artifact identity. SA may verbalize explicitly selected distinctions but does not create a competing knowledge ledger.
+EncyK owns source discovery/acquisition/extraction and source-evidence handoff. SA does not crawl, acquire or parse arbitrary source prose as its canonical input.
 
-The boundary is an explicit `semantik.kristal-v6.communication-projection/1.0`, not raw state ingestion. `record_role`, valuations and actionability remain supporting context unless an upstream mapping explicitly makes the underlying assertion a communication obligation. `actionability = automatic` is not an instruction to SA and never becomes a directive by itself.
+## Médiathèque kOA
 
-## SenTient
+Médiathèque owns persistent source identity, snapshots, physical representations, integrity facts, rights/access and owner-preserving source references. SA may receive source references through upstream projections but never becomes the canonical source store.
 
-SenTient owns semantic ingestion/resolution/normalization of raw material in the canonical ecosystem flow. SA does not parse arbitrary source prose as its canonical input.
+## Interaction Kernel / DaaT
+
+Interaction Kernel transports admitted interactions and artifact references. **DaaT** (`daat`) is the optional anti-corruption/admission and explicit contract-mapping boundary in front of Kristal/Kristall. Neither IK nor DaaT decides what SA must communicate, mints Kristall semantic identity for SA, or owns source bytes. DaaT may carry a mapped contract; semantic/content selection remains with the appropriate upstream authority.
+
+## Kristal / Kristall
+
+The stable portable SA articulation boundary remains `kristal_state/6.0` (Kristal Standard `6.0.0`). The current ecosystem design baseline is Kristal/Kristall `7.0.0-draft.3.2`, additive above portable v6.
+
+Kristal/Kristall owns knowledge-artifact identity, assertions, typed valuations, coordinates/applicability, provenance/evidence, recognition/validation, record roles, actionability, lineage/conflict/supersession, KQ/KP/KA/KS semantic identity, Mesh/axes/registries and crystallization. SA does not create a competing knowledge ledger.
+
+The SA boundary is the explicit `semantik.kristal-v6.communication-projection/1.0`, not raw state ingestion. `record_role`, valuations and actionability remain supporting context unless an upstream semantic/communication projection explicitly selects the underlying assertion and maps its communicative force. `actionability = automatic` is not an instruction to SA and never becomes a directive by itself.
+
+Kristall v7 may align/crystallize knowledge and emit or reference v6-compatible projections; the SA ACL still validates the same portable boundary.
+
+## Kompiler
+
+Kompiler is a read-only context compiler. It may query normalized knowledge outputs and assemble bounded context for a caller, but it does not become truth authority, source authority, semantic-identity authority or communication-obligation authority. If Kompiler-produced context accompanies a request, the explicit `CommunicationRequest.obligations` still determines what SA must communicate. Context budget/ranking is not permission to omit or invent obligations.
 
 ## Orgo
 
@@ -28,7 +44,7 @@ eThikos owns the structured question/argument/concept graph and interaction sema
 
 These systems own exchange/matching/community state. SA may generate system prompts, explanations, notices and semantic exchanges in participant languages.
 
-Free-form human text follows semantic ingestion/formalization before target-language re-realization if semantic translation is desired.
+Free-form human text follows upstream semantic formalization before target-language re-realization if semantic translation is desired.
 
 ## Wikidata/Wikimedia ecosystem
 
@@ -37,7 +53,7 @@ The broader ecosystem may use Wikidata identifiers, dumps, Lexemes and open-sour
 Rules:
 
 - QIDs/Lexeme IDs are valid external references, not the only identity system;
-- local mirrors are first-class sources and Wikidata Lexemes are the default generic lexical knowledge authority;
+- local mirrors are first-class lexical inputs and Wikidata Lexemes are the default generic lexical knowledge authority;
 - ZObjects/Ninai/Udiron/Wikifunctions types terminate at optional adapters;
 - reuse of good offline open-source components is preferred to needless rewriting;
 - the SA canonical model is not defined by Wikimedia protocols.
@@ -68,7 +84,7 @@ language repository / RGL work
 
 GF/RGL owns grammar and morphology; generic GF dictionaries are realization fallback rather than SA semantic authority.
 
-SA MUST NOT patch the language after this boundary. A failing Albanian construction is fixed in the Albanian/GF development source, rebuilt, reconformed and released as a new immutable artifact.
+SA MUST NOT patch the language after this boundary. A failing construction is fixed in the language/GF development source, rebuilt, reconformed and released as a new immutable artifact.
 
 GF Observatory is evidence/observation infrastructure, not a runtime grammar authority. The immutable released artifact + capability/conformance manifest is what SA executes.
 

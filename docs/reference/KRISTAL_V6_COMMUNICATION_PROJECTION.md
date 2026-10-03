@@ -3,7 +3,8 @@
 Status: **normative boundary contract**
 
 Contract: `semantik.kristal-v6.communication-projection/1.0`  
-Kristal baseline: Standard `6.0.0`  
+Portable Kristal baseline: Standard `6.0.0` (`kristal_state/6.0`)  
+Kristal/Kristall design baseline: `7.0.0-draft.3.2`  
 SemantiK canonical request: `CommunicationRequest` schema `1.0`
 
 ## Purpose
@@ -13,7 +14,7 @@ Kristal v6 can preserve several kinds of records and measurements in one `krista
 ```text
 Kristal State
   assertions + valuations + roles + actionability
-        ↓ explicit owner/Da’at selection + semantic mapping
+        ↓ explicit upstream communication selection/projection
 semantik.kristal-v6.communication-projection/1.0
         ↓ KristalV6Acl (traceability validation)
 CommunicationRequest v1.0
@@ -48,4 +49,8 @@ Selected assertion metadata is appended to `CommunicationRequest.supporting_cont
 
 ## Authority
 
-Kristal owns the knowledge artifact. The owner/Da’at mapping owns selection. SemantiK Architect owns articulation. A communication result does not mutate Kristal or operational owner state.
+Kristal/Kristall owns the knowledge artifact and semantic identity. The explicit upstream communication projection owns selection/communicative force. DaaT may transport/map an admitted contract but does not choose obligations. SemantiK Architect owns articulation. A communication result does not mutate Kristal/Kristall or operational owner state.
+
+## Kristall v7
+
+Kristall `7.0.0-draft.3.2` is additive above portable v6. A v7 pipeline may produce or reference a v6-compatible projection for SA; the ACL contract above remains unchanged.

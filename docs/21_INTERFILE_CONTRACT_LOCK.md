@@ -9,7 +9,7 @@ This document prevents adjacent modules from redefining shared objects independe
 | Contract | Producer | Consumer | Persistence | Public? |
 |---|---|---|---|---|
 | `CommunicationRequest` | inbound ACL / SDK mapper | `RenderCommunication` use case | no by core | yes |
-| Kristal v6 communication projection | Da’at / explicit owner ACL | `KristalV6Acl` | no by core | boundary contract |
+| Kristal portable-v6 communication projection | upstream semantic/communication authority | `KristalV6Acl` | no by core | boundary contract |
 | `CommunicationPlan` | `CommunicationPlanner` | `LanguagePlanner` | no | diagnostic only |
 | `LexicalPlanningContext` | `LexicalKnowledgePort` adapter | `LanguagePlanner` | optional cache outside core | no |
 | `LanguagePlan` | `LanguagePlanner` | lexical binder + output planning | no | diagnostic only |
@@ -19,9 +19,9 @@ This document prevents adjacent modules from redefining shared objects independe
 | `RuntimeSetDescriptor` | `RuntimeCatalogPort` | render use case / readiness | immutable catalog | operational public |
 
 
-## Kristal v6 communication projection
+## Kristal portable-v6 communication projection
 
-This is a boundary contract, not a core semantic type. It binds a pinned Kristal State reference and explicitly selected assertion metadata to one already-mapped canonical `CommunicationRequest`. Every selected assertion ID must survive in request `source_refs`. The adapter may add v6 metadata to `supporting_context`; it may not synthesize new obligations or alter their communicative force.
+This is a boundary contract, not a core semantic type. Kristall v7 is additive above the portable v6 artifact and does not change this SA ingress contract. It binds a pinned Kristal State reference and explicitly selected assertion metadata to one already-mapped canonical `CommunicationRequest`. Every selected assertion ID must survive in request `source_refs`. The adapter may add v6 metadata to `supporting_context`; it may not synthesize new obligations or alter their communicative force.
 
 ## CommunicationRequest
 

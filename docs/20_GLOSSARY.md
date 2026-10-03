@@ -40,6 +40,10 @@ Status: **normative terminology**
 
 **LexicalBindingSet** — immutable mapping from LanguagePlan lexical slots to exact runtime lexical references consumed by the realizer.
 
-**Kristal v6 communication projection** — explicit ACL boundary object linking a pinned Kristal State and selected assertion metadata to one canonical `CommunicationRequest`; metadata remains supporting context unless explicitly mapped into an obligation.
+**Kristal portable-v6 communication projection** — explicit ACL boundary object linking a pinned `kristal_state/6.0` artifact/projection and selected assertion metadata to one canonical `CommunicationRequest`; metadata remains supporting context unless explicitly mapped into an obligation. Kristall v7 may be the upstream semantic authority without changing this portable SA boundary.
 
 **Actionability (Kristal v6)** — upstream policy metadata such as `automatic`, `human_review`, or `human_decision`; SA preserves it as context but never treats it as execution authority or a communicative force.
+
+**DaaT** — optional Interaction Kernel anti-corruption/admission and explicit contract-mapping boundary (`daat` machine id) in front of Kristal/Kristall; not a communication-selection authority.
+
+**Kompiler** — read-only context compiler; assembled context can support a request but cannot create truth, semantic identity or communication obligations.

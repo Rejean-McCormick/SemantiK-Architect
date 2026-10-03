@@ -1,6 +1,6 @@
 # Konstellation Explorer 1 — profil candidat français
 
-Ce profil ajoute une planification dédiée, un lexique français, un bridge SA↔GF 1.0, les sources GF et une suite de requêtes émises par Konstellation v0.4. Chaque statement est conservé avec ses arguments, identités, qualificatifs, polarité et sources. Plusieurs statements d'une obligation restent dans le même bloc.
+Ce profil ajoute une planification dédiée, un lexique français, un bridge SA↔GF 1.0 et une suite de requêtes émises par Konstellation v0.4. Les sources GF restent dans GF/Wordbench. Chaque statement est conservé avec ses arguments, identités, qualificatifs, polarité et sources. Plusieurs statements d'une obligation restent dans le même bloc.
 
 La première réalisation est une **présentation structurée avec libellés français et valeurs JSON canoniques**. Elle ne prétend pas fournir une narration fluide ni valider historiquement les assertions. Les métadonnées ne sont pas résumées ou remplacées par une assertion de vérité.
 

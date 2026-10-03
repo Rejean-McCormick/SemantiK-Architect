@@ -1,6 +1,6 @@
-# SemantiK Architect 1.3.0-alpha.1 — MathKristal / Informath integration
+# SemantiK Architect 1.3.0-alpha.2 — ecosystem-aligned articulation
 
-SemantiK Architect is a deterministic semantic-to-human multilingual communication engine. The 1.3 alpha keeps the Kristal v6 articulation boundary and adds the first **mathematical communication profile**: MathKristal Formula IR is projected explicitly into the canonical semantic graph, planned as a mathematical articulation operation, and delegated to **Informath / MathCore / GF** for verbal realization.
+SemantiK Architect is a deterministic semantic-to-human multilingual communication engine. The 1.3 alpha keeps the stable portable `kristal_state/6.0` articulation boundary, aligns it with Kristal/Kristall `7.0.0-draft.3.2`, and retains the first **mathematical communication profile**: MathKristal Formula IR is projected explicitly into the canonical semantic graph, planned as a mathematical articulation operation, and delegated to **Informath / MathCore / GF** for verbal realization.
 
 ## What 1.3 adds
 
@@ -19,7 +19,7 @@ The profile remains **candidate-only** until a concrete Informath runtime is pin
 ## Canonical pipeline
 
 ```text
-external domain model / Kristal v6 / MathKristal Formula IR
+external domain model / portable Kristal v6 projection / MathKristal Formula IR
         ↓ explicit ACL / communication projection
 CommunicationRequest
         ↓
@@ -67,11 +67,13 @@ See:
 - [`docs/reference/INFORMATH_MATH_REALIZATION.md`](docs/reference/INFORMATH_MATH_REALIZATION.md)
 - [`profiles/math-pure-1/`](profiles/math-pure-1/)
 
-## Kristal v6 integration
+## Kristal / Kristall integration
 
-`KristalV6Acl` remains unchanged in authority: raw `kristal_state` is never interpreted as a communication request. Upstream selection is explicit, all selected assertions remain traceable through `source_refs`, and valuations/actionability stay supporting context rather than becoming communication obligations.
+`KristalV6Acl` remains the stable portable articulation boundary: raw `kristal_state` is never interpreted as a communication request. The portable contract stays `kristal_state/6.0` / Standard `6.0.0`, while the current ecosystem design baseline is Kristal/Kristall `7.0.0-draft.3.2`.
 
-MathKristal Formula IR can also be wrapped in the existing Kristal v6 communication projection when the corresponding proposition/assertion is present in an authoritative v6 state.
+Kristal/Kristall owns semantic identity, assertions, Mesh/axes/registries and crystallization. An upstream semantic owner or projection producer explicitly selects what is to be communicated; every selected assertion remains traceable through `source_refs`. **DaaT** (`daat`) may admit/map an external contract toward Kristal but does not decide communication obligations. **Kompiler** may assemble read-only context but cannot create truth, assertion identity or obligations.
+
+MathKristal Formula IR can also be wrapped in the existing portable Kristal v6 communication projection when the corresponding proposition/assertion is present in an authoritative state or v7-derived v6 projection. See [`docs/reference/KRISTAL_KRISTALL_V7_ALIGNMENT.md`](docs/reference/KRISTAL_KRISTALL_V7_ALIGNMENT.md).
 
 ## Lexical and grammar authorities
 
@@ -91,7 +93,11 @@ SemantiK Architect → communication planning and articulation only
 PYTHONPATH=src:. python tools/validate_repository.py
 ```
 
-Current snapshot validation: **58 tests pass; 16 JSON Schemas validate**.
+Current snapshot validation is recorded in `VALIDATION_REPORT.md`.
+
+## No hidden fallback
+
+SemantiK Architect has **no hidden fallback** renderer, grammar, source parser, or semantic inference path. Missing capabilities remain explicit failures.
 
 ## Fail-closed invariant
 

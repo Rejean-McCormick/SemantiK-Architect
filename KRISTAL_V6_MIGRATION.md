@@ -4,7 +4,7 @@ Date: 2026-10-01
 
 ## Decision
 
-SemantiK Architect 1.2.0 keeps `CommunicationRequest` schema `1.0` as its canonical domain input and adds an explicit boundary contract:
+SemantiK Architect 1.2.0 introduced and 1.3.0-alpha.2 retains `CommunicationRequest` schema `1.0` as its canonical domain input and adds an explicit boundary contract:
 
 `semantik.kristal-v6.communication-projection/1.0`
 
@@ -14,7 +14,7 @@ This avoids coupling the core language architecture to the full Kristal State sc
 
 ```text
 Kristal State 6.0
-  ↓ explicit assertion selection + semantic mapping by owner/Da’at
+  ↓ explicit communication selection/projection by upstream semantic authority
 Kristal v6 communication projection
   ↓ traceability/non-inference validation
 KristalV6Acl
@@ -36,3 +36,7 @@ The ACL may preserve selected assertion `record_role`, `valuations[]`, `applicab
 - every selected assertion must remain source-traceable;
 - SemantiK never mutates Kristal or the operational owner;
 - GF language-development source remains outside SemantiK Architect.
+
+## Current v7 alignment
+
+Kristal/Kristall `7.0.0-draft.3.2` is additive above `kristal_state/6.0`, so this migration remains the active portable SA boundary. DaaT (`daat`) may map admitted external contracts toward Kristal but does not own communication selection.

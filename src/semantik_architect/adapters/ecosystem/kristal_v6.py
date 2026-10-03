@@ -14,14 +14,18 @@ class KristalV6Acl:
     """Map an explicit Kristal v6 communication projection into CommunicationRequest.
 
     SemantiK Architect deliberately does not infer communicative obligations from a raw
-    Kristal State. Upstream mapping (normally Da’at / an owner ACL) must select the
+    Kristal State. An upstream semantic owner/projection producer must select the
     assertions to communicate and provide a canonical CommunicationRequest projection.
-    This adapter verifies traceability and preserves v6 role/valuation/actionability
-    metadata as supporting context without changing the core semantic graph.
+    DaaT may transport/map an admitted contract at the ecosystem boundary but is not the
+    authority that decides what must be communicated. This adapter verifies traceability
+    and preserves portable-v6 role/valuation/actionability metadata as supporting context
+    without changing the core semantic graph.
     """
 
     CONTRACT = "semantik.kristal-v6.communication-projection/1.0"
     STANDARD = "6.0.0"
+    PORTABLE_CONTRACT = "kristal_state/6.0"
+    KRISTALL_DESIGN_BASELINE = "7.0.0-draft.3.2"
     ACTIONABILITY_MODES = {
         "automatic",
         "human_review",

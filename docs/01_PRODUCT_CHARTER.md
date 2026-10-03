@@ -44,7 +44,7 @@ A person may build a graph of concepts, propositions and relations. SA renders t
 
 ### Semantic translation
 
-Raw source text is formalized upstream (for example by SenTient/Kristal). SA then re-realizes the resulting semantics in another language. SA is therefore not a canonical string-to-string machine translation engine.
+Raw source material is acquired/extracted upstream (for example by EncyK), persisted as source evidence by Médiathèque, and formalized under a semantic authority such as Kristal/Kristall. SA then re-realizes an explicit communication projection in another language. SA is therefore not a canonical string-to-string machine translation engine.
 
 ## In scope
 

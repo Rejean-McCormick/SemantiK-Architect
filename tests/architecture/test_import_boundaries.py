@@ -16,3 +16,16 @@ def test_no_language_code_branches_in_core():
     text='\n'.join(p.read_text(encoding='utf-8') for sub in ('domain','application') for p in (root/sub).rglob('*.py'))
     for code in ('"sq"',"'sq'",'"fr"',"'fr'",'"en"',"'en'"):
         assert f'== {code}' not in text
+
+
+def test_sa_has_no_runtime_imports_of_ecosystem_products():
+    root=Path('src/semantik_architect')
+    text='\n'.join(p.read_text(encoding='utf-8') for p in root.rglob('*.py')).lower()
+    forbidden=(
+        'import encyk', 'from encyk',
+        'import kompiler', 'from kompiler',
+        'import koa_mediatheque', 'from koa_mediatheque',
+        'import interaction_kernel', 'from interaction_kernel',
+    )
+    for token in forbidden:
+        assert token not in text, token

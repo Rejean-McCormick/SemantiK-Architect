@@ -45,7 +45,7 @@ Language development remains outside SA. A language becomes callable only after 
 
 ## Ecosystem ACL status
 
-The canonical ACL interface, canonical-schema adapter, and `KristalV6Acl` are implemented. The Kristal adapter consumes the explicit `semantik.kristal-v6.communication-projection/1.0` boundary, verifies selected-assertion traceability, and preserves v6 role/valuation/applicability/actionability metadata as supporting context. Other product-specific ACLs are added only when the upstream structured semantic contract is explicit. SA does not infer structured meaning from free text or from metadata magnitude inside an ACL.
+The canonical ACL interface, canonical-schema adapter, and `KristalV6Acl` are implemented. The Kristal adapter consumes the explicit portable `semantik.kristal-v6.communication-projection/1.0` boundary, verifies selected-assertion traceability, and preserves v6 role/valuation/applicability/actionability metadata as supporting context. Kristal/Kristall `7.0.0-draft.3.2` is the upstream design baseline and remains outside SA core. DaaT is transport/contract mapping rather than communication selection; Kompiler context does not create obligations. Other product-specific ACLs are added only when the upstream structured semantic contract is explicit. SA does not infer structured meaning from free text or from metadata magnitude inside an ACL.
 
 ## Deliberately absent
 
