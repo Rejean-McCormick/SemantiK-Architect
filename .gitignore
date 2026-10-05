@@ -30,3 +30,22 @@ GitSink.bat
 *.bak_*
 *.tmp
 *~
+# Engineering overlay local backups.
+.engineering-pack-backups/
+
+# Legacy timestamped backup artifacts should stay local.
+*.backup-*
+
+# Additional caches and backup variants
+.ruff_cache/
+.cache/
+.coverage.*
+*.temp
+*.bak.*
+*.backup
+*.backup_*
+*.swp
+*.swo
+.idea/
+.vscode/
+Desktop.ini
