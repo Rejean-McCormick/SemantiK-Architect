@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "productId": "semantik_architect",
+  "owner": "SemantiK Architect",
+  "variables": {
+    "apiPort": { "type": "port", "env": "KOALI_SEMANTIK_ARCHITECT_PORT", "default": 8304 }
+  },
+  "surface": { "mode": "headless" },
+  "processes": [
+    {
+      "id": "api",
+      "cwd": ".",
+      "command": { "win32": ".venv\\Scripts\\semantik-architect.exe", "default": ".venv/bin/semantik-architect" },
+      "args": ["--runtime-root", "runtime", "serve", "--host", "127.0.0.1", "--port", "${apiPort}"],
+      "probeId": "ready"
+    }
+  ],
+  "probes": [
+    { "id": "live", "url": "http://127.0.0.1:${apiPort}/health", "required": true, "statuses": [200], "timeoutMs": 2000 },
+    { "id": "ready", "url": "http://127.0.0.1:${apiPort}/ready", "required": true, "statuses": [200], "timeoutMs": 5000 }
+  ]
+}
