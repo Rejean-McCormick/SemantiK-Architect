@@ -1,0 +1,61 @@
+{
+  "schema_version": "0.1-prototype",
+  "purpose": "Human-curated semantic seeds for testing deterministic SemantiK-only French realization. No full current Konstellation position sentence is passed to SemantiK.",
+  "seeds": [
+    {
+      "id": "A001-core",
+      "source_position_id": "A001",
+      "source_id": "aug_grace",
+      "locator": "Chapitres 2–4",
+      "operation": "transitive_event",
+      "agent": "theophile:augustin",
+      "predicate": "theophile:defendre",
+      "patient": "theophile:existence-libre-arbitre",
+      "semantic_origin": "prototype_manual_decomposition_from_existing_ai_assisted_position"
+    },
+    {
+      "id": "H131-second-clause",
+      "source_position_id": "H131",
+      "source_id": "anselm",
+      "locator": "Proslogion, ch.1",
+      "operation": "transitive_event",
+      "agent": "theophile:foi",
+      "predicate": "theophile:stimuler",
+      "patient": "theophile:enquete-intellectuelle-anselme",
+      "semantic_origin": "prototype_manual_decomposition_from_existing_ai_assisted_position"
+    },
+    {
+      "id": "H223-core",
+      "source_position_id": "H223",
+      "source_id": "rn",
+      "locator": "Rerum novarum, développement sur la propriété et la famille",
+      "operation": "transitive_event",
+      "agent": "theophile:leon-xiii",
+      "predicate": "theophile:defendre",
+      "patient": "theophile:propriete-privee-prevoyance-famille",
+      "semantic_origin": "prototype_manual_decomposition_from_existing_ai_assisted_position"
+    },
+    {
+      "id": "P014-core",
+      "source_position_id": "P014",
+      "source_id": "le",
+      "locator": "§ 12",
+      "operation": "transitive_event",
+      "agent": "theophile:jean-paul-ii",
+      "predicate": "theophile:affirmer",
+      "patient": "theophile:priorite-travail-capital",
+      "semantic_origin": "prototype_manual_decomposition_from_existing_ai_assisted_position"
+    },
+    {
+      "id": "K003-classification",
+      "source_classification_id": "K003",
+      "source_position_id": "D005",
+      "source_id": "ccc_mary",
+      "locator": "CEC 491 ; citation de la définition de 1854",
+      "operation": "classification",
+      "entity": "theophile:immaculee-conception",
+      "class": "theophile:dogme",
+      "semantic_origin": "structured_classification_plus_witness"
+    }
+  ]
+}

@@ -102,3 +102,14 @@ SemantiK Architect has **no hidden fallback** renderer, grammar, source parser, 
 ## Fail-closed invariant
 
 Missing Formula IR structure, unmapped math symbols, unavailable Informath, unsupported language, invalid RuntimeSet identity, lexical gaps, or GF/Informath failures are explicit errors. SemantiK Architect does not silently substitute prose templates or change mathematical meaning.
+
+## Integrated five-phrase SemantiK prototype (offline fixture)
+
+The historical standalone `SemantiK_only_phrase_prototype` is now consolidated into this repo as a **non-production, five-case regression fixture**, reusing the existing canonical `profiles/konstellation-explorer-3` artifacts rather than copying them. The real semantic planning/binding/coverage path runs, but final GF/PGF linearization is simulated; it does not qualify or activate a RuntimeSet.
+
+```bash
+python tools/phrase_prototype.py
+python -m pytest -q tests/integration/test_phrase_prototype.py
+```
+
+See [`examples/phrase-prototype/README.md`](examples/phrase-prototype/README.md) and [`docs/23_FIVE_PHRASE_PROTOTYPE_CONSOLIDATION.md`](docs/23_FIVE_PHRASE_PROTOTYPE_CONSOLIDATION.md) for provenance, corpus checks, and the GF `unlexer` choice.
