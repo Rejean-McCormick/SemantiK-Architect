@@ -113,3 +113,8 @@ python -m pytest -q tests/integration/test_phrase_prototype.py
 ```
 
 See [`examples/phrase-prototype/README.md`](examples/phrase-prototype/README.md) and [`docs/23_FIVE_PHRASE_PROTOTYPE_CONSOLIDATION.md`](docs/23_FIVE_PHRASE_PROTOTYPE_CONSOLIDATION.md) for provenance, corpus checks, and the GF `unlexer` choice.
+
+## Vérification des intégrations satellites (27 octobre 2026)
+
+Voir [le contrôle de compatibilité et les limites de qualification](docs/Integration-Verification-2026-10-27.md). Les versions et statuts externes doivent être vérifiés avant tout déploiement.
+
