@@ -118,3 +118,15 @@ See [`examples/phrase-prototype/README.md`](examples/phrase-prototype/README.md)
 
 Voir [le contrôle de compatibilité et les limites de qualification](docs/Integration-Verification-2026-10-27.md). Les versions et statuts externes doivent être vérifiés avant tout déploiement.
 
+
+## Defluens practical development handoff (inspection only)
+
+GF WordBench exports `defluens.wordbench-sa-development-handoff/1.0` describing
+GF pilot evidence and *suggested* SA↔GF operation correspondences. Check it via
+`PYTHONPATH=src python tools/inspect_defluens_handoff.py semantik_handoff.json`.
+This does not create an SA RuntimeSet, verify conformance or authorize release;
+see [`docs/25_DEFLUENS_PRACTICAL_HANDOFF.md`](docs/25_DEFLUENS_PRACTICAL_HANDOFF.md).
+
+### Defluens v0.5 development-only real GF preview
+
+The CLI includes `preview-candidate --candidate-dir <dir> --runtime-set-id konstellation-fr-3 <request.json>`, which delegates to existing `CandidateConformance` and real GF. This is **not** a production render, release or shortcut around conformance. See `docs/reference/DEFLUENS_CANDIDATE_PREVIEW_v05.md`.

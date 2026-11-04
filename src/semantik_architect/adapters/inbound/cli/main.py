@@ -17,13 +17,30 @@ def main(argv:list[str]|None=None)->int:
         sp=sub.add_parser(name); sp.add_argument('request',help='request JSON path or - for stdin')
     mp=sub.add_parser('project-math'); mp.add_argument('formula',help='MathKristal projection or Formula IR JSON path'); mp.add_argument('--language',required=True); mp.add_argument('--locale'); mp.add_argument('--mode',choices=['PURE','NATURAL'],default='PURE'); mp.add_argument('--profile')
     mr=sub.add_parser('render-math'); mr.add_argument('formula',help='MathKristal projection or Formula IR JSON path'); mr.add_argument('--language',required=True); mr.add_argument('--locale'); mr.add_argument('--mode',choices=['PURE','NATURAL'],default='PURE'); mr.add_argument('--profile')
+    pv=sub.add_parser('preview-candidate', help='Development-only real GF candidate preview; never releases')
+    pv.add_argument('request', help='CommunicationRequest JSON path or - for stdin')
+    pv.add_argument('--candidate-dir', required=True)
+    pv.add_argument('--runtime-set-id', required=True)
     sub.add_parser('capabilities')
     vr=sub.add_parser('validate-runtime'); vr.add_argument('runtime_set_id')
     cf=sub.add_parser('conformance'); cf.add_argument('suite', nargs='?'); cf.add_argument('--suite', dest='suite_option'); cf.add_argument('--runtime-set-id'); cf.add_argument('--output'); cf.add_argument('--candidate-dir')
     sv=sub.add_parser('serve'); sv.add_argument('--host',default='127.0.0.1'); sv.add_argument('--port',type=int,default=8765)
     args=p.parse_args(argv); app=SemantikArchitect.from_runtime_root(args.runtime_root)
     try:
-        if args.command=='render': out=app.render(_load(args.request))
+        if args.command=='preview-candidate':
+            if not (Path(args.candidate_dir)/'pipeline.lock.json').is_file():
+                raise SemantikArchitectError('SA-RUN-001', 'GF candidate is absent: first compile a PGF through WordBench', runtime_set_id=args.runtime_set_id)
+            from ....conformance.candidate import CandidateConformance
+            candidate = CandidateConformance(args.candidate_dir, args.runtime_set_id)
+            result = candidate.render(_load(args.request))
+            out = {
+                'schema_version':'1.0', 'status':'CANDIDATE_PREVIEW',
+                'qualification':'DEVELOPMENT_ONLY_REAL_GF',
+                'released':False, 'activated':False, 'linguistically_certified':False,
+                'runtime_set_id':args.runtime_set_id,
+                'communication_result':result,
+            }
+        elif args.command=='render': out=app.render(_load(args.request))
         elif args.command=='validate-request': out=app.validate_request(_load(args.request))
         elif args.command=='explain': out=app.explain(_load(args.request))
         elif args.command=='project-math':
@@ -55,7 +72,7 @@ def main(argv:list[str]|None=None)->int:
         print(json.dumps(out,ensure_ascii=False,indent=2)); return 1 if (args.command=='conformance' and not out.get('passed')) or (args.command=='validate-runtime' and not out.get('valid')) else 0
     except SemantikArchitectError as exc:
         print(json.dumps(exc.to_dict(),ensure_ascii=False,indent=2),file=sys.stderr); return 2
-    except (KeyError,TypeError,ValueError,json.JSONDecodeError) as exc:
+    except (KeyError,TypeError,ValueError,FileNotFoundError,RuntimeError,json.JSONDecodeError) as exc:
         err={"schema_version":"1.0","code":"SA-REQ-001","category":"REQUEST_INVALID","stage":"validation","message_safe":str(exc),"retryable":False}
         print(json.dumps(err,ensure_ascii=False,indent=2),file=sys.stderr); return 2
 

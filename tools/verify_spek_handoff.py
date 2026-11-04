@@ -30,13 +30,16 @@ def verify(lock: dict, requests_dir: Path) -> dict:
     root=Path(requests_dir)
     if root.is_symlink() or not root.is_dir():
         raise HandoffError('Private request directory missing or unsafe')
-    request_ids=set(); validator=RequestValidator()
+    request_ids=set(); request_files=set(); validator=RequestValidator()
     for field in fields:
         if not isinstance(field,dict):
             raise HandoffError('Malformed language field')
         filename=field.get('request_file')
         if not isinstance(filename,str) or not SAFE_FILENAME.fullmatch(filename):
             raise HandoffError('Unsafe request filename')
+        if filename in request_files:
+            raise HandoffError('Duplicate request filename in editorial handoff')
+        request_files.add(filename)
         path=root/filename
         if path.is_symlink() or not path.is_file() or not path.resolve().is_relative_to(root.resolve()) or path.stat().st_size>2_000_000:
             raise HandoffError('Request missing or unsafe')

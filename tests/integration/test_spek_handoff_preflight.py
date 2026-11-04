@@ -32,3 +32,10 @@ def test_private_handoff_language_contract_no_pgf_claim(tmp_path):
     assert result['request_count']==1 and result['gf_pgf_execution_verified'] is False
     lock['fields'][0]['source_assertion_refs']=['another:source']
     with pytest.raises(HandoffError):verify(lock,tmp_path)
+
+
+def test_duplicate_private_request_is_refused(tmp_path):
+    _,lock=sample(tmp_path)
+    lock['fields'].append(dict(lock['fields'][0]))
+    with pytest.raises(HandoffError,match='Duplicate request filename'):
+        verify(lock,tmp_path)
