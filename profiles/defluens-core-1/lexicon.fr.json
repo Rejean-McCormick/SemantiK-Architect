@@ -1,0 +1,303 @@
+{
+  "schema_version": "1.1",
+  "lexicon_id": "defluens-core-fr-1-candidate",
+  "source_kind": "project",
+  "source_ref": "defluens:core-dev-v08",
+  "lexical_policy": {
+    "policy_version": "1.0",
+    "precedence": [
+      "request_override",
+      "domain",
+      "project",
+      "wikidata",
+      "gf_generic"
+    ],
+    "default_source_kind": "project",
+    "equal_precedence_conflict": "fail"
+  },
+  "entries": [
+    {
+      "semantic_ref": "defluens:relation-attribute",
+      "language": "fr",
+      "lexical_ref": "relation-attribute",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:entity",
+          "attribute": "role:attribute"
+        },
+        "slot_map": {
+          "entity": "role:entity",
+          "attribute": "role:attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "defluens:relation-classification",
+      "language": "fr",
+      "lexical_ref": "relation-classification",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_classification",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:entity",
+          "class": "role:class"
+        },
+        "slot_map": {
+          "entity": "role:entity",
+          "class": "role:class"
+        }
+      }
+    },
+    {
+      "semantic_ref": "defluens:relation-event",
+      "language": "fr",
+      "lexical_ref": "relation-event",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.intransitive_event",
+        "independent_statement": true,
+        "role_map": {
+          "agent": "role:agent",
+          "predicate": "role:predicate"
+        },
+        "slot_map": {
+          "agent": "role:agent",
+          "predicate": "role:predicate"
+        }
+      }
+    },
+    {
+      "semantic_ref": "defluens:relation-transitive",
+      "language": "fr",
+      "lexical_ref": "relation-transitive",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.transitive_event",
+        "independent_statement": true,
+        "role_map": {
+          "agent": "role:agent",
+          "predicate": "role:predicate",
+          "patient": "role:patient"
+        },
+        "slot_map": {
+          "agent": "role:agent",
+          "predicate": "role:predicate",
+          "patient": "role:patient"
+        }
+      }
+    },
+    {
+      "semantic_ref": "defluens:relation-location",
+      "language": "fr",
+      "lexical_ref": "relation-location",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.locative",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:entity",
+          "location": "role:location"
+        },
+        "slot_map": {
+          "entity": "role:entity",
+          "location": "role:location"
+        }
+      }
+    },
+    {
+      "semantic_ref": "defluens:relation-directive",
+      "language": "fr",
+      "lexical_ref": "relation-directive",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "directive.action",
+        "independent_statement": true,
+        "role_map": {
+          "predicate": "role:predicate"
+        },
+        "slot_map": {
+          "predicate": "role:predicate"
+        }
+      }
+    },
+    {
+      "semantic_ref": "defluens:subject-mira",
+      "language": "fr",
+      "lexical_ref": "Mira_Subject",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "defluens:subject-lea",
+      "language": "fr",
+      "lexical_ref": "Lea_Subject",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "defluens:subject-noa",
+      "language": "fr",
+      "lexical_ref": "Noa_Subject",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "defluens:object-book",
+      "language": "fr",
+      "lexical_ref": "Book_Object",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "defluens:object-document",
+      "language": "fr",
+      "lexical_ref": "Document_Object",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "defluens:object-flower",
+      "language": "fr",
+      "lexical_ref": "Flower_Object",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "defluens:attribute-ready",
+      "language": "fr",
+      "lexical_ref": "Ready_Quality",
+      "binding_kind": "gf_expr",
+      "category": "AP"
+    },
+    {
+      "semantic_ref": "defluens:attribute-calm",
+      "language": "fr",
+      "lexical_ref": "Calm_Quality",
+      "binding_kind": "gf_expr",
+      "category": "AP"
+    },
+    {
+      "semantic_ref": "defluens:attribute-absent",
+      "language": "fr",
+      "lexical_ref": "Absent_Quality",
+      "binding_kind": "gf_expr",
+      "category": "AP"
+    },
+    {
+      "semantic_ref": "defluens:attribute-available",
+      "language": "fr",
+      "lexical_ref": "Available_Quality",
+      "binding_kind": "gf_expr",
+      "category": "AP"
+    },
+    {
+      "semantic_ref": "defluens:classification-guide",
+      "language": "fr",
+      "lexical_ref": "Guide_Kind",
+      "binding_kind": "gf_expr",
+      "category": "N"
+    },
+    {
+      "semantic_ref": "defluens:classification-artist",
+      "language": "fr",
+      "lexical_ref": "Artist_Kind",
+      "binding_kind": "gf_expr",
+      "category": "N"
+    },
+    {
+      "semantic_ref": "defluens:classification-scientist",
+      "language": "fr",
+      "lexical_ref": "Scientist_Kind",
+      "binding_kind": "gf_expr",
+      "category": "N"
+    },
+    {
+      "semantic_ref": "defluens:event-work",
+      "language": "fr",
+      "lexical_ref": "Work_Event",
+      "binding_kind": "gf_expr",
+      "category": "V"
+    },
+    {
+      "semantic_ref": "defluens:event-walk",
+      "language": "fr",
+      "lexical_ref": "Walk_Event",
+      "binding_kind": "gf_expr",
+      "category": "V"
+    },
+    {
+      "semantic_ref": "defluens:event-speak",
+      "language": "fr",
+      "lexical_ref": "Speak_Event",
+      "binding_kind": "gf_expr",
+      "category": "V"
+    },
+    {
+      "semantic_ref": "defluens:transitive-carry",
+      "language": "fr",
+      "lexical_ref": "Carry_Action",
+      "binding_kind": "gf_expr",
+      "category": "V2"
+    },
+    {
+      "semantic_ref": "defluens:transitive-watch",
+      "language": "fr",
+      "lexical_ref": "Watch_Action",
+      "binding_kind": "gf_expr",
+      "category": "V2"
+    },
+    {
+      "semantic_ref": "defluens:transitive-visit",
+      "language": "fr",
+      "lexical_ref": "Visit_Action",
+      "binding_kind": "gf_expr",
+      "category": "V2"
+    },
+    {
+      "semantic_ref": "defluens:location-here",
+      "language": "fr",
+      "lexical_ref": "Here_Place",
+      "binding_kind": "gf_expr",
+      "category": "Adv"
+    },
+    {
+      "semantic_ref": "defluens:location-there",
+      "language": "fr",
+      "lexical_ref": "There_Place",
+      "binding_kind": "gf_expr",
+      "category": "Adv"
+    },
+    {
+      "semantic_ref": "defluens:location-in_paris",
+      "language": "fr",
+      "lexical_ref": "InParis_Place",
+      "binding_kind": "gf_expr",
+      "category": "Adv"
+    },
+    {
+      "semantic_ref": "defluens:directive-wait",
+      "language": "fr",
+      "lexical_ref": "Wait_Command",
+      "binding_kind": "gf_expr",
+      "category": "V"
+    },
+    {
+      "semantic_ref": "defluens:directive-walk",
+      "language": "fr",
+      "lexical_ref": "Walk_Command",
+      "binding_kind": "gf_expr",
+      "category": "V"
+    },
+    {
+      "semantic_ref": "defluens:directive-speak",
+      "language": "fr",
+      "lexical_ref": "Speak_Command",
+      "binding_kind": "gf_expr",
+      "category": "V"
+    }
+  ]
+}

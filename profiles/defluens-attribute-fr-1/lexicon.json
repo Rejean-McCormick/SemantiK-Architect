@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.1",
+  "lexicon_id": "defluens-attribute-fr-1-candidate",
+  "source_kind": "project",
+  "source_ref": "defluens:typed-attribute-dev",
+  "lexical_policy": {
+    "policy_version": "1.0",
+    "precedence": [
+      "request_override",
+      "domain",
+      "project",
+      "wikidata",
+      "gf_generic"
+    ],
+    "default_source_kind": "project",
+    "equal_precedence_conflict": "fail"
+  },
+  "entries": [
+    {
+      "semantic_ref": "defluens:copular-attribute",
+      "language": "fr",
+      "lexical_ref": "copular-attribute",
+      "binding_kind": "literal",
+      "properties": {
+        "preferred_operation": "clause.copular_attribute",
+        "independent_statement": true,
+        "role_map": {
+          "entity": "role:entity",
+          "attribute": "role:attribute"
+        },
+        "slot_map": {
+          "entity": "role:entity",
+          "attribute": "role:attribute"
+        }
+      }
+    },
+    {
+      "semantic_ref": "defluens:mira",
+      "language": "fr",
+      "lexical_ref": "Mira_Subject",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "defluens:lea",
+      "language": "fr",
+      "lexical_ref": "Lea_Subject",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "defluens:noa",
+      "language": "fr",
+      "lexical_ref": "Noa_Subject",
+      "binding_kind": "gf_expr",
+      "category": "NP"
+    },
+    {
+      "semantic_ref": "defluens:ready",
+      "language": "fr",
+      "lexical_ref": "Ready_Quality",
+      "binding_kind": "gf_expr",
+      "category": "AP"
+    },
+    {
+      "semantic_ref": "defluens:calm",
+      "language": "fr",
+      "lexical_ref": "Calm_Quality",
+      "binding_kind": "gf_expr",
+      "category": "AP"
+    },
+    {
+      "semantic_ref": "defluens:absent",
+      "language": "fr",
+      "lexical_ref": "Absent_Quality",
+      "binding_kind": "gf_expr",
+      "category": "AP"
+    },
+    {
+      "semantic_ref": "defluens:available",
+      "language": "fr",
+      "lexical_ref": "Available_Quality",
+      "binding_kind": "gf_expr",
+      "category": "AP"
+    }
+  ]
+}

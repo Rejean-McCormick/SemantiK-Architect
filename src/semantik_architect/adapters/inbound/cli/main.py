@@ -21,7 +21,24 @@ def main(argv:list[str]|None=None)->int:
     pv.add_argument('request', help='CommunicationRequest JSON path or - for stdin')
     pv.add_argument('--candidate-dir', required=True)
     pv.add_argument('--runtime-set-id', required=True)
+    pb=sub.add_parser('preview-candidate-batch', help='One locked real GF candidate per batch, development only')
+    pb.add_argument('batch', help='JSON vectors of canonical requests; - for stdin')
+    pb.add_argument('--candidate-dir', required=True)
+    pb.add_argument('--runtime-set-id', required=True)
+    ar=sub.add_parser('defluens-attribute-request', help='Build a canonical typed request from explicit attribute selections (development only)')
+    ar.add_argument('--subject',required=True)
+    ar.add_argument('--attribute',required=True)
+    ar.add_argument('--polarity',required=True)
+    ar.add_argument('--tense',required=True)
     sub.add_parser('capabilities')
+    sub.add_parser('defluens-core-catalog', help='Bounded development semantic operations; candidate only')
+    cr=sub.add_parser('defluens-core-request', help='Map typed JSON recipe to canonical SemantiK request (candidate only)')
+    cr.add_argument('recipe', help='Recipe JSON path or - for stdin')
+    cb=sub.add_parser('defluens-core-batch', help='Validate bounded core recipes through SemantiK in one process; candidate only')
+    cb.add_argument('batch', help='JSON batch path or - for stdin')
+    sub.add_parser('defluens-intents', help='Development map for the 15 practical intents; no release claim')
+    dik=sub.add_parser('inspect-dik-lexicon', help='Inspect read-only diK/WordBench lexical candidate; no release')
+    dik.add_argument('--bundle', required=True)
     vr=sub.add_parser('validate-runtime'); vr.add_argument('runtime_set_id')
     cf=sub.add_parser('conformance'); cf.add_argument('suite', nargs='?'); cf.add_argument('--suite', dest='suite_option'); cf.add_argument('--runtime-set-id'); cf.add_argument('--output'); cf.add_argument('--candidate-dir')
     sv=sub.add_parser('serve'); sv.add_argument('--host',default='127.0.0.1'); sv.add_argument('--port',type=int,default=8765)
@@ -40,6 +57,21 @@ def main(argv:list[str]|None=None)->int:
                 'runtime_set_id':args.runtime_set_id,
                 'communication_result':result,
             }
+        elif args.command=='preview-candidate-batch':
+            from .defluens_core import preview_core_batch
+            out=preview_core_batch(_load(args.batch), args.candidate_dir, args.runtime_set_id)
+        elif args.command=='defluens-attribute-request':
+            from .defluens_attribute import compose_request
+            out=compose_request(args.subject,args.attribute,args.polarity,args.tense)
+        elif args.command=='defluens-core-catalog':
+            from .defluens_core import catalog
+            out=catalog()
+        elif args.command=='defluens-core-request':
+            from .defluens_core import compose_core_request
+            out=compose_core_request(_load(args.recipe))
+        elif args.command=='defluens-core-batch':
+            from .defluens_core import validate_core_batch
+            out=validate_core_batch(_load(args.batch))
         elif args.command=='render': out=app.render(_load(args.request))
         elif args.command=='validate-request': out=app.validate_request(_load(args.request))
         elif args.command=='explain': out=app.explain(_load(args.request))
@@ -50,6 +82,12 @@ def main(argv:list[str]|None=None)->int:
             raw=_load(args.formula); payload=raw if raw.get('contract')== 'semantik.mathkristal-formula-ir.communication-projection/1.0' else {'contract':'semantik.mathkristal-formula-ir.communication-projection/1.0','formula_ir':raw}
             out=app.render_mathkristal(payload,target_language=args.language,target_locale=args.locale,mode=args.mode,capability_profile=args.profile)
         elif args.command=='capabilities': out=app.capabilities()
+        elif args.command=='inspect-dik-lexicon':
+            from ....conformance.dik_lexicon import inspect
+            out=inspect(Path(args.bundle))
+        elif args.command=='defluens-intents':
+            from ....conformance.defluens_intents import describe_practical_intents
+            out=describe_practical_intents()
         elif args.command=='validate-runtime': out=app.validate_runtime(args.runtime_set_id)
         elif args.command=='conformance':
             from ....conformance.harness import ConformanceHarness

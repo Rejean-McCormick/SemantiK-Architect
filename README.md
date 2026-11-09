@@ -130,3 +130,15 @@ see [`docs/25_DEFLUENS_PRACTICAL_HANDOFF.md`](docs/25_DEFLUENS_PRACTICAL_HANDOFF
 ### Defluens v0.5 development-only real GF preview
 
 The CLI includes `preview-candidate --candidate-dir <dir> --runtime-set-id konstellation-fr-3 <request.json>`, which delegates to existing `CandidateConformance` and real GF. This is **not** a production render, release or shortcut around conformance. See `docs/reference/DEFLUENS_CANDIDATE_PREVIEW_v05.md`.
+
+## Development interoperability — Defluens 15-intent catalog (v0.6)
+
+The public `defluens-intents` CLI lists the bounded 15 practical intentions
+and their candidate operation families (not a validated SA bridge or released
+profile). See [`docs/reference/DEFLUENS_15_INTENTS_DEVELOPMENT_v06.md`](docs/reference/DEFLUENS_15_INTENTS_DEVELOPMENT_v06.md).
+
+## Defluens typed French attributes — v0.7 candidate (development only)
+
+The additive profile [`profiles/defluens-attribute-fr-1/`](profiles/defluens-attribute-fr-1/) exercises the **existing** `clause.copular_attribute` SA↔GF operation. A public `defluens-attribute-request` CLI command maps four explicit enumerated selections (subject, attribute, polarity, tense) into the canonical request structure. WordBench owns PGF build, RGL owns French morphology, and the existing `preview-candidate` command owns the hash-checked realization path. No alternate planner or fake text renderer has been added. See [`docs/reference/DEFLUENS_ATTRIBUTE_CANDIDATE_v07.md`](docs/reference/DEFLUENS_ATTRIBUTE_CANDIDATE_v07.md).
+
+This profile is **not RELEASED**. GF compilation and surface-language acceptance must be verified with the installed official GF executable.

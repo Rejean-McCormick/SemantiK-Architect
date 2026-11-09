@@ -65,3 +65,21 @@ Implemented in the current snapshot:
 - Euler candidate artifacts and contract tests.
 
 Not released in this snapshot: a production Informath RuntimeSet. The profile remains candidate until a concrete Informath runtime is pinned and passes conformance.
+
+## Defluens v0.10 candidate acceptance (2026-11-04)
+
+The public `defluens-core-batch` CLI validates bounded batches of canonical
+FR/EN requests through the pre-existing core mapper and RequestValidator.
+It does not realize GF, emit language certification, or release a RuntimeSet.
+The corresponding 36-vector matrix and optional real-GF candidate recipe are
+owned by Defluens. See `docs/reference/DEFLUENS_CORE_ACCEPTANCE_v010.md`.
+
+
+## Extension candidate v0.11 — qualification FR/EN
+
+Ajout du CLI `preview-candidate-batch` (lot borné de demandes canoniques),
+réutilisant exclusivement le moteur `CandidateConformance` et le réalisateur
+GF existant. Aucune publication. La recette Defluens v0.11 contrôle parité,
+empreintes, blocs et obligations; la conformité linguistique réelle reste à
+qualifier sur le poste Windows GF 3.12. Voir
+`docs/reference/DEFLUENS_CORE_QUALIFICATION_v011.md`.

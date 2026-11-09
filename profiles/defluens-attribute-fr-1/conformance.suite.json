@@ -1,0 +1,333 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "suite:defluens-attribute-fr-1-candidate",
+  "runtime_set_id": "defluens-attribute-fr-1",
+  "language": "fr",
+  "capability_profile": "defluens-attribute-fr-1",
+  "cases": [
+    {
+      "case_id": "attribute-01",
+      "request": {
+        "schema_version": "1.0",
+        "semantic_graph": {
+          "graph_id": "g:defluens-attribute",
+          "nodes": [
+            {
+              "id": "n_entity",
+              "kind": "entity_ref",
+              "external_ref": "defluens:mira"
+            },
+            {
+              "id": "n_attribute",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:ready"
+            },
+            {
+              "id": "n_tense",
+              "kind": "literal",
+              "value": "present"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s1",
+              "predicate_ref": "defluens:copular-attribute",
+              "arguments": [
+                {
+                  "role_ref": "role:entity",
+                  "value_id": "n_entity"
+                },
+                {
+                  "role_ref": "role:attribute",
+                  "value_id": "n_attribute"
+                }
+              ],
+              "polarity": "negative",
+              "qualifiers": [
+                {
+                  "qualifier_ref": "qualifier:tense",
+                  "value_id": "n_tense"
+                }
+              ]
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o1",
+            "semantic_refs": [
+              "s1"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED"
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "fr",
+          "target_locale": "fr-CA",
+          "channel": "offline-build",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "forbidden",
+          "output_format": "structured"
+        },
+        "capability_profile": "defluens-attribute-fr-1",
+        "runtime_selector": {
+          "runtime_set_id": "defluens-attribute-fr-1"
+        },
+        "request_id": "sha256:36a95bcbcadd6cd1888ec9e51b2877e3ad78378cb8e743776d5cb975a8db00ab"
+      },
+      "expected": {}
+    },
+    {
+      "case_id": "attribute-02",
+      "request": {
+        "schema_version": "1.0",
+        "semantic_graph": {
+          "graph_id": "g:defluens-attribute",
+          "nodes": [
+            {
+              "id": "n_entity",
+              "kind": "entity_ref",
+              "external_ref": "defluens:mira"
+            },
+            {
+              "id": "n_attribute",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:ready"
+            },
+            {
+              "id": "n_tense",
+              "kind": "literal",
+              "value": "past"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s1",
+              "predicate_ref": "defluens:copular-attribute",
+              "arguments": [
+                {
+                  "role_ref": "role:entity",
+                  "value_id": "n_entity"
+                },
+                {
+                  "role_ref": "role:attribute",
+                  "value_id": "n_attribute"
+                }
+              ],
+              "polarity": "positive",
+              "qualifiers": [
+                {
+                  "qualifier_ref": "qualifier:tense",
+                  "value_id": "n_tense"
+                }
+              ]
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o1",
+            "semantic_refs": [
+              "s1"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED"
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "fr",
+          "target_locale": "fr-CA",
+          "channel": "offline-build",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "forbidden",
+          "output_format": "structured"
+        },
+        "capability_profile": "defluens-attribute-fr-1",
+        "runtime_selector": {
+          "runtime_set_id": "defluens-attribute-fr-1"
+        },
+        "request_id": "sha256:6f0b151fd988640aa0679a2555eed96e3961dfa07053bda9fd68f0a17351a61d"
+      },
+      "expected": {}
+    },
+    {
+      "case_id": "attribute-03",
+      "request": {
+        "schema_version": "1.0",
+        "semantic_graph": {
+          "graph_id": "g:defluens-attribute",
+          "nodes": [
+            {
+              "id": "n_entity",
+              "kind": "entity_ref",
+              "external_ref": "defluens:noa"
+            },
+            {
+              "id": "n_attribute",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:absent"
+            },
+            {
+              "id": "n_tense",
+              "kind": "literal",
+              "value": "future"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s1",
+              "predicate_ref": "defluens:copular-attribute",
+              "arguments": [
+                {
+                  "role_ref": "role:entity",
+                  "value_id": "n_entity"
+                },
+                {
+                  "role_ref": "role:attribute",
+                  "value_id": "n_attribute"
+                }
+              ],
+              "polarity": "negative",
+              "qualifiers": [
+                {
+                  "qualifier_ref": "qualifier:tense",
+                  "value_id": "n_tense"
+                }
+              ]
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o1",
+            "semantic_refs": [
+              "s1"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED"
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "fr",
+          "target_locale": "fr-CA",
+          "channel": "offline-build",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "forbidden",
+          "output_format": "structured"
+        },
+        "capability_profile": "defluens-attribute-fr-1",
+        "runtime_selector": {
+          "runtime_set_id": "defluens-attribute-fr-1"
+        },
+        "request_id": "sha256:88363da7fff0ee6ea05a5adf55eaf8b829c182b5b59c36a51f6f6b496f436d4b"
+      },
+      "expected": {}
+    },
+    {
+      "case_id": "attribute-04",
+      "request": {
+        "schema_version": "1.0",
+        "semantic_graph": {
+          "graph_id": "g:defluens-attribute",
+          "nodes": [
+            {
+              "id": "n_entity",
+              "kind": "entity_ref",
+              "external_ref": "defluens:lea"
+            },
+            {
+              "id": "n_attribute",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:calm"
+            },
+            {
+              "id": "n_tense",
+              "kind": "literal",
+              "value": "present"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s1",
+              "predicate_ref": "defluens:copular-attribute",
+              "arguments": [
+                {
+                  "role_ref": "role:entity",
+                  "value_id": "n_entity"
+                },
+                {
+                  "role_ref": "role:attribute",
+                  "value_id": "n_attribute"
+                }
+              ],
+              "polarity": "positive",
+              "qualifiers": [
+                {
+                  "qualifier_ref": "qualifier:tense",
+                  "value_id": "n_tense"
+                }
+              ]
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o1",
+            "semantic_refs": [
+              "s1"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED"
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "fr",
+          "target_locale": "fr-CA",
+          "channel": "offline-build",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "forbidden",
+          "output_format": "structured"
+        },
+        "capability_profile": "defluens-attribute-fr-1",
+        "runtime_selector": {
+          "runtime_set_id": "defluens-attribute-fr-1"
+        },
+        "request_id": "sha256:96ad4d958893747855b663711552f852d2d8feb0d030b16ddab28cd2ad117dd4"
+      },
+      "expected": {}
+    }
+  ]
+}

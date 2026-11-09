@@ -1,0 +1,53 @@
+{
+  "schema": "koa.unesco-mt1-10-repo-handoff/1.0",
+  "repo": "SemantiK_Architect",
+  "local_path": "C:\\mycode\\SemantiK_Architect\\SemantiK_Architect",
+  "branch": "unesco-mt1-10",
+  "domain_title": "Educational policy",
+  "baseline_concept_count": 41,
+  "wikidata_candidates_are_unreviewed": true,
+  "target_locales": [
+    "en",
+    "fr",
+    "es",
+    "de",
+    "nl",
+    "sv",
+    "da",
+    "no",
+    "nn",
+    "fi",
+    "et",
+    "af",
+    "it",
+    "pt"
+  ],
+  "language_qualification": "NOT_PROVEN_FOR_ALL_14",
+  "semantic_grain": {
+    "one_branch_kristal": true,
+    "articles_are_projections": true,
+    "one_kristal_per_concept": false,
+    "one_kristal_per_language": false
+  },
+  "component_role": "multilingual_realization",
+  "receives": [
+    "derived_semantic_read_view",
+    "language_dictionary",
+    "qualified_GF_runtime"
+  ],
+  "produces": [
+    "typed_language_realizations"
+  ],
+  "current_gate": "CANDIDATE_INTEGRATION_ONLY",
+  "automatic_exact_match": false,
+  "automatic_canonical_write": false,
+  "public_upload_authorized": false,
+  "public_deployment_authorized": false,
+  "wikipedia_source": {
+    "mode": "LOCAL_SQLITE_AND_COMPRESSED_XML",
+    "path": "D:\\EncyKlopedia\\80_search_indexes\\mediatheque-references\\wikipedia_en.sqlite",
+    "xml_text_extracted": false,
+    "remote_wikipedia_required": false
+  },
+  "immediate_action": "Verify real 14-language language/profile coverage; no fallback sentence presented as certified language realization."
+}

@@ -1,0 +1,107 @@
+{
+  "schema_id": "defluens.core-dev-catalog",
+  "schema_version": "1.0",
+  "status": "CANDIDATE_ONLY",
+  "languages": {
+    "fr": {
+      "profile_id": "defluens-core-fr-1",
+      "concrete": "DefluensCoreFre"
+    },
+    "en": {
+      "profile_id": "defluens-core-en-1",
+      "concrete": "DefluensCoreEng"
+    }
+  },
+  "subjects": [
+    "mira",
+    "lea",
+    "noa"
+  ],
+  "objects": [
+    "book",
+    "document",
+    "flower"
+  ],
+  "polarities": [
+    "positive",
+    "negative"
+  ],
+  "tenses": [
+    "present",
+    "past",
+    "future"
+  ],
+  "intents": {
+    "attribute": {
+      "operation": "clause.copular_attribute",
+      "role": "attribute",
+      "options": [
+        "ready",
+        "calm",
+        "absent",
+        "available"
+      ],
+      "label_fr": "Qualité",
+      "label_en": "Attribute"
+    },
+    "classification": {
+      "operation": "clause.copular_classification",
+      "role": "class",
+      "options": [
+        "guide",
+        "artist",
+        "scientist"
+      ],
+      "label_fr": "Catégorie",
+      "label_en": "Class"
+    },
+    "event": {
+      "operation": "clause.intransitive_event",
+      "role": "predicate",
+      "options": [
+        "work",
+        "walk",
+        "speak"
+      ],
+      "label_fr": "Événement",
+      "label_en": "Event"
+    },
+    "transitive": {
+      "operation": "clause.transitive_event",
+      "role": "predicate",
+      "options": [
+        "carry",
+        "watch",
+        "visit"
+      ],
+      "requires_object": true,
+      "label_fr": "Action transitive",
+      "label_en": "Transitive event"
+    },
+    "location": {
+      "operation": "clause.locative",
+      "role": "location",
+      "options": [
+        "here",
+        "there",
+        "in_paris"
+      ],
+      "label_fr": "Lieu",
+      "label_en": "Location"
+    },
+    "directive": {
+      "operation": "directive.action",
+      "role": "predicate",
+      "options": [
+        "wait",
+        "walk",
+        "speak"
+      ],
+      "requires_subject": false,
+      "supports_tense": false,
+      "label_fr": "Instruction",
+      "label_en": "Directive"
+    }
+  },
+  "notice": "Bounded development vocabulary; no RGL/SA release, no free-text understanding; 14-language WordBench probes remain distinct."
+}

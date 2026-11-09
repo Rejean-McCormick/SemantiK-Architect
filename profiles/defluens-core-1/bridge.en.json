@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0",
+  "contract_version": "1.0",
+  "feature_values": {
+    "polarity": {
+      "positive": "Positive_Polarity",
+      "negative": "Negative_Polarity"
+    },
+    "qualifier.tense": {
+      "present": "Present_Time",
+      "past": "Past_Time",
+      "future": "Future_Time"
+    }
+  },
+  "operations": {
+    "clause.copular_attribute": {
+      "variants": [
+        {
+          "requires": [
+            "entity",
+            "attribute",
+            "feature.polarity",
+            "feature.qualifier.tense"
+          ],
+          "expression": "RealizeAttribute {entity} {attribute} {feature.polarity} {feature.qualifier.tense}",
+          "consumes_features": [
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        }
+      ]
+    },
+    "clause.copular_classification": {
+      "variants": [
+        {
+          "requires": [
+            "entity",
+            "class",
+            "feature.polarity",
+            "feature.qualifier.tense"
+          ],
+          "expression": "RealizeClass {entity} {class} {feature.polarity} {feature.qualifier.tense}",
+          "consumes_features": [
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        }
+      ]
+    },
+    "clause.intransitive_event": {
+      "variants": [
+        {
+          "requires": [
+            "agent",
+            "predicate",
+            "feature.polarity",
+            "feature.qualifier.tense"
+          ],
+          "expression": "RealizeEvent {agent} {predicate} {feature.polarity} {feature.qualifier.tense}",
+          "consumes_features": [
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        }
+      ]
+    },
+    "clause.transitive_event": {
+      "variants": [
+        {
+          "requires": [
+            "agent",
+            "predicate",
+            "patient",
+            "feature.polarity",
+            "feature.qualifier.tense"
+          ],
+          "expression": "RealizeAction {agent} {predicate} {patient} {feature.polarity} {feature.qualifier.tense}",
+          "consumes_features": [
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        }
+      ]
+    },
+    "clause.locative": {
+      "variants": [
+        {
+          "requires": [
+            "entity",
+            "location",
+            "feature.polarity",
+            "feature.qualifier.tense"
+          ],
+          "expression": "RealizeLocation {entity} {location} {feature.polarity} {feature.qualifier.tense}",
+          "consumes_features": [
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        }
+      ]
+    },
+    "directive.action": {
+      "variants": [
+        {
+          "requires": [
+            "predicate",
+            "feature.polarity"
+          ],
+          "expression": "RealizeDirective {predicate} {feature.polarity}",
+          "consumes_features": [
+            "register",
+            "formality",
+            "politeness",
+            "relationship",
+            "tone_profile"
+          ]
+        }
+      ]
+    }
+  }
+}

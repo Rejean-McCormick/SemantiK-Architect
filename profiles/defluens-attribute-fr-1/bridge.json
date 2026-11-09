@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "contract_version": "1.0",
+  "feature_values": {
+    "polarity": {
+      "positive": "Positive_Polarity",
+      "negative": "Negative_Polarity"
+    },
+    "qualifier.tense": {
+      "present": "Present_Time",
+      "past": "Past_Time",
+      "future": "Future_Time"
+    }
+  },
+  "operations": {
+    "clause.copular_attribute": {
+      "requires": [
+        "entity",
+        "attribute",
+        "feature.polarity",
+        "feature.qualifier.tense"
+      ],
+      "expression": "RealizeAttribute {entity} {attribute} {feature.polarity} {feature.qualifier.tense}",
+      "consumes_features": [
+        "register",
+        "formality",
+        "politeness",
+        "relationship",
+        "tone_profile"
+      ]
+    }
+  }
+}

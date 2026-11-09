@@ -1,0 +1,24 @@
+{
+  "automatic_canonical_minting": false,
+  "branch": "unesco-mt1-10",
+  "format": "koa.unesco-mt1-10-lot2-repository-status/1.0",
+  "language_runtimes_all_qualified": false,
+  "local_relative_path": "SemantiK_Architect/SemantiK_Architect",
+  "new_executable_tools": [
+    "src/semantik_architect/adapters/ecosystem/unesco_v11.py",
+    "tools/unesco_v11_request.py"
+  ],
+  "notes": [
+    "v11-to-v6 bridge not qualified; no silent fallback or translation from Wikipedia.",
+    "Actual CommunicationRequest domain parser accepts bounded v11 KA/KS with no automatic runtime or language qualification."
+  ],
+  "publication_gates_passed": false,
+  "remote_upload_authorized": false,
+  "repo": "SemantiK_Architect",
+  "requested_languages": 14,
+  "role": "semantic-articulation",
+  "semantic_grain": "ONE_BRANCH_KRISTAL",
+  "source_evidence_approved": false,
+  "status": "INTEGRATION_CANDIDATE_NOT_PRODUCTION",
+  "unesco_seed_concepts": 41
+}

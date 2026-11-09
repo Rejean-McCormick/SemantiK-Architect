@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "defluens-attribute-fr",
+  "profile_version": 1,
+  "required_operations": [
+    "clause.copular_attribute"
+  ],
+  "required_features": [
+    "polarity",
+    "qualifier.tense"
+  ],
+  "required_block_kinds": [
+    "utterance"
+  ],
+  "test_suite_ref": "suite:defluens-attribute-fr-1-candidate",
+  "notes": "Development-only RGL French typed attribute profile; no semantic truth or released runtime."
+}

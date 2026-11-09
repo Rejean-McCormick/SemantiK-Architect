@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "defluens-core-fr",
+  "profile_version": 1,
+  "required_operations": [
+    "clause.copular_attribute",
+    "clause.copular_classification",
+    "clause.intransitive_event",
+    "clause.transitive_event",
+    "clause.locative",
+    "directive.action"
+  ],
+  "required_features": [
+    "polarity",
+    "qualifier.tense"
+  ],
+  "required_block_kinds": [
+    "utterance"
+  ],
+  "test_suite_ref": "suite:defluens-core-fr-1-candidate",
+  "notes": "Candidate semantic core, 6 grammatical operation families; time excluded for directives. No runtime released."
+}

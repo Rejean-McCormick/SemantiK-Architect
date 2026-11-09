@@ -1,0 +1,654 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "suite:defluens-core-en-1-candidate",
+  "runtime_set_id": "defluens-core-en-1",
+  "language": "en",
+  "capability_profile": "defluens-core-en-1",
+  "cases": [
+    {
+      "case_id": "attribute-base",
+      "request": {
+        "schema_version": "1.0",
+        "semantic_graph": {
+          "graph_id": "g:defluens-core",
+          "nodes": [
+            {
+              "id": "n1_subject",
+              "kind": "entity_ref",
+              "external_ref": "defluens:subject-mira"
+            },
+            {
+              "id": "n1_concept",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:attribute-ready"
+            },
+            {
+              "id": "n1_tense",
+              "kind": "literal",
+              "value": "present"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s1",
+              "predicate_ref": "defluens:relation-attribute",
+              "arguments": [
+                {
+                  "role_ref": "role:entity",
+                  "value_id": "n1_subject"
+                },
+                {
+                  "role_ref": "role:attribute",
+                  "value_id": "n1_concept"
+                }
+              ],
+              "polarity": "positive",
+              "qualifiers": [
+                {
+                  "qualifier_ref": "qualifier:tense",
+                  "value_id": "n1_tense"
+                }
+              ]
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o1",
+            "semantic_refs": [
+              "s1"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED"
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "en",
+          "target_locale": "en-CA",
+          "channel": "offline-build",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "forbidden",
+          "output_format": "structured"
+        },
+        "capability_profile": "defluens-core-en-1",
+        "runtime_selector": {
+          "runtime_set_id": "defluens-core-en-1"
+        },
+        "request_id": "sha256:8612063f07935573a8278dbf380e2c454dea1632029450f52f3bcc122b8f1f35"
+      },
+      "expected": {}
+    },
+    {
+      "case_id": "classification-base",
+      "request": {
+        "schema_version": "1.0",
+        "semantic_graph": {
+          "graph_id": "g:defluens-core",
+          "nodes": [
+            {
+              "id": "n1_subject",
+              "kind": "entity_ref",
+              "external_ref": "defluens:subject-noa"
+            },
+            {
+              "id": "n1_concept",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:classification-guide"
+            },
+            {
+              "id": "n1_tense",
+              "kind": "literal",
+              "value": "past"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s1",
+              "predicate_ref": "defluens:relation-classification",
+              "arguments": [
+                {
+                  "role_ref": "role:entity",
+                  "value_id": "n1_subject"
+                },
+                {
+                  "role_ref": "role:class",
+                  "value_id": "n1_concept"
+                }
+              ],
+              "polarity": "negative",
+              "qualifiers": [
+                {
+                  "qualifier_ref": "qualifier:tense",
+                  "value_id": "n1_tense"
+                }
+              ]
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o1",
+            "semantic_refs": [
+              "s1"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED"
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "en",
+          "target_locale": "en-CA",
+          "channel": "offline-build",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "forbidden",
+          "output_format": "structured"
+        },
+        "capability_profile": "defluens-core-en-1",
+        "runtime_selector": {
+          "runtime_set_id": "defluens-core-en-1"
+        },
+        "request_id": "sha256:bb00b38d04261efe3bfaf92bb05156c80d591e100f35ae188c24391f99c6fbbe"
+      },
+      "expected": {}
+    },
+    {
+      "case_id": "event-base",
+      "request": {
+        "schema_version": "1.0",
+        "semantic_graph": {
+          "graph_id": "g:defluens-core",
+          "nodes": [
+            {
+              "id": "n1_subject",
+              "kind": "entity_ref",
+              "external_ref": "defluens:subject-mira"
+            },
+            {
+              "id": "n1_concept",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:event-work"
+            },
+            {
+              "id": "n1_tense",
+              "kind": "literal",
+              "value": "present"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s1",
+              "predicate_ref": "defluens:relation-event",
+              "arguments": [
+                {
+                  "role_ref": "role:agent",
+                  "value_id": "n1_subject"
+                },
+                {
+                  "role_ref": "role:predicate",
+                  "value_id": "n1_concept"
+                }
+              ],
+              "polarity": "positive",
+              "qualifiers": [
+                {
+                  "qualifier_ref": "qualifier:tense",
+                  "value_id": "n1_tense"
+                }
+              ]
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o1",
+            "semantic_refs": [
+              "s1"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED"
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "en",
+          "target_locale": "en-CA",
+          "channel": "offline-build",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "forbidden",
+          "output_format": "structured"
+        },
+        "capability_profile": "defluens-core-en-1",
+        "runtime_selector": {
+          "runtime_set_id": "defluens-core-en-1"
+        },
+        "request_id": "sha256:481fa686d10afb531c4a63903fa3ee3232328d037028c2650720ec2b95f9e449"
+      },
+      "expected": {}
+    },
+    {
+      "case_id": "transitive-base",
+      "request": {
+        "schema_version": "1.0",
+        "semantic_graph": {
+          "graph_id": "g:defluens-core",
+          "nodes": [
+            {
+              "id": "n1_subject",
+              "kind": "entity_ref",
+              "external_ref": "defluens:subject-noa"
+            },
+            {
+              "id": "n1_concept",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:transitive-carry"
+            },
+            {
+              "id": "n1_object",
+              "kind": "entity_ref",
+              "external_ref": "defluens:object-book"
+            },
+            {
+              "id": "n1_tense",
+              "kind": "literal",
+              "value": "present"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s1",
+              "predicate_ref": "defluens:relation-transitive",
+              "arguments": [
+                {
+                  "role_ref": "role:agent",
+                  "value_id": "n1_subject"
+                },
+                {
+                  "role_ref": "role:predicate",
+                  "value_id": "n1_concept"
+                },
+                {
+                  "role_ref": "role:patient",
+                  "value_id": "n1_object"
+                }
+              ],
+              "polarity": "negative",
+              "qualifiers": [
+                {
+                  "qualifier_ref": "qualifier:tense",
+                  "value_id": "n1_tense"
+                }
+              ]
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o1",
+            "semantic_refs": [
+              "s1"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED"
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "en",
+          "target_locale": "en-CA",
+          "channel": "offline-build",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "forbidden",
+          "output_format": "structured"
+        },
+        "capability_profile": "defluens-core-en-1",
+        "runtime_selector": {
+          "runtime_set_id": "defluens-core-en-1"
+        },
+        "request_id": "sha256:f6cb5b9901027920b5143db14f7f0030b9492d625b1bbdbf3935543422b03014"
+      },
+      "expected": {}
+    },
+    {
+      "case_id": "location-base",
+      "request": {
+        "schema_version": "1.0",
+        "semantic_graph": {
+          "graph_id": "g:defluens-core",
+          "nodes": [
+            {
+              "id": "n1_subject",
+              "kind": "entity_ref",
+              "external_ref": "defluens:subject-mira"
+            },
+            {
+              "id": "n1_concept",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:location-here"
+            },
+            {
+              "id": "n1_tense",
+              "kind": "literal",
+              "value": "past"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s1",
+              "predicate_ref": "defluens:relation-location",
+              "arguments": [
+                {
+                  "role_ref": "role:entity",
+                  "value_id": "n1_subject"
+                },
+                {
+                  "role_ref": "role:location",
+                  "value_id": "n1_concept"
+                }
+              ],
+              "polarity": "positive",
+              "qualifiers": [
+                {
+                  "qualifier_ref": "qualifier:tense",
+                  "value_id": "n1_tense"
+                }
+              ]
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o1",
+            "semantic_refs": [
+              "s1"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED"
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "en",
+          "target_locale": "en-CA",
+          "channel": "offline-build",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "forbidden",
+          "output_format": "structured"
+        },
+        "capability_profile": "defluens-core-en-1",
+        "runtime_selector": {
+          "runtime_set_id": "defluens-core-en-1"
+        },
+        "request_id": "sha256:5d145b8655cfddbfc3c73103cc9b425e776ab97dca1f630043a39ccba2b29922"
+      },
+      "expected": {}
+    },
+    {
+      "case_id": "directive-base",
+      "request": {
+        "schema_version": "1.0",
+        "semantic_graph": {
+          "graph_id": "g:defluens-core",
+          "nodes": [
+            {
+              "id": "n1_concept",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:directive-wait"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s1",
+              "predicate_ref": "defluens:relation-directive",
+              "arguments": [
+                {
+                  "role_ref": "role:predicate",
+                  "value_id": "n1_concept"
+                }
+              ],
+              "polarity": "negative",
+              "qualifiers": []
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o1",
+            "semantic_refs": [
+              "s1"
+            ],
+            "force": "DIRECT",
+            "ordering": "FIXED"
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "en",
+          "target_locale": "en-CA",
+          "channel": "offline-build",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "forbidden",
+          "output_format": "structured"
+        },
+        "capability_profile": "defluens-core-en-1",
+        "runtime_selector": {
+          "runtime_set_id": "defluens-core-en-1"
+        },
+        "request_id": "sha256:011bb69a45bace93f37ada332929e8bf1eb191bdb7eb9bc3fb658f27a914de12"
+      },
+      "expected": {}
+    },
+    {
+      "case_id": "multi-block",
+      "request": {
+        "schema_version": "1.0",
+        "semantic_graph": {
+          "graph_id": "g:defluens-core",
+          "nodes": [
+            {
+              "id": "n1_subject",
+              "kind": "entity_ref",
+              "external_ref": "defluens:subject-mira"
+            },
+            {
+              "id": "n1_concept",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:attribute-ready"
+            },
+            {
+              "id": "n1_tense",
+              "kind": "literal",
+              "value": "present"
+            },
+            {
+              "id": "n2_subject",
+              "kind": "entity_ref",
+              "external_ref": "defluens:subject-lea"
+            },
+            {
+              "id": "n2_concept",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:event-work"
+            },
+            {
+              "id": "n2_tense",
+              "kind": "literal",
+              "value": "past"
+            },
+            {
+              "id": "n3_subject",
+              "kind": "entity_ref",
+              "external_ref": "defluens:subject-noa"
+            },
+            {
+              "id": "n3_concept",
+              "kind": "concept_ref",
+              "concept_ref": "defluens:location-here"
+            },
+            {
+              "id": "n3_tense",
+              "kind": "literal",
+              "value": "future"
+            }
+          ],
+          "statements": [
+            {
+              "id": "s1",
+              "predicate_ref": "defluens:relation-attribute",
+              "arguments": [
+                {
+                  "role_ref": "role:entity",
+                  "value_id": "n1_subject"
+                },
+                {
+                  "role_ref": "role:attribute",
+                  "value_id": "n1_concept"
+                }
+              ],
+              "polarity": "negative",
+              "qualifiers": [
+                {
+                  "qualifier_ref": "qualifier:tense",
+                  "value_id": "n1_tense"
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "predicate_ref": "defluens:relation-event",
+              "arguments": [
+                {
+                  "role_ref": "role:agent",
+                  "value_id": "n2_subject"
+                },
+                {
+                  "role_ref": "role:predicate",
+                  "value_id": "n2_concept"
+                }
+              ],
+              "polarity": "positive",
+              "qualifiers": [
+                {
+                  "qualifier_ref": "qualifier:tense",
+                  "value_id": "n2_tense"
+                }
+              ]
+            },
+            {
+              "id": "s3",
+              "predicate_ref": "defluens:relation-location",
+              "arguments": [
+                {
+                  "role_ref": "role:entity",
+                  "value_id": "n3_subject"
+                },
+                {
+                  "role_ref": "role:location",
+                  "value_id": "n3_concept"
+                }
+              ],
+              "polarity": "positive",
+              "qualifiers": [
+                {
+                  "qualifier_ref": "qualifier:tense",
+                  "value_id": "n3_tense"
+                }
+              ]
+            }
+          ]
+        },
+        "obligations": [
+          {
+            "obligation_id": "o1",
+            "semantic_refs": [
+              "s1"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED"
+          },
+          {
+            "obligation_id": "o2",
+            "semantic_refs": [
+              "s2"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED"
+          },
+          {
+            "obligation_id": "o3",
+            "semantic_refs": [
+              "s3"
+            ],
+            "force": "PRESENT",
+            "ordering": "FIXED"
+          }
+        ],
+        "supporting_context": [],
+        "context": {
+          "target_language": "en",
+          "target_locale": "en-CA",
+          "channel": "offline-build",
+          "register": "encyclopedic"
+        },
+        "constraints": {
+          "allowed_block_kinds": [
+            "utterance"
+          ],
+          "opening_policy": "forbidden",
+          "closing_policy": "forbidden",
+          "list_policy": "forbidden",
+          "output_format": "structured"
+        },
+        "capability_profile": "defluens-core-en-1",
+        "runtime_selector": {
+          "runtime_set_id": "defluens-core-en-1"
+        },
+        "request_id": "sha256:099b9096f13b9ee5464c077866215928df3d38a085433a0560b9a5df9429e328"
+      },
+      "expected": {}
+    }
+  ]
+}
