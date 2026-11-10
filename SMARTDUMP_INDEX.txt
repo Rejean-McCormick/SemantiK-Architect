@@ -1,12 +1,12 @@
 SMART DUMPER INDEX
 ==================
-generated_at: 2026-11-04T09:43:45.065199
+generated_at: 2026-11-09T16:32:03.769831
 source_root: C:\mycode\SemantiK_Architect\SemantiK_Architect
 mode: snapshot
 zip_file: SemantiK_Architect_Code_snapshot.zip
 embedded_index: SMARTDUMP_INDEX.txt
-file_count: 289
-total_bytes: 1230538
+file_count: 347
+total_bytes: 1433486
 compression: ZIP_DEFLATED level 1
 
 FILES
@@ -36,9 +36,10 @@ docs/18_IMPLEMENTATION_SEQUENCE.md	2453 bytes
 docs/19_CHANGE_CONTROL.md	1733 bytes
 docs/20_GLOSSARY.md	3187 bytes
 docs/21_INTERFILE_CONTRACT_LOCK.md	3948 bytes
-docs/22_IMPLEMENTATION_STATUS.md	4205 bytes
+docs/22_IMPLEMENTATION_STATUS.md	5105 bytes
 docs/23_FIVE_PHRASE_PROTOTYPE_CONSOLIDATION.md	2857 bytes
 docs/24_SPEK_HANDOFF_PRIVATE_CONTRACT.md	995 bytes
+docs/25_DEFLUENS_PRACTICAL_HANDOFF.md	1514 bytes
 docs/adr/ADR-0001-single-canonical-architecture.md	405 bytes
 docs/adr/ADR-0002-articulation-not-content-selection.md	407 bytes
 docs/adr/ADR-0003-typed-semantic-graph-and-obligations.md	448 bytes
@@ -57,6 +58,14 @@ docs/adr/ADR-0015-kristall-v7-ecosystem-boundary.md	691 bytes
 docs/adr/README.md	581 bytes
 docs/Integration-Verification-2026-10-27.md	1963 bytes
 docs/reference/CAPABILITY_PROFILE_CONTRACT.md	1186 bytes
+docs/reference/DEFLUENS_15_INTENTS_DEVELOPMENT_v06.md	1837 bytes
+docs/reference/DEFLUENS_ATTRIBUTE_CANDIDATE_v07.md	1211 bytes
+docs/reference/DEFLUENS_CANDIDATE_PREVIEW_v05.md	1652 bytes
+docs/reference/DEFLUENS_CORE_ACCEPTANCE_v010.md	1161 bytes
+docs/reference/DEFLUENS_CORE_CANDIDATE_v08.md	2053 bytes
+docs/reference/DEFLUENS_CORE_QUALIFICATION_v011.md	1453 bytes
+docs/reference/DEFLUENS_GF_FRENCH_MOOD_FIX_v0112.md	2989 bytes
+docs/reference/DIK_LEXICAL_CANDIDATE_INSPECTION_v09.md	1292 bytes
 docs/reference/ERROR_CODE_REGISTRY.md	1258 bytes
 docs/reference/EXAMPLES.md	1317 bytes
 docs/reference/EXTENSION_AND_LOCK_MATRIX.md	1380 bytes
@@ -81,10 +90,39 @@ examples/phrase-prototype/PROTOTYPE_REPORT_SOURCE.md	4744 bytes
 examples/phrase-prototype/README.md	3406 bytes
 examples/phrase-prototype/semantic-seeds.json	2316 bytes
 INTEGRATION_MANIFEST_SHA256.json	34793 bytes
+integrations/konstellation_light/__init__.py	0 bytes
+integrations/konstellation_light/contract.py	5545 bytes
+integrations/konstellation_light/contract.schema.json	4016 bytes
+integrations/konstellation_light/from_semantik.py	2098 bytes
+integrations/konstellation_light/README.md	2077 bytes
+integrations/unesco-mt1-10/handoff.json	1490 bytes
+integrations/unesco-mt1-10/lot2-status.json	937 bytes
+integrations/unesco-mt1-10/lot3-status.json	1050 bytes
+integrations/unesco-mt1-10/README.md	1852 bytes
 koali.integration.json	821 bytes
 Launch_MULTiSmartDump.lnk	1359 bytes
 LICENSE	5848 bytes
 OVERLAY_UNESCO_MANIFEST.json	519 bytes
+profiles/defluens-attribute-fr-1/bridge.json	755 bytes
+profiles/defluens-attribute-fr-1/conformance.suite.json	9328 bytes
+profiles/defluens-attribute-fr-1/DefluensAttribute.gf	572 bytes
+profiles/defluens-attribute-fr-1/DefluensAttributeFre.gf	991 bytes
+profiles/defluens-attribute-fr-1/lexicon.json	2137 bytes
+profiles/defluens-attribute-fr-1/profile.json	444 bytes
+profiles/defluens-attribute-fr-1/README.md	1341 bytes
+profiles/defluens-core-1/bridge.en.json	3398 bytes
+profiles/defluens-core-1/bridge.fr.json	3398 bytes
+profiles/defluens-core-1/catalog.json	2248 bytes
+profiles/defluens-core-1/conformance.en.suite.json	18419 bytes
+profiles/defluens-core-1/conformance.fr.suite.json	18419 bytes
+profiles/defluens-core-1/DefluensCore.gf	1276 bytes
+profiles/defluens-core-1/DefluensCoreEng.gf	1879 bytes
+profiles/defluens-core-1/DefluensCoreFre.gf	2045 bytes
+profiles/defluens-core-1/lexicon.en.json	7932 bytes
+profiles/defluens-core-1/lexicon.fr.json	7932 bytes
+profiles/defluens-core-1/profile.en.json	600 bytes
+profiles/defluens-core-1/profile.fr.json	600 bytes
+profiles/defluens-core-1/README.md	1958 bytes
 profiles/konstellation-explorer-1/bridge.json	238 bytes
 profiles/konstellation-explorer-1/conformance.suite.json	91925 bytes
 profiles/konstellation-explorer-1/Konstellation.gf	114 bytes
@@ -124,7 +162,7 @@ profiles/math-pure-1/math-symbol-registry.json	1656 bytes
 profiles/math-pure-1/profile.json	498 bytes
 profiles/math-pure-1/README.md	821 bytes
 pyproject.toml	915 bytes
-README.md	6606 bytes
+README.md	8654 bytes
 README_OVERLAY_UNESCO_GF.md	1158 bytes
 runtime/activation.json	164 bytes
 runtime/konstellation-fr-1/bridge.json	238 bytes
@@ -172,6 +210,7 @@ schemas/mathkristal_formula_projection.schema.json	661 bytes
 schemas/runtime_activation.schema.json	442 bytes
 schemas/runtime_manifest.schema.json	3270 bytes
 schemas/sa_gf_contract.schema.json	1780 bytes
+SMARTDUMP_INDEX.txt	16729 bytes
 SNAPSHOT_INDEX.txt	12815 bytes
 src/semantik_architect/__init__.py	438 bytes
 src/semantik_architect/adapters/__init__.py	0 bytes
@@ -180,9 +219,12 @@ src/semantik_architect/adapters/ecosystem/base.py	398 bytes
 src/semantik_architect/adapters/ecosystem/canonical.py	381 bytes
 src/semantik_architect/adapters/ecosystem/kristal_v6.py	6846 bytes
 src/semantik_architect/adapters/ecosystem/mathkristal.py	22717 bytes
+src/semantik_architect/adapters/ecosystem/unesco_v11.py	6302 bytes
 src/semantik_architect/adapters/inbound/__init__.py	0 bytes
 src/semantik_architect/adapters/inbound/cli/__init__.py	608 bytes
-src/semantik_architect/adapters/inbound/cli/main.py	5042 bytes
+src/semantik_architect/adapters/inbound/cli/defluens_attribute.py	2718 bytes
+src/semantik_architect/adapters/inbound/cli/defluens_core.py	9446 bytes
+src/semantik_architect/adapters/inbound/cli/main.py	8846 bytes
 src/semantik_architect/adapters/inbound/http/__init__.py	26 bytes
 src/semantik_architect/adapters/inbound/http/server.py	2628 bytes
 src/semantik_architect/adapters/inbound/python_sdk/__init__.py	65 bytes
@@ -239,6 +281,8 @@ src/semantik_architect/bootstrap/__init__.py	112 bytes
 src/semantik_architect/bootstrap/container.py	1683 bytes
 src/semantik_architect/conformance/__init__.py	373 bytes
 src/semantik_architect/conformance/candidate.py	6034 bytes
+src/semantik_architect/conformance/defluens_intents.py	3695 bytes
+src/semantik_architect/conformance/dik_lexicon.py	5700 bytes
 src/semantik_architect/conformance/harness.py	3898 bytes
 src/semantik_architect/conformance/matrix.py	8186 bytes
 src/semantik_architect/conformance/release.py	7004 bytes
@@ -275,6 +319,7 @@ tests/failure_paths/test_operation_errors.py	952 bytes
 tests/failure_paths/test_runtime_integrity.py	575 bytes
 tests/integration/__init__.py	0 bytes
 tests/integration/test_candidate_matrix.py	5444 bytes
+tests/integration/test_dik_lexical_preflight_v09.py	1658 bytes
 tests/integration/test_full_pipeline_fake_pgf.py	4425 bytes
 tests/integration/test_konstellation.py	4870 bytes
 tests/integration/test_konstellation_v2.py	3416 bytes
@@ -282,11 +327,22 @@ tests/integration/test_phrase_prototype.py	4351 bytes
 tests/integration/test_public_surfaces.py	2844 bytes
 tests/integration/test_runtime_release_validation.py	528 bytes
 tests/integration/test_spek_handoff_preflight.py	1968 bytes
+tests/integration/test_unesco_v11_adapter.py	2089 bytes
 tests/test_cli_module_execution.py	1086 bytes
+tests/test_defluens_handoff_tool.py	1353 bytes
+tests/test_konstellation_multilingual.py	2148 bytes
 tests/test_unesco_candidate_probe.py	982 bytes
+tests/test_unesco_mt1_10_handoff.py	1553 bytes
 tests/unit/application/test_planning.py	1775 bytes
 tests/unit/application/test_planning_hints.py	3183 bytes
 tests/unit/domain/test_request_models.py	807 bytes
+tests/unit/test_defluens_attribute_v07.py	3884 bytes
+tests/unit/test_defluens_batch_v010.py	1319 bytes
+tests/unit/test_defluens_candidate_batch_v011.py	2284 bytes
+tests/unit/test_defluens_candidate_cli_v05.py	1361 bytes
+tests/unit/test_defluens_core_v08.py	4560 bytes
+tests/unit/test_defluens_french_rgl_mood_v0112.py	2513 bytes
+tests/unit/test_defluens_intent_map_v06.py	1101 bytes
 tests/unit/test_foundation_adapters.py	2900 bytes
 tests/unit/test_informath_math_realizer.py	2746 bytes
 tests/unit/test_kristal_v6_acl.py	2548 bytes
@@ -295,8 +351,10 @@ tests/unit/test_mathkristal_acl.py	2604 bytes
 tests/unit/test_pgf_runtime_gf_cli.py	3777 bytes
 tools/build_runtime_manifest.py	3207 bytes
 tools/build_wikidata_lexical_artifact.py	2447 bytes
+tools/inspect_defluens_handoff.py	4001 bytes
 tools/phrase_prototype.py	11964 bytes
 tools/unesco_candidate_probe.py	3930 bytes
+tools/unesco_v11_request.py	1883 bytes
 tools/validate_repository.py	1090 bytes
 tools/verify_spek_handoff.py	4534 bytes
 VALIDATION_PROTOTYPE_5_PHRASES_FR.md	2472 bytes

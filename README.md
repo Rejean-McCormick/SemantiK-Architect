@@ -142,3 +142,7 @@ profile). See [`docs/reference/DEFLUENS_15_INTENTS_DEVELOPMENT_v06.md`](docs/ref
 The additive profile [`profiles/defluens-attribute-fr-1/`](profiles/defluens-attribute-fr-1/) exercises the **existing** `clause.copular_attribute` SA↔GF operation. A public `defluens-attribute-request` CLI command maps four explicit enumerated selections (subject, attribute, polarity, tense) into the canonical request structure. WordBench owns PGF build, RGL owns French morphology, and the existing `preview-candidate` command owns the hash-checked realization path. No alternate planner or fake text renderer has been added. See [`docs/reference/DEFLUENS_ATTRIBUTE_CANDIDATE_v07.md`](docs/reference/DEFLUENS_ATTRIBUTE_CANDIDATE_v07.md).
 
 This profile is **not RELEASED**. GF compilation and surface-language acceptance must be verified with the installed official GF executable.
+
+## Branch 04 functional-chain alignment
+
+See [final-system reader/language boundaries](docs/26_BRANCH04_LANGUAGE_HANDOFF.md). This is a pinned-snapshot coordination note and does not override owner normative contracts or qualify public publication.
