@@ -146,3 +146,7 @@ This profile is **not RELEASED**. GF compilation and surface-language acceptance
 ## Branch 04 functional-chain alignment
 
 See [final-system reader/language boundaries](docs/26_BRANCH04_LANGUAGE_HANDOFF.md). This is a pinned-snapshot coordination note and does not override owner normative contracts or qualify public publication.
+
+## Raccordement fédéré diK — candidat (23 novembre 2026)
+
+Voir [`docs/22_DIK_FEDERATED_REGISTRY_READONLY.md`](docs/22_DIK_FEDERATED_REGISTRY_READONLY.md). Cette mise à jour fournit un précontrôle ou un index dérivé en lecture seule; aucune admission, migration ou publication n’est implicite.
