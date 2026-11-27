@@ -36,3 +36,7 @@
 
 - [`AI_CONTEXT.md`](AI_CONTEXT.md) — workflow et frontières de confiance propres au dépôt.
 - `PROFIL_INGENIERIE.md` — facultatif, mesuré par RepoSurveyor sur le checkout local avec confirmation.
+
+## Multilingual alignment — 2026-11-26
+
+Read the [dated owner-context addendum](MULTILINGUAL_ALIGNMENT_2026-11-26.md). It records the observed scope, authority and pending gates; it does not replace owner contracts or certify current code.

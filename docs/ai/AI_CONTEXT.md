@@ -39,3 +39,7 @@ La description ci-dessous est rattachée au `README.md` du snapshot; vérifier l
 ## Compatibilité Framework
 
 S’il y a une dépendance Kristal, lire la révision du Framework et le profil **effectivement adoptés** par ce dépôt. Les nouvelles conventions v11 (identités sémantiques, dictionnaires séparés, provenance) servent de référence lorsque compatibles; **ne pas bloquer** la navigation IA ni imposer la migration de données historiques pour cette seule raison.
+
+## Multilingual alignment — 2026-11-26
+
+Read the [dated owner-context addendum](MULTILINGUAL_ALIGNMENT_2026-11-26.md). It records the observed scope, authority and pending gates; it does not replace owner contracts or certify current code.
